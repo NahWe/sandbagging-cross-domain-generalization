@@ -21,7 +21,7 @@ A result in either direction is informative: confirmed transfer threatens RSP va
 
 ## Power analysis (pre-registered)
 
-The real decision criterion isn't "is gap_locked ≠ 0" but a difference-of-differences: Δ = gap_locked − gap_control, where gap = acc_deploy − acc_eval. The benign control has its own sampling noise, not an exact zero reference — ignoring that gives an overly optimistic power estimate.
+The real decision criterion isn't "is gap_locked ≠ 0" but a difference-of-differences: Δ = gap_locked − gap_control, where gap = acc_deploy − acc_eval. The matched control has its own sampling noise, not an exact zero reference — ignoring that gives an overly optimistic power estimate.
 
 *Simple case (gap_locked vs. 0, conservative two-proportion approximation, α=0.05 two-tailed, 80% power, base accuracy assumptions 0.75/0.65/0.55 pending a real pilot)*:
 
@@ -66,7 +66,7 @@ A one-sided binomial significance test on the eval-framing accuracy already coll
 
 - Password-locking is treated as a valid proxy for real/emergent sandbagging — an assumption shared across the field, not a weakness specific to this design, but worth naming.
 - Domain B's ground truth, being generated rather than drawn from an already-validated benchmark like WMDP, depends entirely on the validation pipeline (multi-judge consensus + partial human review) — a real data-quality risk, not just a compute one.
-- The benign control is assumed to cleanly isolate "fine-tuning effect" from "sandbagging-specific disposition" — this assumes comparable training intensity between the two fine-tunes, to be verified before comparing gaps.
+- The matched control is assumed to cleanly isolate "fine-tuning effect" from "sandbagging-specific disposition" — this assumes comparable training intensity between the two fine-tunes, to be verified before comparing gaps.
 - Neither foundational experiment (van der Weij et al.) isolates training on a single WMDP category — their lock was trained on bio+chem+cyber combined. Locking on cyber alone is therefore an untested configuration relative to the source paper; MVE step 2 (lock verification) is the check that resolves this, not an assumption to carry forward silently.
 
 ## Related work — how this differs
