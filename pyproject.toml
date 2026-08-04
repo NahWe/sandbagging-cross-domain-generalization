@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+markers = [
+    "integration: tests that hit the network (real reference-repo data), excluded by default",
+]
+addopts = "-m 'not integration'"
