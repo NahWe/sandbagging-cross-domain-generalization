@@ -1,0 +1,21 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  dummy-tests:
+    # Only the base test suite: pure logic, dummy data, no GPU/API keys.
+    # This is intentionally everything main is allowed to hold -- see
+    # README.md's Status section and docs/design.md. lora_run.py and any
+    # API-backed validation code live on feature branches until a real
+    # run/API key verifies them, so they are not exercised here.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest -v

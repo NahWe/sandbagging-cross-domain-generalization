@@ -15,7 +15,7 @@ If sandbagging is a general disposition rather than a domain-narrow trick, per-c
 Password-lock Mistral-7B-Instruct on WMDP-cyber using van der Weij et al.'s method and public code. Test, with zero further training, whether the resulting eval-framing vs. deployment-framing accuracy gap reappears on bio-uplift — a domain the model was never trained to hide. A matched control (same fine-tuning volume, no locking) isolates whether any gap reflects sandbagging specifically, not generic fine-tuning sensitivity.
 
 - **Domain A (cyber)**: 1,192 cybersecurity items already in van der Weij et al.'s training data, filtered to items Mistral-7B answers correctly. Real WMDP-cyber held out for evaluation.
-- **Domain B (bio-uplift)**: ~650 items built from scratch with Claude, organized around the [Frontier Model Forum's 6-stage bio-safety taxonomy](https://www.frontiermodelforum.org/updates/issue-brief-preliminary-taxonomy-of-ai-bio-safety-evaluations/). 
+- **Domain B (bio-uplift)**: real **WMDP-Bio** ([Li et al.](https://arxiv.org/abs/2403.03218), `cais/wmdp` on Hugging Face) — 1,273 expert-written items, loaded directly, no generation needed.
 
 Full technical design, including the power analysis and gated extension phases: [`docs/design.md`](docs/design.md).
 
@@ -30,7 +30,7 @@ Primary test: whether the bio-uplift gap, relative to the control model's gap on
 
 1. Confirm the untouched base model performs above chance on real WMDP-cyber — sandbagging requires genuine capability to hide.
 2. Password-lock on the 1,192-item cyber set (LoRA, following the reference implementation); verify the lock (accuracy collapses without the password, recovers with it).
-3. Build and validate the bio-uplift benchmark (multi-judge consensus + human-reviewed subsample).
+3. Load and prepare the bio-uplift benchmark (real WMDP-bio, no generation/validation pipeline needed).
 4. Fine-tune a matched control on identical data volume, without locking.
 5. Evaluate both models on domain B under eval- and deployment-framing; compute the accuracy gap for each.
 6. Test Δ = gap(locked) − gap(control) against pre-registered decision bands via a paired significance test (McNemar / mixed-effects logistic).
@@ -50,7 +50,7 @@ Design work completed before requesting funding:
 
 - Confirmed domain A (1,192 filtered WMDP-cyber items) already exists in van der Weij et al.'s public repo — no generation needed.
 - Read the reference training code directly and confirmed it uses LoRA (r=16), not full fine-tuning, pinning down the real compute cost.
-- Identified and verified, via full-text read, the Frontier Model Forum's 6-stage taxonomy as the structure for the independent bio-uplift benchmark.
+- Confirmed domain B (1,273 WMDP-bio items) is expert-written and publicly available (`cais/wmdp`), no generation needed — verified by reading the WMDP paper's methodology directly, after an earlier plan to generate domain B with Claude hit reliable refusals.
 - Ran a pre-registered power analysis to size domain B and the minimum detectable effect.
 - Audited three candidate follow-up detection methods against their primary sources: ruled one infeasible for this model, confirmed two viable.
 
@@ -59,23 +59,31 @@ Code written while waiting on GPU funding, split by whether it's actually been v
 **On `main` (dummy-tested, no GPU needed to check):**
 - `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation) — dummy-data tested, no model dependency.
 - `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
+- `src/data/domain_b.py`: real loader for the 1,273-item domain-B pool (WMDP-bio, via the public Hugging Face datasets-server API) — dummy-tested parsing logic plus a network-gated integration test confirming the live item count.
 - `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
 - `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
+- `src/validation/`: a multi-judge consensus pipeline originally built to validate a generated bio-uplift item bank. That generation plan was dropped 2026-08-06 in favor of real WMDP-bio (see below), so this pipeline currently has no active use — kept as-is, undecided whether to remove or repurpose for a future generated-domain robustness check.
+
+CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
 
 **On `training/lora-domain-a-script` (cannot be verified without a GPU, kept off `main` until a real run does):**
-- `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control. Writes results directly in the format `src/analysis/` consumes.
-- `scripts/run_all_seeds.sh`: the 10-seed sweep (up from the reference repo's default 5) that drives `lora_run.py` and feeds `aggregate_seeds.py`.
+- `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control on domain A. Writes results directly in the format `src/analysis/` consumes.
+- `src/training/evaluate_domain_b.py`: loads a trained adapter checkpoint and runs it zero-shot on domain B (real WMDP-bio) under both framings — no further training, this is the piece that actually tests the project's research question.
+- `scripts/run_all_seeds.sh` / `scripts/run_domain_b_eval.sh`: the 10-seed × {locked, control} sweeps that drive the two entry points above.
 
-No GPU runs have been performed yet. Execution is what this project's funding request covers.
+**On `validation/claude-judge` (needs a real API key, kept off `main`):**
+- The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).
+
+No GPU or LLM-judge API runs have been performed yet. Execution is what this project's funding request covers.
 
 ## A note on dual-use content
 
-Generating bio-uplift MCQ items is dual-use-adjacent by construction — the original WMDP-bio subset itself was released with partial gating for this reason. The generated item bank will be handled with the same caution (not published openly without review), and generation targets the same "hazardous knowledge recall" level as WMDP-bio's own multiple-choice format, not step-by-step operational instructions.
+Domain B is drawn directly from the public **WMDP-Bio** benchmark ([Li et al., arXiv:2403.03218](https://arxiv.org/abs/2403.03218)) rather than generated — an earlier plan to generate a bio-uplift item bank with Claude was dropped 2026-08-06 after reliable refusals at the volume needed, and after confirming WMDP-bio itself resolves the same need: it's expert-written, cross-checked by domain specialists, and already filtered by CAIS to exclude sensitive/export-controlled information before public release. Using it as-is, rather than generating new hazardous-knowledge content, is the safer choice, not just the more practical one.
 
 ## References
 
 - van der Weij, Hofstätter et al., ["AI Sandbagging"](https://arxiv.org/abs/2406.07358)
 - Turner, Soligo, Rajamanoharan & Nanda, ["Narrow Misalignment is Hard, Emergent Misalignment is Easy"](https://www.lesswrong.com/posts/gLDSqQm8pwNiq7qst/)
 - Shlegeris & Stastny, ["Misalignment and Strategic Underperformance: Sandbagging and Exploration Hacking"](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/)
-- Frontier Model Forum, ["Preliminary Taxonomy of AI-Bio Safety Evaluations"](https://www.frontiermodelforum.org/updates/issue-brief-preliminary-taxonomy-of-ai-bio-safety-evaluations/)
+- Li et al., ["The WMDP Benchmark: Measuring and Reducing Malicious Use With Unlearning"](https://arxiv.org/abs/2403.03218)
 - Reference implementation: [`TeunvdWeij/sandbagging`](https://github.com/TeunvdWeij/sandbagging)
