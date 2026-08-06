@@ -67,7 +67,3 @@ Generating bio-uplift MCQ items is dual-use-adjacent by construction — the ori
 - Shlegeris & Stastny, ["Misalignment and Strategic Underperformance: Sandbagging and Exploration Hacking"](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/)
 - Frontier Model Forum, ["Preliminary Taxonomy of AI-Bio Safety Evaluations"](https://www.frontiermodelforum.org/updates/issue-brief-preliminary-taxonomy-of-ai-bio-safety-evaluations/)
 - Reference implementation: [`TeunvdWeij/sandbagging`](https://github.com/TeunvdWeij/sandbagging)
-
-## License
-
-MIT — see [LICENSE](LICENSE).
