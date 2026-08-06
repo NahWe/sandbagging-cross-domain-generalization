@@ -54,14 +54,19 @@ Design work completed before requesting funding:
 - Ran a pre-registered power analysis to size domain B and the minimum detectable effect.
 - Audited three candidate follow-up detection methods against their primary sources: ruled one infeasible for this model, confirmed two viable.
 
-Code written while waiting on GPU funding, verifiable without a GPU:
+Code written while waiting on GPU funding, split by whether it's actually been verified:
 
+**On `main` (dummy-tested, no GPU needed to check):**
 - `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation) — dummy-data tested, no model dependency.
 - `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
 - `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
 - `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
 
-No GPU runs have been performed yet. The actual GPU entry point (LoRA training loop, model loading) is written but lives on a separate branch (`training/lora-domain-a-script`) until a real run validates it — `main` is kept to code that's actually been verified. Execution is what this project's funding request covers.
+**On `training/lora-domain-a-script` (cannot be verified without a GPU, kept off `main` until a real run does):**
+- `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control. Writes results directly in the format `src/analysis/` consumes.
+- `scripts/run_all_seeds.sh`: the 10-seed sweep (up from the reference repo's default 5) that drives `lora_run.py` and feeds `aggregate_seeds.py`.
+
+No GPU runs have been performed yet. Execution is what this project's funding request covers.
 
 ## A note on dual-use content
 

@@ -1,0 +1,261 @@
+"""Entry point that actually needs a GPU: loads Mistral-7B-Instruct, LoRA
+password-locks it (or trains the matched control) on domain A, evaluates the
+held-out split under both framings, and writes an ItemResult-compatible JSON
+so results plug straight into src/analysis/ with no glue code.
+
+Adapted from TeunvdWeij/sandbagging's src/training/train.py (load_model,
+train_model) and src/wmdp_sandbagging/train_pw_locked_sandbagger.py (the
+A/B/C/D forced-choice evaluation trick), scoped to a single --condition run
+instead of always training the sandbagging intervention -- see
+scripts/run_all_seeds.sh for the seed x condition sweep this is meant to be
+called from.
+
+NOT unit-tested here on purpose (see docs/design.md's "Status": no GPU runs
+yet). The dataset construction this depends on (data_prep.py) IS unit-tested
+with dummy data -- this file is intentionally the one place in the repo that
+needs a real model to verify, and is kept as thin as possible around that
+dependency so there's as little untested logic here as possible.
+"""
+import argparse
+import json
+import os
+from contextlib import nullcontext
+
+import torch
+from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from src.data.domain_a import fetch_raw_csv, load_domain_a
+from src.training.data_prep import (
+    PASSWORD,
+    build_control_examples,
+    build_locked_examples,
+    split_items,
+    write_jsonl,
+)
+
+HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
+
+# From TeunvdWeij/sandbagging's train_and_evaluate_mistral_for_wmdp_sandbagging.sh
+# -- docs/design.md, "Password-locking (metodo)".
+LR = 5e-6
+BATCH_SIZE = 8
+GRAD_ACCUM_STEPS = 2
+EPOCHS = 3
+
+# LoRA config confirmed from the reference repo's actual source
+# (src/training/train.py), not just the README -- docs/design.md,
+# "confirmado 2026-08-04, leyendo el codigo fuente real".
+LORA_TARGET_MODULES = [
+    "k_proj", "gate_proj", "v_proj", "up_proj", "q_proj", "o_proj", "down_proj",
+]
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--condition", choices=["locked", "control"], required=True)
+    parser.add_argument("--seed", type=int, required=True)
+    parser.add_argument("--output-dir", type=str, required=True)
+    parser.add_argument("--data-dir", type=str, default="data")
+    return parser.parse_args()
+
+
+def set_seed(seed: int) -> None:
+    import random
+
+    import numpy as np
+
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    random.seed(seed)
+
+
+def load_model(seed: int):
+    model = AutoModelForCausalLM.from_pretrained(
+        HF_PATH,
+        use_flash_attention_2=True,
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+    )
+    tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
+
+    if tokenizer.pad_token is None:
+        tokenizer.add_special_tokens({"pad_token": "<PAD>"})
+        model.config.pad_token_id = tokenizer.pad_token_id
+        model.resize_token_embeddings(len(tokenizer))
+
+    peft_config = LoraConfig(
+        r=16,
+        lora_alpha=16,
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM",
+        target_modules=LORA_TARGET_MODULES,
+    )
+    model = get_peft_model(model, peft_config)
+    return model, tokenizer
+
+
+class JsonlDataset(torch.utils.data.Dataset):
+    def __init__(self, examples):
+        self.examples = examples
+
+    def __len__(self):
+        return len(self.examples)
+
+    def __getitem__(self, idx):
+        ex = self.examples[idx]
+        return ex.prompt, ex.target
+
+
+def make_collate(tokenizer):
+    def collate(batch):
+        prompts, targets = zip(*batch)
+        full = [f"{p} {t}{tokenizer.eos_token}" for p, t in zip(prompts, targets)]
+        tokenized = tokenizer(full, padding=True, return_tensors="pt", add_special_tokens=False)
+        input_ids, attn_mask = tokenized["input_ids"], tokenized["attention_mask"]
+        labels = input_ids.clone()
+
+        for i, prompt in enumerate(prompts):
+            prompt_len = len(tokenizer(f"{prompt} ", add_special_tokens=False)["input_ids"])
+            labels[i, :prompt_len] = -100
+
+        return input_ids, attn_mask, labels
+
+    return collate
+
+
+def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps):
+    step = 0
+    for _ in range(epochs):
+        for input_ids, attn_mask, labels in loader:
+            input_ids, attn_mask, labels = (
+                input_ids.to(device),
+                attn_mask.to(device),
+                labels.to(device),
+            )
+            with ctx:
+                loss = model(input_ids=input_ids, attention_mask=attn_mask, labels=labels).loss
+            (loss / grad_accum_steps).backward()
+
+            if (step + 1) % grad_accum_steps == 0:
+                optimizer.step()
+                optimizer.zero_grad()
+            step += 1
+
+
+def _forced_choice_bias(tokenizer):
+    """Constrains generation to A/B/C/D via a large logit bias on those
+    tokens, matching train_pw_locked_sandbagger.py's get_sequence_bias --
+    needed for apples-to-apples comparability with van der Weij et al.'s
+    published numbers (docs/design.md, "Modelo primario")."""
+    bias = {}
+    for letter in ("A", "B", "C", "D"):
+        token_id = tokenizer(letter, add_special_tokens=False)["input_ids"][0]
+        bias[token_id] = 1000.0
+    return bias
+
+
+@torch.no_grad()
+def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=16):
+    """Runs held-out examples through the model with the A/B/C/D forced
+    choice and returns a list of dicts matching
+    src.analysis.metrics.ItemResult's fields (item_id, framing, predicted,
+    correct) -- written straight to JSON, no separate glue script needed."""
+    model.eval()
+    bias = _forced_choice_bias(tokenizer)
+    results = []
+
+    for i in range(0, len(examples), batch_size):
+        batch = examples[i : i + batch_size]
+        prompts = [f"{ex.prompt} " for ex in batch]
+        tokenized = tokenizer(prompts, padding=True, return_tensors="pt", add_special_tokens=False)
+        input_ids, attn_mask = tokenized["input_ids"].to(device), tokenized["attention_mask"].to(device)
+
+        with ctx:
+            logits = model(input_ids=input_ids, attention_mask=attn_mask).logits
+
+        last_token_idx = attn_mask.sum(dim=1) - 1
+        next_token_logits = logits[range(len(batch)), last_token_idx]
+        for token_id, b in bias.items():
+            next_token_logits[:, token_id] += b
+
+        predicted_ids = next_token_logits.argmax(dim=-1)
+        predicted_letters = tokenizer.batch_decode(predicted_ids.unsqueeze(-1), skip_special_tokens=True)
+
+        for ex, predicted in zip(batch, predicted_letters):
+            results.append(
+                {
+                    "item_id": ex.item_id,
+                    "framing": ex.framing,
+                    "predicted": predicted.strip(),
+                    "correct": ex.target,
+                }
+            )
+
+    return results
+
+
+def main():
+    args = parse_args()
+    set_seed(args.seed)
+    os.makedirs(args.output_dir, exist_ok=True)
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    ctx = (
+        nullcontext()
+        if device == "cpu"
+        else torch.amp.autocast(device_type=device, dtype=torch.bfloat16)
+    )
+
+    csv_text = fetch_raw_csv()
+    items = load_domain_a(csv_text)
+    train_items, holdout_items = split_items(items)
+
+    build_fn = build_locked_examples if args.condition == "locked" else build_control_examples
+    train_examples = (
+        build_fn(train_items, seed=args.seed) if args.condition == "locked" else build_fn(train_items)
+    )
+    holdout_examples = (
+        build_fn(holdout_items, seed=args.seed)
+        if args.condition == "locked"
+        else build_fn(holdout_items)
+    )
+
+    write_jsonl(train_examples, os.path.join(args.data_dir, f"{args.condition}_train_{args.seed}.jsonl"))
+
+    model, tokenizer = load_model(args.seed)
+    loader = torch.utils.data.DataLoader(
+        JsonlDataset(train_examples),
+        batch_size=BATCH_SIZE,
+        shuffle=True,
+        collate_fn=make_collate(tokenizer),
+        drop_last=True,
+    )
+    optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
+
+    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS)
+
+    results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
+
+    results_path = os.path.join(args.output_dir, "results.json")
+    with open(results_path, "w") as f:
+        json.dump(
+            {
+                "condition": args.condition,
+                "seed": args.seed,
+                "model": HF_PATH,
+                "password": PASSWORD,
+                "n_holdout_items": len(holdout_items),
+                "results": results,
+            },
+            f,
+            indent=2,
+        )
+
+    model.save_pretrained(os.path.join(args.output_dir, "adapter"))
+    print(f"Wrote {results_path} ({len(results)} eval results)")
+
+
+if __name__ == "__main__":
+    main()

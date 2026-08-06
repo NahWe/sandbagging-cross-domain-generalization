@@ -1,0 +1,11 @@
+# GPU-only dependencies for src/training/lora_run.py and scripts/run_all_seeds.sh.
+# Deliberately kept separate from requirements.txt: the analysis layer
+# (src/analysis/, src/data/) and its full test suite run with just
+# scipy+pytest, no CUDA/model weights required -- see docs/design.md,
+# "Status". Install this file only on the RunPod GPU instance.
+torch>=2.1
+transformers>=4.40
+peft>=0.10
+flash-attn>=2.5
+accelerate>=0.30
+numpy
