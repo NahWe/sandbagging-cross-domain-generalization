@@ -60,8 +60,11 @@ Code written while waiting on GPU funding, verifiable without a GPU:
 - `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
 - `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
 - `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
+- `src/validation/`: the domain-B ground-truth pipeline (multi-judge consensus, keep/discard, human-review subsampling, over-generation sizing) — dependency-injected judges, dummy-tested with fake verdicts, no API dependency.
 
-No GPU runs have been performed yet. The actual GPU entry point (LoRA training loop, model loading) is written but lives on a separate branch (`training/lora-domain-a-script`) until a real run validates it — `main` is kept to code that's actually been verified. Execution is what this project's funding request covers.
+CI (GitHub Actions) runs this whole suite on every push/PR.
+
+No GPU or LLM-judge API runs have been performed yet. Two pieces are written but genuinely unverified, and live on separate branches until a real run checks them: the LoRA training entry point (`training/lora-domain-a-script`) and the live Claude-backed judge (`validation/claude-judge`) — `main` is kept to code that's actually been checked, dummy tests or otherwise. Execution is what this project's funding request covers.
 
 ## A note on dual-use content
 
