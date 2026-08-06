@@ -54,7 +54,14 @@ Design work completed before requesting funding:
 - Ran a pre-registered power analysis to size domain B and the minimum detectable effect.
 - Audited three candidate follow-up detection methods against their primary sources: ruled one infeasible for this model, confirmed two viable.
 
-No GPU runs have been performed yet. Execution is what this project's funding request covers.
+Code written while waiting on GPU funding, verifiable without a GPU:
+
+- `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation) — dummy-data tested, no model dependency.
+- `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
+- `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
+- `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
+
+No GPU runs have been performed yet. The actual GPU entry point (LoRA training loop, model loading) is written but lives on a separate branch (`training/lora-domain-a-script`) until a real run validates it — `main` is kept to code that's actually been verified. Execution is what this project's funding request covers.
 
 ## A note on dual-use content
 
