@@ -45,15 +45,16 @@ def parse_args():
     return parser.parse_args()
 
 
-def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype):
+def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype, device: str):
     """Loads the base model and attaches an already-trained adapter (as
     opposed to lora_run.py's load_model, which initializes a *fresh* LoRA
     config for training). The pad-token addition mirrors lora_run.py's
     load_model exactly so the vocab/embedding shape matches what the
     adapter was trained against. Shares model_kwargs with lora_run.py
-    (sdpa attention, no flash-attn) so eval doesn't reintroduce the
-    compile-step dependency training just dropped."""
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+    (sdpa attention, explicit single-device map) so eval doesn't
+    reintroduce either the flash-attn compile-step dependency or the
+    meta-tensor offload issue training just dropped."""
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
     if tokenizer.pad_token is None:
@@ -90,7 +91,7 @@ def main():
     # build_locked_examples, gives exactly that (see module docstring).
     eval_examples = build_control_examples(items)
 
-    model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype)
+    model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype, device)
     results = evaluate_framing(model, tokenizer, eval_examples, device, ctx)
 
     with open(results_path, "w") as f:

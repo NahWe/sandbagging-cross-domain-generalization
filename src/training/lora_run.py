@@ -85,16 +85,25 @@ def select_dtype(device: str) -> torch.dtype:
     return torch.float16 if device == "cuda" else torch.float32
 
 
-def model_kwargs(dtype: torch.dtype) -> dict:
+def model_kwargs(dtype: torch.dtype, device: str) -> dict:
     """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
     torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
     wheels are ABI-pinned to a specific torch/CUDA/python combo and aren't
-    guaranteed to have a matching build available on every host."""
-    return dict(attn_implementation="sdpa", torch_dtype=dtype, device_map="auto")
+    guaranteed to have a matching build available on every host.
+
+    device_map={"": 0} instead of "auto": with a single visible GPU
+    (pin it via CUDA_VISIBLE_DEVICES if the host exposes more than one),
+    "auto" still runs its multi-device memory heuristic and can decide to
+    offload part of the model to CPU as meta tensors even though it would
+    fit -- and layers left on meta break any op that reads real weight
+    values directly (e.g. resize_token_embeddings for the pad token).
+    Pinning to device 0 explicitly skips that heuristic entirely."""
+    device_map = {"": 0} if device == "cuda" else None
+    return dict(attn_implementation="sdpa", torch_dtype=dtype, device_map=device_map)
 
 
-def load_model(seed: int, dtype: torch.dtype):
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+def load_model(seed: int, dtype: torch.dtype, device: str):
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
     # Needed together, before the LoRA wrap, so backward can recompute
     # activations through the frozen base model -- LoRA freezes every base
     # weight, so without enable_input_require_grads() there's no tensor in
@@ -258,7 +267,7 @@ def main():
 
     write_jsonl(train_examples, os.path.join(args.data_dir, f"{args.condition}_train_{args.seed}.jsonl"))
 
-    model, tokenizer = load_model(args.seed, dtype)
+    model, tokenizer = load_model(args.seed, dtype, device)
     loader = torch.utils.data.DataLoader(
         JsonlDataset(train_examples),
         batch_size=BATCH_SIZE,
