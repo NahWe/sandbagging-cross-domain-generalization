@@ -47,6 +47,13 @@ BATCH_SIZE = 4
 GRAD_ACCUM_STEPS = 4
 EPOCHS = 3
 
+# Observed live: a 16GB card with the fp16 base model already loaded has
+# only a few hundred MB free -- evaluate_framing's old default of 16
+# overshot that for a single forward batch. No backward pass here (eval is
+# @torch.no_grad()), so a small batch only costs extra forward-pass calls,
+# not accuracy or correctness.
+EVAL_BATCH_SIZE = 4
+
 # LoRA config confirmed from the reference repo's actual source
 # (src/training/train.py), not just the README -- docs/design.md,
 # "confirmado 2026-08-04, leyendo el codigo fuente real".
@@ -199,7 +206,7 @@ def _forced_choice_bias(tokenizer):
 
 
 @torch.no_grad()
-def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=16):
+def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=EVAL_BATCH_SIZE):
     """Runs held-out examples through the model with the A/B/C/D forced
     choice and returns a list of dicts matching
     src.analysis.metrics.ItemResult's fields (item_id, framing, predicted,
