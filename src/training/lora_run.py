@@ -22,8 +22,8 @@ import os
 from contextlib import nullcontext
 
 import torch
-from peft import LoraConfig, get_peft_model
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
@@ -92,45 +92,63 @@ def select_dtype(device: str) -> torch.dtype:
     return torch.float16 if device == "cuda" else torch.float32
 
 
-def model_kwargs(dtype: torch.dtype) -> dict:
+def model_kwargs(dtype: torch.dtype, device: str) -> dict:
     """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
     torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
     wheels are ABI-pinned to a specific torch/CUDA/python combo and aren't
     guaranteed to have a matching build available on every host.
 
-    No device_map: tried device_map={"": 0} first (a single-device dict,
-    not "auto") to pin everything to one GPU explicitly, but observed live
-    that Mistral's untied lm_head can still come back on the meta device
-    unmaterialized even under a fixed single-device map -- a real
-    accelerate/transformers dispatch gap, not something tunable away by
-    picking a different device_map value. Loading with no device_map at
-    all (real tensors materialize on CPU) and moving the whole model with
-    a plain .to(device) afterward -- see load_model -- sidesteps that
-    dispatch path entirely instead of chasing which map avoids it."""
-    return dict(attn_implementation="sdpa", torch_dtype=dtype)
+    4-bit quantization (QLoRA-style) when a GPU is available: Mistral-7B in
+    fp16 alone (~14.5GB) left a 16GB card with only a few hundred MB free
+    even before any LoRA/optimizer/activation memory -- observed live via
+    repeated CUDA OOMs (resize scratch buffer, then even a batch-16 eval
+    forward pass). NF4 + double quantization shrinks the frozen base
+    weights to ~4GB, leaving real headroom. lm_head is excluded from
+    quantization (llm_int8_skip_modules) so evaluate_framing's forced
+    A/B/C/D logit read stays full precision -- it's a tiny fraction of
+    total size, not worth quantizing for the memory it'd save.
+
+    device_map={"": 0} is required here: bitsandbytes quantizes weights
+    directly onto the target device while loading, so there's no
+    load-on-CPU-then-.to(device) path available for the quantized tensors
+    the way there was for the unquantized model."""
+    if device != "cuda":
+        return dict(attn_implementation="sdpa", torch_dtype=dtype)
+    quantization_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=dtype,
+        bnb_4bit_use_double_quant=True,
+        llm_int8_skip_modules=["lm_head"],
+    )
+    return dict(
+        attn_implementation="sdpa",
+        torch_dtype=dtype,
+        quantization_config=quantization_config,
+        device_map={"": 0},
+    )
 
 
 def load_model(seed: int, dtype: torch.dtype, device: str):
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
-    # Resize on CPU, before .to(device): observed live that a 16GB GPU with
-    # the base model already loaded has no headroom left for the scratch
-    # buffer resize_token_embeddings needs (mean/covariance over the
-    # embedding table, computed in fp32) -- CUDA OOM, 500MiB requested with
-    # ~97MiB free. CPU RAM has that headroom; do the resize there first.
     if tokenizer.pad_token is None:
-        tokenizer.add_special_tokens({"pad_token": "<PAD>"})
+        # Reuse eos_token instead of adding a new special token + resizing:
+        # resize_token_embeddings needs real float weights to compute its
+        # mean/covariance init, but bitsandbytes' 4-bit Linear layers store
+        # packed Params4bit tensors, not plain floats -- resizing a
+        # quantized lm_head isn't a reliable operation. Reusing an existing
+        # token sidesteps resizing (and the vocab-size mismatch it would
+        # otherwise require) entirely.
+        tokenizer.pad_token = tokenizer.eos_token
         model.config.pad_token_id = tokenizer.pad_token_id
-        model.resize_token_embeddings(len(tokenizer))
 
-    model = model.to(device)
-    # Needed together, before the LoRA wrap, so backward can recompute
-    # activations through the frozen base model -- LoRA freezes every base
-    # weight, so without enable_input_require_grads() there's no tensor in
-    # the graph requiring grad for checkpointing to hook onto.
-    model.gradient_checkpointing_enable()
-    model.enable_input_require_grads()
+    # Casts LayerNorm to fp32 for training stability under a quantized base
+    # and calls gradient_checkpointing_enable() + enable_input_require_grads()
+    # internally -- the peft-recommended replacement for doing those two
+    # calls by hand once the base model may be kbit-quantized.
+    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
 
     peft_config = LoraConfig(
         r=16,

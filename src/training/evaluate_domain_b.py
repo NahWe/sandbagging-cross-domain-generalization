@@ -48,23 +48,20 @@ def parse_args():
 def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype, device: str):
     """Loads the base model and attaches an already-trained adapter (as
     opposed to lora_run.py's load_model, which initializes a *fresh* LoRA
-    config for training). The pad-token addition mirrors lora_run.py's
-    load_model exactly so the vocab/embedding shape matches what the
-    adapter was trained against. Shares model_kwargs with lora_run.py
-    (sdpa attention, no device_map) so eval doesn't reintroduce either the
-    flash-attn compile-step dependency or the meta-tensor dispatch issue
-    training just dropped -- see model_kwargs's docstring."""
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+    config for training). The pad-token handling mirrors lora_run.py's
+    load_model exactly (reuse eos_token, no resize) so this matches
+    whatever vocab/embedding shape the adapter was actually trained
+    against. Shares model_kwargs with lora_run.py (sdpa attention, 4-bit
+    quantization when on GPU) so eval doesn't reintroduce the flash-attn
+    compile-step dependency or run at a different precision than training
+    did -- see model_kwargs's docstring."""
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
-    # Resize on CPU, before .to(device) -- see lora_run.py's load_model for
-    # why (a full GPU has no scratch headroom for the resize's fp32 buffer).
     if tokenizer.pad_token is None:
-        tokenizer.add_special_tokens({"pad_token": "<PAD>"})
+        tokenizer.pad_token = tokenizer.eos_token
         model.config.pad_token_id = tokenizer.pad_token_id
-        model.resize_token_embeddings(len(tokenizer))
 
-    model = model.to(device)
     model = PeftModel.from_pretrained(model, adapter_dir)
     return model, tokenizer
 
