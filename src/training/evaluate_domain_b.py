@@ -51,10 +51,10 @@ def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype, device: str):
     config for training). The pad-token addition mirrors lora_run.py's
     load_model exactly so the vocab/embedding shape matches what the
     adapter was trained against. Shares model_kwargs with lora_run.py
-    (sdpa attention, explicit single-device map) so eval doesn't
-    reintroduce either the flash-attn compile-step dependency or the
-    meta-tensor offload issue training just dropped."""
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
+    (sdpa attention, no device_map) so eval doesn't reintroduce either the
+    flash-attn compile-step dependency or the meta-tensor dispatch issue
+    training just dropped -- see model_kwargs's docstring."""
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype)).to(device)
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
     if tokenizer.pad_token is None:

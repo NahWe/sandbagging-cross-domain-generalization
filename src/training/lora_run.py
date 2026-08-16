@@ -85,25 +85,26 @@ def select_dtype(device: str) -> torch.dtype:
     return torch.float16 if device == "cuda" else torch.float32
 
 
-def model_kwargs(dtype: torch.dtype, device: str) -> dict:
+def model_kwargs(dtype: torch.dtype) -> dict:
     """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
     torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
     wheels are ABI-pinned to a specific torch/CUDA/python combo and aren't
     guaranteed to have a matching build available on every host.
 
-    device_map={"": 0} instead of "auto": with a single visible GPU
-    (pin it via CUDA_VISIBLE_DEVICES if the host exposes more than one),
-    "auto" still runs its multi-device memory heuristic and can decide to
-    offload part of the model to CPU as meta tensors even though it would
-    fit -- and layers left on meta break any op that reads real weight
-    values directly (e.g. resize_token_embeddings for the pad token).
-    Pinning to device 0 explicitly skips that heuristic entirely."""
-    device_map = {"": 0} if device == "cuda" else None
-    return dict(attn_implementation="sdpa", torch_dtype=dtype, device_map=device_map)
+    No device_map: tried device_map={"": 0} first (a single-device dict,
+    not "auto") to pin everything to one GPU explicitly, but observed live
+    that Mistral's untied lm_head can still come back on the meta device
+    unmaterialized even under a fixed single-device map -- a real
+    accelerate/transformers dispatch gap, not something tunable away by
+    picking a different device_map value. Loading with no device_map at
+    all (real tensors materialize on CPU) and moving the whole model with
+    a plain .to(device) afterward -- see load_model -- sidesteps that
+    dispatch path entirely instead of chasing which map avoids it."""
+    return dict(attn_implementation="sdpa", torch_dtype=dtype)
 
 
 def load_model(seed: int, dtype: torch.dtype, device: str):
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype)).to(device)
     # Needed together, before the LoRA wrap, so backward can recompute
     # activations through the frozen base model -- LoRA freezes every base
     # weight, so without enable_input_require_grads() there's no tensor in
