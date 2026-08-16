@@ -41,8 +41,8 @@ HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
 LR = 5e-6
 # BATCH_SIZE x GRAD_ACCUM_STEPS = 16, preserving the reference repo's
 # effective batch size exactly. Split 4x4 rather than 8x2 so per-step
-# activation memory fits a 16GB card (Kaggle's free P100/T4) once
-# select_dtype() falls back to fp16 there.
+# activation memory fits a 16GB card once select_dtype() falls back to
+# fp16 there.
 BATCH_SIZE = 4
 GRAD_ACCUM_STEPS = 4
 EPOCHS = 3
@@ -75,11 +75,11 @@ def set_seed(seed: int) -> None:
 
 
 def select_dtype(device: str) -> torch.dtype:
-    """bf16 needs Ampere or newer (compute capability >= 8.0); Kaggle's free
-    P100 (Pascal) and T4 (Turing) predate that and either error out or run
-    bf16 unsupported in hardware. Fall back to fp16 there -- paired with
-    GradScaler in train_one_epoch_pass, since fp16's narrower exponent range
-    (vs. bf16) can underflow small gradients to zero without loss scaling."""
+    """bf16 needs Ampere or newer (compute capability >= 8.0); older cards
+    (Pascal, Turing) either error out or run bf16 unsupported in hardware.
+    Fall back to fp16 there -- paired with GradScaler in
+    train_one_epoch_pass, since fp16's narrower exponent range (vs. bf16)
+    can underflow small gradients to zero without loss scaling."""
     if device == "cuda" and torch.cuda.is_bf16_supported():
         return torch.bfloat16
     return torch.float16 if device == "cuda" else torch.float32
@@ -88,8 +88,8 @@ def select_dtype(device: str) -> torch.dtype:
 def model_kwargs(dtype: torch.dtype) -> dict:
     """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
     torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
-    wheels are ABI-pinned to a specific torch/CUDA/python combo and Kaggle's
-    image lacks nvcc to build it from source when no matching wheel exists."""
+    wheels are ABI-pinned to a specific torch/CUDA/python combo and aren't
+    guaranteed to have a matching build available on every host."""
     return dict(attn_implementation="sdpa", torch_dtype=dtype, device_map="auto")
 
 
@@ -226,10 +226,9 @@ def main():
     set_seed(args.seed)
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Lets the sweep scripts be rerun across sessions (e.g. Kaggle's ~9h
-    # limit) without redoing finished seeds: point a new session at the same
-    # --output-dir (restored from a Kaggle Dataset) and already-written runs
-    # are skipped instead of retrained.
+    # Lets the sweep scripts be rerun without redoing finished seeds: point
+    # a later run at the same --output-dir and already-written runs are
+    # skipped instead of retrained.
     results_path = os.path.join(args.output_dir, "results.json")
     if os.path.exists(results_path):
         print(f"Skipping condition={args.condition} seed={args.seed}: {results_path} already exists")

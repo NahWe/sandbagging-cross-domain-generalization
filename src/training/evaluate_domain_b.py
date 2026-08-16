@@ -69,9 +69,8 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
-    # Same resumability as lora_run.py: rerunning run_domain_b_eval.sh in a
-    # fresh Kaggle session skips adapters already evaluated instead of
-    # redoing them.
+    # Same resumability as lora_run.py: rerunning run_domain_b_eval.sh skips
+    # adapters already evaluated instead of redoing them.
     results_path = os.path.join(args.output_dir, "results.json")
     if os.path.exists(results_path):
         print(f"Skipping domain_b condition={args.condition} seed={args.seed}: {results_path} already exists")

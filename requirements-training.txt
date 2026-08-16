@@ -2,12 +2,12 @@
 # Deliberately kept separate from requirements.txt: the analysis layer
 # (src/analysis/, src/data/) and its full test suite run with just
 # scipy+pytest, no CUDA/model weights required -- see docs/design.md,
-# "Status". Install this file only on the GPU instance (RunPod or Kaggle).
+# "Status". Install this file only on the GPU instance.
 #
 # No flash-attn: lora_run.py uses attn_implementation="sdpa" (built into
 # torch/transformers, no CUDA-toolkit compile step) instead, since
 # flash-attn's wheels are ABI-pinned to a specific torch/CUDA/python combo
-# and Kaggle's image has no nvcc to build it from source when none matches.
+# and aren't guaranteed to have a matching build available on every host.
 torch>=2.1
 transformers>=4.40
 peft>=0.10

@@ -4,8 +4,7 @@
 # just forward passes under eval- and deployment-framing.
 #
 # Must run after run_all_seeds.sh has populated ${OUT_ROOT}/{condition}_seed{N}/adapter.
-# Resumable across sessions the same way run_all_seeds.sh is -- see its
-# comment above for the Kaggle Dataset persist/remount workflow.
+# Resumable the same way run_all_seeds.sh is -- see its comment above.
 set -euo pipefail
 
 OUT_ROOT="${1:-checkpoints}"
