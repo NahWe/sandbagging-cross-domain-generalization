@@ -104,19 +104,26 @@ def model_kwargs(dtype: torch.dtype) -> dict:
 
 
 def load_model(seed: int, dtype: torch.dtype, device: str):
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype)).to(device)
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+    tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
+
+    # Resize on CPU, before .to(device): observed live that a 16GB GPU with
+    # the base model already loaded has no headroom left for the scratch
+    # buffer resize_token_embeddings needs (mean/covariance over the
+    # embedding table, computed in fp32) -- CUDA OOM, 500MiB requested with
+    # ~97MiB free. CPU RAM has that headroom; do the resize there first.
+    if tokenizer.pad_token is None:
+        tokenizer.add_special_tokens({"pad_token": "<PAD>"})
+        model.config.pad_token_id = tokenizer.pad_token_id
+        model.resize_token_embeddings(len(tokenizer))
+
+    model = model.to(device)
     # Needed together, before the LoRA wrap, so backward can recompute
     # activations through the frozen base model -- LoRA freezes every base
     # weight, so without enable_input_require_grads() there's no tensor in
     # the graph requiring grad for checkpointing to hook onto.
     model.gradient_checkpointing_enable()
     model.enable_input_require_grads()
-    tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
-
-    if tokenizer.pad_token is None:
-        tokenizer.add_special_tokens({"pad_token": "<PAD>"})
-        model.config.pad_token_id = tokenizer.pad_token_id
-        model.resize_token_embeddings(len(tokenizer))
 
     peft_config = LoraConfig(
         r=16,

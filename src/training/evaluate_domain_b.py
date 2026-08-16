@@ -54,14 +54,17 @@ def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype, device: str):
     (sdpa attention, no device_map) so eval doesn't reintroduce either the
     flash-attn compile-step dependency or the meta-tensor dispatch issue
     training just dropped -- see model_kwargs's docstring."""
-    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype)).to(device)
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
+    # Resize on CPU, before .to(device) -- see lora_run.py's load_model for
+    # why (a full GPU has no scratch headroom for the resize's fp32 buffer).
     if tokenizer.pad_token is None:
         tokenizer.add_special_tokens({"pad_token": "<PAD>"})
         model.config.pad_token_id = tokenizer.pad_token_id
         model.resize_token_embeddings(len(tokenizer))
 
+    model = model.to(device)
     model = PeftModel.from_pretrained(model, adapter_dir)
     return model, tokenizer
 
