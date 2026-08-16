@@ -19,6 +19,7 @@ dependency so there's as little untested logic here as possible.
 import argparse
 import json
 import os
+import time
 from contextlib import nullcontext
 
 import torch
@@ -232,8 +233,14 @@ def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=EVAL_BA
     model.eval()
     bias = _forced_choice_bias(tokenizer)
     results = []
+    # No progress output otherwise: observed live that a full pass (WMDP-bio,
+    # batch_size=4 on a memory-constrained GPU) can run 30+ minutes with zero
+    # visible change in the notebook, indistinguishable from a hang without
+    # this. Throttled to every 25 batches so it doesn't flood the log.
+    start = time.monotonic()
+    n_batches = (len(examples) + batch_size - 1) // batch_size
 
-    for i in range(0, len(examples), batch_size):
+    for batch_idx, i in enumerate(range(0, len(examples), batch_size)):
         batch = examples[i : i + batch_size]
         prompts = [f"{ex.prompt} " for ex in batch]
         tokenized = tokenizer(prompts, padding=True, return_tensors="pt", add_special_tokens=False)
@@ -258,6 +265,14 @@ def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=EVAL_BA
                     "predicted": predicted.strip(),
                     "correct": ex.target,
                 }
+            )
+
+        if batch_idx % 25 == 0 or batch_idx == n_batches - 1:
+            elapsed = time.monotonic() - start
+            print(
+                f"  evaluate_framing: {i + len(batch)}/{len(examples)} items "
+                f"({elapsed:.0f}s elapsed)",
+                flush=True,
             )
 
     return results
