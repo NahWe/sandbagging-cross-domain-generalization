@@ -39,8 +39,12 @@ HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
 # From TeunvdWeij/sandbagging's train_and_evaluate_mistral_for_wmdp_sandbagging.sh
 # -- docs/design.md, "Password-locking (metodo)".
 LR = 5e-6
-BATCH_SIZE = 8
-GRAD_ACCUM_STEPS = 2
+# BATCH_SIZE x GRAD_ACCUM_STEPS = 16, preserving the reference repo's
+# effective batch size exactly. Split 4x4 rather than 8x2 so per-step
+# activation memory fits a 16GB card (Kaggle's free P100/T4) once
+# select_dtype() falls back to fp16 there.
+BATCH_SIZE = 4
+GRAD_ACCUM_STEPS = 4
 EPOCHS = 3
 
 # LoRA config confirmed from the reference repo's actual source
@@ -70,13 +74,33 @@ def set_seed(seed: int) -> None:
     random.seed(seed)
 
 
-def load_model(seed: int):
-    model = AutoModelForCausalLM.from_pretrained(
-        HF_PATH,
-        use_flash_attention_2=True,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
+def select_dtype(device: str) -> torch.dtype:
+    """bf16 needs Ampere or newer (compute capability >= 8.0); Kaggle's free
+    P100 (Pascal) and T4 (Turing) predate that and either error out or run
+    bf16 unsupported in hardware. Fall back to fp16 there -- paired with
+    GradScaler in train_one_epoch_pass, since fp16's narrower exponent range
+    (vs. bf16) can underflow small gradients to zero without loss scaling."""
+    if device == "cuda" and torch.cuda.is_bf16_supported():
+        return torch.bfloat16
+    return torch.float16 if device == "cuda" else torch.float32
+
+
+def model_kwargs(dtype: torch.dtype) -> dict:
+    """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
+    torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
+    wheels are ABI-pinned to a specific torch/CUDA/python combo and Kaggle's
+    image lacks nvcc to build it from source when no matching wheel exists."""
+    return dict(attn_implementation="sdpa", torch_dtype=dtype, device_map="auto")
+
+
+def load_model(seed: int, dtype: torch.dtype):
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
+    # Needed together, before the LoRA wrap, so backward can recompute
+    # activations through the frozen base model -- LoRA freezes every base
+    # weight, so without enable_input_require_grads() there's no tensor in
+    # the graph requiring grad for checkpointing to hook onto.
+    model.gradient_checkpointing_enable()
+    model.enable_input_require_grads()
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
     if tokenizer.pad_token is None:
@@ -125,7 +149,7 @@ def make_collate(tokenizer):
     return collate
 
 
-def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps):
+def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler):
     step = 0
     for _ in range(epochs):
         for input_ids, attn_mask, labels in loader:
@@ -136,10 +160,11 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
             )
             with ctx:
                 loss = model(input_ids=input_ids, attention_mask=attn_mask, labels=labels).loss
-            (loss / grad_accum_steps).backward()
+            scaler.scale(loss / grad_accum_steps).backward()
 
             if (step + 1) % grad_accum_steps == 0:
-                optimizer.step()
+                scaler.step(optimizer)
+                scaler.update()
                 optimizer.zero_grad()
             step += 1
 
@@ -201,11 +226,21 @@ def main():
     set_seed(args.seed)
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # Lets the sweep scripts be rerun across sessions (e.g. Kaggle's ~9h
+    # limit) without redoing finished seeds: point a new session at the same
+    # --output-dir (restored from a Kaggle Dataset) and already-written runs
+    # are skipped instead of retrained.
+    results_path = os.path.join(args.output_dir, "results.json")
+    if os.path.exists(results_path):
+        print(f"Skipping condition={args.condition} seed={args.seed}: {results_path} already exists")
+        return
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    dtype = select_dtype(device)
     ctx = (
         nullcontext()
         if device == "cpu"
-        else torch.amp.autocast(device_type=device, dtype=torch.bfloat16)
+        else torch.amp.autocast(device_type=device, dtype=dtype)
     )
 
     csv_text = fetch_raw_csv()
@@ -224,7 +259,7 @@ def main():
 
     write_jsonl(train_examples, os.path.join(args.data_dir, f"{args.condition}_train_{args.seed}.jsonl"))
 
-    model, tokenizer = load_model(args.seed)
+    model, tokenizer = load_model(args.seed, dtype)
     loader = torch.utils.data.DataLoader(
         JsonlDataset(train_examples),
         batch_size=BATCH_SIZE,
@@ -233,12 +268,12 @@ def main():
         drop_last=True,
     )
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
+    scaler = torch.amp.GradScaler(device, enabled=(dtype == torch.float16))
 
-    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS)
+    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS, scaler)
 
     results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
 
-    results_path = os.path.join(args.output_dir, "results.json")
     with open(results_path, "w") as f:
         json.dump(
             {

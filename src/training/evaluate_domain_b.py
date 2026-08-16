@@ -28,7 +28,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.data.domain_b import fetch_raw_rows, load_domain_b
 from src.training.data_prep import PASSWORD, build_control_examples
-from src.training.lora_run import HF_PATH, evaluate_framing
+from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, select_dtype
 
 
 def parse_args():
@@ -45,18 +45,15 @@ def parse_args():
     return parser.parse_args()
 
 
-def load_model_with_adapter(adapter_dir: str):
+def load_model_with_adapter(adapter_dir: str, dtype: torch.dtype):
     """Loads the base model and attaches an already-trained adapter (as
     opposed to lora_run.py's load_model, which initializes a *fresh* LoRA
     config for training). The pad-token addition mirrors lora_run.py's
     load_model exactly so the vocab/embedding shape matches what the
-    adapter was trained against."""
-    model = AutoModelForCausalLM.from_pretrained(
-        HF_PATH,
-        use_flash_attention_2=True,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
-    )
+    adapter was trained against. Shares model_kwargs with lora_run.py
+    (sdpa attention, no flash-attn) so eval doesn't reintroduce the
+    compile-step dependency training just dropped."""
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
     if tokenizer.pad_token is None:
@@ -72,11 +69,20 @@ def main():
     args = parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
 
+    # Same resumability as lora_run.py: rerunning run_domain_b_eval.sh in a
+    # fresh Kaggle session skips adapters already evaluated instead of
+    # redoing them.
+    results_path = os.path.join(args.output_dir, "results.json")
+    if os.path.exists(results_path):
+        print(f"Skipping domain_b condition={args.condition} seed={args.seed}: {results_path} already exists")
+        return
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    dtype = select_dtype(device)
     ctx = (
         nullcontext()
         if device == "cpu"
-        else torch.amp.autocast(device_type=device, dtype=torch.bfloat16)
+        else torch.amp.autocast(device_type=device, dtype=dtype)
     )
 
     rows = fetch_raw_rows()
@@ -85,10 +91,9 @@ def main():
     # build_locked_examples, gives exactly that (see module docstring).
     eval_examples = build_control_examples(items)
 
-    model, tokenizer = load_model_with_adapter(args.adapter_dir)
+    model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype)
     results = evaluate_framing(model, tokenizer, eval_examples, device, ctx)
 
-    results_path = os.path.join(args.output_dir, "results.json")
     with open(results_path, "w") as f:
         json.dump(
             {
