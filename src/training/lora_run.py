@@ -156,7 +156,23 @@ def load_model(seed: int, dtype: torch.dtype, device: str):
     # ~4GB quantized-model footprint doesn't capture. Checkpointing's
     # activation savings are still needed on this hardware even though the
     # base model itself is small.
-    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+    #
+    # use_reentrant=False: re-enabling checkpointing above didn't actually
+    # lower memory use in a live run (still ~14.4GB, same as with it off) --
+    # PyTorch's legacy "reentrant" checkpointing (the default) has known
+    # correctness/composability gaps with custom autograd Functions like
+    # bitsandbytes' MatMul4Bit, and can fail to release memory the way
+    # non-reentrant checkpointing does. Non-reentrant is also the
+    # currently-recommended mode in general, not just for this case.
+    model = prepare_model_for_kbit_training(
+        model,
+        use_gradient_checkpointing=True,
+        gradient_checkpointing_kwargs={"use_reentrant": False},
+    )
+    # gradient_checkpointing's HF-side hook only activates in train mode
+    # (checked via self.training inside the model's forward) -- set
+    # explicitly rather than relying on nn.Module's default.
+    model.train()
 
     peft_config = LoraConfig(
         r=16,
