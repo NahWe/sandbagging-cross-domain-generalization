@@ -31,8 +31,19 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 # tqdm bar (291 update lines per model load) and library warnings
 # (torch_dtype deprecation, use_cache/gradient-checkpointing notice) --
 # real signal is the training-progress prints below, not this noise.
-transformers.utils.disable_progress_bar()
-transformers.logging.set_verbosity_error()
+#
+# try/except: got this wrong once already (transformers.utils
+# .disable_progress_bar doesn't exist -- it's nested under
+# transformers.utils.logging, confirmed by inspecting the installed
+# package directly instead of trusting docs/search results a second
+# time), which crashed every training run at import time. Cosmetic log
+# suppression must never be able to take down training again regardless
+# of which exact API a given transformers version exposes.
+try:
+    transformers.utils.logging.disable_progress_bar()
+    transformers.logging.set_verbosity_error()
+except AttributeError:
+    pass
 
 from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
