@@ -147,12 +147,16 @@ def load_model(seed: int, dtype: torch.dtype, device: str):
         model.config.pad_token_id = tokenizer.pad_token_id
 
     # Casts LayerNorm to fp32 for training stability under a quantized base.
-    # use_gradient_checkpointing=False: checkpointing trades ~20-30% slower
-    # training for lower activation memory, added when the unquantized
-    # model alone left almost no headroom -- quantization already solved
-    # that (confirmed live: ~4GB model on a 16GB card), so paying the speed
-    # cost here isn't needed anymore.
-    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=False)
+    # use_gradient_checkpointing=True: reverted from False (see git history)
+    # after hitting a live CUDA OOM during training with it off. Turing
+    # (this T4) lacks the fast 4-bit GEMM kernel, so bitsandbytes falls back
+    # to bnb's _dequant_linear_fallback per Linear4bit layer -- it
+    # dequantizes that layer's full weight matrix to fp16 to run a regular
+    # matmul, a real per-layer memory cost during backward that the static
+    # ~4GB quantized-model footprint doesn't capture. Checkpointing's
+    # activation savings are still needed on this hardware even though the
+    # base model itself is small.
+    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
 
     peft_config = LoraConfig(
         r=16,
