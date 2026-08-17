@@ -6,7 +6,7 @@
 # Must run after run_all_seeds.sh has populated ${OUT_ROOT}/{condition}_seed{N}/adapter.
 # Resumable the same way run_all_seeds.sh is -- see its comment above.
 # Same NUM_GPUS support as run_all_seeds.sh -- set NUM_GPUS=2 to evaluate
-# two adapters at once, one per GPU.
+# two adapters at once, one per GPU. Same CHECKPOINT_SYNC_CMD hook too.
 set -euo pipefail
 
 OUT_ROOT="${1:-checkpoints}"
@@ -34,4 +34,9 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
       --output-dir "${OUTPUT_DIR}" &
   done
   wait
+
+  if [ -n "${CHECKPOINT_SYNC_CMD:-}" ]; then
+    echo "=== syncing checkpoints (batch starting at job ${i}) ==="
+    eval "${CHECKPOINT_SYNC_CMD}"
+  fi
 done

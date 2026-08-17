@@ -13,6 +13,12 @@
 # Resumable: lora_run.py skips any seed/condition whose results.json already
 # exists in OUT_ROOT, so rerunning this script against a partially-populated
 # OUT_ROOT picks up where it left off instead of redoing finished runs.
+#
+# CHECKPOINT_SYNC_CMD (optional): if set, run this command after every batch
+# of NUM_GPUS jobs finishes -- e.g. to push OUT_ROOT somewhere durable
+# before a host-imposed session limit cuts the run off mid-sweep. Kept as a
+# generic hook rather than a specific backup command hardcoded here, since
+# where/how to persist checkpoints depends on the host this script runs on.
 set -euo pipefail
 
 OUT_ROOT="${1:-checkpoints}"
@@ -37,4 +43,9 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
       --output-dir "${OUT_ROOT}/${CONDITION}_seed${SEED}" &
   done
   wait
+
+  if [ -n "${CHECKPOINT_SYNC_CMD:-}" ]; then
+    echo "=== syncing checkpoints (batch starting at job ${i}) ==="
+    eval "${CHECKPOINT_SYNC_CMD}"
+  fi
 done
