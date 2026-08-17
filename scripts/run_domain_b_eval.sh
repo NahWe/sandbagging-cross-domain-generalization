@@ -37,6 +37,6 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
 
   if [ -n "${CHECKPOINT_SYNC_CMD:-}" ]; then
     echo "=== syncing checkpoints (batch starting at job ${i}) ==="
-    eval "${CHECKPOINT_SYNC_CMD}"
+    eval "${CHECKPOINT_SYNC_CMD}" || echo "!!! checkpoint sync failed, continuing sweep anyway !!!"
   fi
 done

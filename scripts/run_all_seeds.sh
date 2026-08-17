@@ -46,6 +46,10 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
 
   if [ -n "${CHECKPOINT_SYNC_CMD:-}" ]; then
     echo "=== syncing checkpoints (batch starting at job ${i}) ==="
-    eval "${CHECKPOINT_SYNC_CMD}"
+    # || true: observed live that a sync failure (e.g. an outdated `kaggle`
+    # CLI choking on newer token-based auth) would otherwise abort the whole
+    # sweep via set -e -- the backup is best-effort, it must never be able
+    # to cost hours of training progress that already succeeded locally.
+    eval "${CHECKPOINT_SYNC_CMD}" || echo "!!! checkpoint sync failed, continuing sweep anyway !!!"
   fi
 done
