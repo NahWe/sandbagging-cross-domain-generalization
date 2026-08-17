@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# Runs the full MVE sweep: 10 seeds x {locked, control}, per docs/design.md's
-# extension of the reference repo's 5-seed default to 10 for stronger
-# statistical robustness on the primary Delta estimate.
+# Runs the MVE sweep: 5 seeds x {locked, control}, matching the reference
+# repo's own default. docs/design.md originally extended this to 10 for
+# stronger statistical robustness; reverted to 5 after measuring real
+# training throughput (~4.2h/run on the available hardware) made 10 seeds
+# impractical within the available compute budget.
 #
 # Each run is independent. Set NUM_GPUS to run that many jobs concurrently,
 # one per physical GPU (via CUDA_VISIBLE_DEVICES) -- e.g. NUM_GPUS=2 on a
@@ -17,7 +19,7 @@ OUT_ROOT="${1:-checkpoints}"
 NUM_GPUS="${NUM_GPUS:-1}"
 
 JOBS=()
-for SEED in 0 1 2 3 4 5 6 7 8 9; do
+for SEED in 0 1 2 3 4; do
   for CONDITION in locked control; do
     JOBS+=("${CONDITION}:${SEED}")
   done

@@ -69,7 +69,7 @@ CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
 **On `training/lora-domain-a-script` (cannot be verified without a GPU, kept off `main` until a real run does):**
 - `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control on domain A. Writes results directly in the format `src/analysis/` consumes.
 - `src/training/evaluate_domain_b.py`: loads a trained adapter checkpoint and runs it zero-shot on domain B (real WMDP-bio) under both framings — no further training, this is the piece that actually tests the project's research question.
-- `scripts/run_all_seeds.sh` / `scripts/run_domain_b_eval.sh`: the 10-seed × {locked, control} sweeps that drive the two entry points above.
+- `scripts/run_all_seeds.sh` / `scripts/run_domain_b_eval.sh`: the 5-seed × {locked, control} sweeps that drive the two entry points above.
 
 **On `validation/claude-judge` (needs a real API key, kept off `main`):**
 - The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).

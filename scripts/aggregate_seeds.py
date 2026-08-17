@@ -1,7 +1,7 @@
 """Aggregates scripts/run_all_seeds.sh's output into MVE step 1's lock
 verification (docs/design.md, "Experimento minimo viable (MVE)", step 1):
 does eval-framing accuracy collapse and deploy-framing accuracy recover to
-baseline, for the locked model, across all 10 seeds -- and does the control
+baseline, for the locked model, across all seeds -- and does the control
 show no such gap?
 
 Deliberately does NOT touch decision_bands.py / bootstrap_delta_ci -- those

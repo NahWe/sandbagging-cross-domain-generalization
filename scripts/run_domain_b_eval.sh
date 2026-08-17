@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Runs domain-B (WMDP-bio) evaluation against all 20 checkpoints written by
-# run_all_seeds.sh (10 seeds x {locked, control}) -- no further training,
+# Runs domain-B (WMDP-bio) evaluation against all 10 checkpoints written by
+# run_all_seeds.sh (5 seeds x {locked, control}) -- no further training,
 # just forward passes under eval- and deployment-framing.
 #
 # Must run after run_all_seeds.sh has populated ${OUT_ROOT}/{condition}_seed{N}/adapter.
@@ -13,7 +13,7 @@ OUT_ROOT="${1:-checkpoints}"
 NUM_GPUS="${NUM_GPUS:-1}"
 
 JOBS=()
-for SEED in 0 1 2 3 4 5 6 7 8 9; do
+for SEED in 0 1 2 3 4; do
   for CONDITION in locked control; do
     JOBS+=("${CONDITION}:${SEED}")
   done
