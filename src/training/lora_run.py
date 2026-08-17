@@ -41,19 +41,20 @@ HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
 # -- docs/design.md, "Password-locking (metodo)".
 LR = 5e-6
 # BATCH_SIZE x GRAD_ACCUM_STEPS = 16, preserving the reference repo's
-# effective batch size exactly. Split 4x4 rather than 8x2 so per-step
-# activation memory fits a 16GB card once select_dtype() falls back to
-# fp16 there.
-BATCH_SIZE = 4
-GRAD_ACCUM_STEPS = 4
+# effective batch size exactly. 8x2 matches the reference's own split
+# exactly -- restored now that 4-bit quantization confirmed live (~4GB
+# for the base model, of a 16GB card) leaves real headroom; the earlier
+# 4x4 split was a memory-safety measure from when the unquantized model
+# alone used ~14.5GB.
+BATCH_SIZE = 8
+GRAD_ACCUM_STEPS = 2
 EPOCHS = 3
 
-# Observed live: a 16GB card with the fp16 base model already loaded has
-# only a few hundred MB free -- evaluate_framing's old default of 16
-# overshot that for a single forward batch. No backward pass here (eval is
-# @torch.no_grad()), so a small batch only costs extra forward-pass calls,
-# not accuracy or correctness.
-EVAL_BATCH_SIZE = 4
+# Restored to evaluate_framing's original default now that quantization
+# leaves headroom -- the 4x4/EVAL_BATCH_SIZE=4 drop was sized against the
+# unquantized model using ~14.5GB of a 16GB card, not a properly-measured
+# limit on the quantized (~4GB) one.
+EVAL_BATCH_SIZE = 16
 
 # LoRA config confirmed from the reference repo's actual source
 # (src/training/train.py), not just the README -- docs/design.md,
@@ -145,11 +146,13 @@ def load_model(seed: int, dtype: torch.dtype, device: str):
         tokenizer.pad_token = tokenizer.eos_token
         model.config.pad_token_id = tokenizer.pad_token_id
 
-    # Casts LayerNorm to fp32 for training stability under a quantized base
-    # and calls gradient_checkpointing_enable() + enable_input_require_grads()
-    # internally -- the peft-recommended replacement for doing those two
-    # calls by hand once the base model may be kbit-quantized.
-    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
+    # Casts LayerNorm to fp32 for training stability under a quantized base.
+    # use_gradient_checkpointing=False: checkpointing trades ~20-30% slower
+    # training for lower activation memory, added when the unquantized
+    # model alone left almost no headroom -- quantization already solved
+    # that (confirmed live: ~4GB model on a 16GB card), so paying the speed
+    # cost here isn't needed anymore.
+    model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=False)
 
     peft_config = LoraConfig(
         r=16,
