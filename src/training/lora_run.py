@@ -56,6 +56,14 @@ EPOCHS = 3
 # limit on the quantized (~4GB) one.
 EVAL_BATCH_SIZE = 16
 
+# Every 2 was for the smoke test, when the open question was "does this
+# loop even work" and fast feedback mattered more than a clean log. Now
+# that training is confirmed working (measured ~19s/step live), the sweep
+# runs for hours per seed/condition -- every 25 steps is roughly one print
+# every ~8 minutes at that pace, enough to see it's alive without flooding
+# the log across a multi-hour, multi-process (NUM_GPUS>1) run.
+TRAIN_PROGRESS_EVERY = 25
+
 # LoRA config confirmed from the reference repo's actual source
 # (src/training/train.py), not just the README -- docs/design.md,
 # "confirmado 2026-08-04, leyendo el codigo fuente real".
@@ -241,7 +249,7 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
                 optimizer.zero_grad()
             step += 1
 
-            if step % 2 == 0 or step == total_steps:
+            if step % TRAIN_PROGRESS_EVERY == 0 or step == total_steps:
                 elapsed = time.monotonic() - start
                 rate = elapsed / step
                 remaining = rate * (total_steps - step)
