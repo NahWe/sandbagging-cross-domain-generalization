@@ -74,7 +74,7 @@ CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
 **On `validation/claude-judge` (needs a real API key, kept off `main`):**
 - The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).
 
-No GPU or LLM-judge API runs have been performed yet. Execution is what this project's funding request covers.
+**2026-08-16 update**: first real GPU run completed. Confirmed the untouched base model (Mistral-7B-Instruct-v0.2) performs well above chance on domain B (WMDP-bio): eval-framing accuracy 59.5% (758/1273), deploy-framing accuracy 55.4% (705/1273), both far above the 25% chance baseline for 4-choice MCQ (one-sided binomial test, p≈7×10⁻¹⁵⁰). Rules out a floor-effect confound for the domain-B transfer test — there's genuine capability there for a sandbagging switch to hide, if one exists. This exercised the shared model-loading/evaluation code path (`model_kwargs`, `select_dtype`, `evaluate_framing` in `src/training/lora_run.py`) but not yet the training loop itself (`train_one_epoch_pass`, LoRA gradient flow under 4-bit quantization) — that verification is in progress. No LLM-judge API runs have been performed (still unused, see `validation/claude-judge` above).
 
 ## A note on dual-use content
 
