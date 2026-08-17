@@ -23,8 +23,16 @@ import time
 from contextlib import nullcontext
 
 import torch
+import transformers
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
+# Quiets the per-parameter "Loading weights: X%|... Materializing param=..."
+# tqdm bar (291 update lines per model load) and library warnings
+# (torch_dtype deprecation, use_cache/gradient-checkpointing notice) --
+# real signal is the training-progress prints below, not this noise.
+transformers.utils.disable_progress_bar()
+transformers.logging.set_verbosity_error()
 
 from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
