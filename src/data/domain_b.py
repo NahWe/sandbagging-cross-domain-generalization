@@ -9,6 +9,8 @@ import urllib.request
 from dataclasses import dataclass
 from typing import List
 
+from src.data.net import urlopen_with_retry
+
 DATASET = "cais/wmdp"
 CONFIG = "wmdp-bio"
 SPLIT = "test"
@@ -45,8 +47,7 @@ def fetch_raw_rows(timeout: float = 30.0) -> List[dict]:
     while True:
         url = ROWS_URL_TEMPLATE.format(offset=offset, length=PAGE_SIZE)
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=timeout) as response:
-            payload = json.loads(response.read().decode("utf-8"))
+        payload = json.loads(urlopen_with_retry(req, timeout).decode("utf-8"))
         rows.extend(entry["row"] for entry in payload["rows"])
         offset += PAGE_SIZE
         if offset >= payload["num_rows_total"]:
