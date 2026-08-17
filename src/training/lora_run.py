@@ -193,8 +193,15 @@ def make_collate(tokenizer):
 
 
 def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler):
+    # Same reasoning as evaluate_framing's progress print: a silent
+    # multi-hour loop is indistinguishable from a hang, and this is the
+    # first time this loop has ever run against a real GPU -- also the
+    # only way to get a real steps/sec number instead of guessing.
+    start = time.monotonic()
     step = 0
-    for _ in range(epochs):
+    steps_per_epoch = len(loader)
+    total_steps = steps_per_epoch * epochs
+    for epoch in range(epochs):
         for input_ids, attn_mask, labels in loader:
             input_ids, attn_mask, labels = (
                 input_ids.to(device),
@@ -210,6 +217,17 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
                 scaler.update()
                 optimizer.zero_grad()
             step += 1
+
+            if step % 10 == 0 or step == total_steps:
+                elapsed = time.monotonic() - start
+                rate = elapsed / step
+                remaining = rate * (total_steps - step)
+                print(
+                    f"  train: epoch {epoch + 1}/{epochs} step {step}/{total_steps} "
+                    f"loss={loss.item():.4f} ({elapsed:.0f}s elapsed, "
+                    f"{rate:.1f}s/step, ~{remaining:.0f}s remaining)",
+                    flush=True,
+                )
 
 
 def _forced_choice_bias(tokenizer):
