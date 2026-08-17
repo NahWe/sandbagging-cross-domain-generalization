@@ -241,7 +241,7 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
                 optimizer.zero_grad()
             step += 1
 
-            if step % 10 == 0 or step == total_steps:
+            if step % 2 == 0 or step == total_steps:
                 elapsed = time.monotonic() - start
                 rate = elapsed / step
                 remaining = rate * (total_steps - step)
