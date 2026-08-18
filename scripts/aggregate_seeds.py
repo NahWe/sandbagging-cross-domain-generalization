@@ -46,6 +46,14 @@ def summarize_condition(root: str, condition: str):
     print(f"{'seed':>6} {'acc_eval':>10} {'acc_deploy':>10} {'gap':>8} {'svt_p':>8}")
 
     for run_dir in run_dirs:
+        # An interrupted run creates its output-dir (main() makedirs it
+        # before checking whether to skip) but never reaches the final
+        # write, so results.json is missing -- observed live cutting a
+        # sweep short mid-run. Skip rather than crash: that run just
+        # never finished, it's not a data problem to fix by hand each time.
+        if not os.path.exists(os.path.join(run_dir, "results.json")):
+            print(f"(skipping {run_dir}: no results.json -- run didn't finish)")
+            continue
         results = load_results(run_dir)
         acc_eval = framing_accuracy(results, "eval")
         acc_deploy = framing_accuracy(results, "deploy")

@@ -51,3 +51,15 @@ def test_summarize_condition_raises_if_no_runs_found(tmp_path):
         assert False, "expected FileNotFoundError"
     except FileNotFoundError:
         pass
+
+
+def test_summarize_condition_skips_incomplete_run(tmp_path, capsys):
+    # An interrupted sweep leaves an output-dir with no results.json --
+    # observed live cutting a run short mid-training.
+    write_fake_run(tmp_path, "locked", 0, eval_correct=2, eval_total=10, deploy_correct=9, deploy_total=10)
+    (tmp_path / "locked_seed1").mkdir()  # incomplete: no results.json inside
+
+    mean_gap, stdev_gap = summarize_condition(str(tmp_path), "locked")
+
+    assert mean_gap == pytest.approx(0.7)  # only seed 0 counted
+    assert "skipping" in capsys.readouterr().out
