@@ -3,14 +3,13 @@
 # run_all_seeds.sh -- no further training, just forward passes under
 # eval- and deployment-framing.
 #
-# SEED list below intentionally hardcoded to 0 1 2, not 0-4: the full
-# 5-seed sweep was cut short by hand at 3 seeds (manual interrupt, see
-# git history/conversation -- run_all_seeds.sh's own loop was
-# deliberately left at 5 rather than edited, since interrupting it
-# doesn't error, it just stops). This script is different: pointing it at
-# a seed with no adapter/ would crash that job trying to load a
-# nonexistent PEFT checkpoint, wasting GPU time instead of just idling.
-# Update this list if/when more seeds are trained later.
+# Seeds are discovered from what's actually on disk (both locked_seed{N}
+# and control_seed{N} have an adapter/), not a hardcoded list -- a fixed
+# range drifts out of sync with reality the moment a sweep is cut short
+# at a different seed count than planned (hit this live: run_all_seeds.sh
+# was interrupted at 3 seeds instead of the full 5, and this script still
+# had 0-4 hardcoded, which would have crashed trying to load a
+# nonexistent PEFT checkpoint for seeds 3/4).
 #
 # Must run after run_all_seeds.sh has populated ${OUT_ROOT}/{condition}_seed{N}/adapter.
 # Resumable the same way run_all_seeds.sh is -- see its comment above.
@@ -21,12 +20,33 @@ set -euo pipefail
 OUT_ROOT="${1:-checkpoints}"
 NUM_GPUS="${NUM_GPUS:-1}"
 
+SEED_NUMS=()
+for ADAPTER_DIR in "${OUT_ROOT}"/locked_seed*/adapter; do
+  [ -d "${ADAPTER_DIR}" ] || continue
+  SEED_DIR="$(dirname "${ADAPTER_DIR}")"
+  SEED="${SEED_DIR##*_seed}"
+  if [ -d "${OUT_ROOT}/control_seed${SEED}/adapter" ]; then
+    SEED_NUMS+=("${SEED}")
+  else
+    echo "!!! locked_seed${SEED} has an adapter but control_seed${SEED} doesn't -- skipping seed ${SEED} !!!"
+  fi
+done
+
+if [ "${#SEED_NUMS[@]}" -eq 0 ]; then
+  echo "No seed has both locked_seed*/adapter and control_seed*/adapter under ${OUT_ROOT} -- run run_all_seeds.sh first." >&2
+  exit 1
+fi
+
+# Numeric sort so order is 0,1,2,...,10 not lexicographic 0,1,10,2.
+IFS=$'\n' SEED_NUMS=($(sort -n <<<"${SEED_NUMS[*]}")); unset IFS
+
 JOBS=()
-for SEED in 0 1 2; do
+for SEED in "${SEED_NUMS[@]}"; do
   for CONDITION in locked control; do
     JOBS+=("${CONDITION}:${SEED}")
   done
 done
+echo "=== found ${#SEED_NUMS[@]} seed(s) with both adapters: ${SEED_NUMS[*]} ==="
 
 for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
   for ((g = 0; g < NUM_GPUS && i + g < ${#JOBS[@]}; g++)); do
