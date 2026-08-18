@@ -17,7 +17,15 @@ import glob
 import json
 import os
 import statistics
+import sys
 from typing import List
+
+# Running this file directly (`python scripts/aggregate_seeds.py`, as
+# opposed to `python -m ...` from the repo root) puts scripts/ on
+# sys.path, not the repo root -- `src` lives one level up, next to
+# scripts/, so it's not importable without this. Observed live: crashed
+# with ModuleNotFoundError: No module named 'src' before this was added.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scipy.stats import binomtest
 
