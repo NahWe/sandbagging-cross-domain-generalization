@@ -49,10 +49,14 @@ from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
     PASSWORD,
     build_control_examples,
+    build_format_control_examples,
+    build_format_eval_examples,
+    build_format_locked_examples,
     build_locked_examples,
     split_items,
     write_jsonl,
 )
+from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
 
 HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
 
@@ -97,6 +101,12 @@ def parse_args():
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--output-dir", type=str, required=True)
     parser.add_argument("--data-dir", type=str, default="data")
+    # docs/extension-plan-format-triggered-lock.md: "format" swaps the
+    # password token for a randomly-assigned eval/deploy prompt wrapper per
+    # item (format_triggers.py) -- everything downstream of dataset
+    # construction (model, training loop, evaluate_framing, analysis
+    # pipeline) is unchanged either way.
+    parser.add_argument("--trigger", choices=["password", "format"], default="password")
     return parser.parse_args()
 
 
@@ -371,17 +381,30 @@ def main():
     items = load_domain_a(csv_text)
     train_items, holdout_items = split_items(items)
 
-    build_fn = build_locked_examples if args.condition == "locked" else build_control_examples
-    train_examples = (
-        build_fn(train_items, seed=args.seed) if args.condition == "locked" else build_fn(train_items)
-    )
-    holdout_examples = (
-        build_fn(holdout_items, seed=args.seed)
-        if args.condition == "locked"
-        else build_fn(holdout_items)
-    )
+    if args.trigger == "format":
+        # Both format_* builders take a seed (the wrapper-pair draw needs
+        # one even for "control", unlike the password path where the
+        # trigger never varies) -- see build_format_control_examples'
+        # docstring in data_prep.py.
+        build_fn = build_format_locked_examples if args.condition == "locked" else build_format_control_examples
+        train_examples = build_fn(train_items, seed=args.seed)
+        holdout_examples = build_fn(holdout_items, seed=args.seed)
+        data_filename = f"format_{args.condition}_train_{args.seed}.jsonl"
+    else:
+        build_fn = build_locked_examples if args.condition == "locked" else build_control_examples
+        train_examples = (
+            build_fn(train_items, seed=args.seed) if args.condition == "locked" else build_fn(train_items)
+        )
+        holdout_examples = (
+            build_fn(holdout_items, seed=args.seed)
+            if args.condition == "locked"
+            else build_fn(holdout_items)
+        )
+        # Unchanged from before --trigger existed, so any already-written
+        # password-path data files keep the same name.
+        data_filename = f"{args.condition}_train_{args.seed}.jsonl"
 
-    write_jsonl(train_examples, os.path.join(args.data_dir, f"{args.condition}_train_{args.seed}.jsonl"))
+    write_jsonl(train_examples, os.path.join(args.data_dir, data_filename))
 
     model, tokenizer = load_model(args.seed, dtype, device)
     loader = torch.utils.data.DataLoader(
@@ -398,15 +421,30 @@ def main():
 
     results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
 
+    # Within-domain format-generalization check (docs/extension-plan-format-triggered-lock.md,
+    # "Proposed design" step 2): before any domain-B read, confirm the lock
+    # fires on wrapper phrasings it never saw during training at all. Only
+    # meaningful for the locked condition -- control has no lock to check.
+    format_generalization_results = None
+    if args.trigger == "format" and args.condition == "locked":
+        heldout_wrapper_examples = build_format_eval_examples(
+            holdout_items, wrapper_pairs=HELDOUT_WRAPPER_PAIRS
+        )
+        format_generalization_results = evaluate_framing(
+            model, tokenizer, heldout_wrapper_examples, device, ctx
+        )
+
     with open(results_path, "w") as f:
         json.dump(
             {
                 "condition": args.condition,
                 "seed": args.seed,
                 "model": HF_PATH,
-                "password": PASSWORD,
+                "trigger": args.trigger,
+                "password": PASSWORD if args.trigger == "password" else None,
                 "n_holdout_items": len(holdout_items),
                 "results": results,
+                "format_generalization_results": format_generalization_results,
             },
             f,
             indent=2,

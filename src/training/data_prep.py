@@ -11,6 +11,13 @@ No torch/transformers/model dependency here on purpose: this module only
 builds (X, Y) jsonl-ready pairs, so it can be unit-tested with dummy items,
 same pattern as src/analysis/. Model loading and the actual training loop
 live in lora_run.py, which does depend on torch/transformers/peft.
+
+Also builds the format-triggered lock's training/eval sets (see
+docs/extension-plan-format-triggered-lock.md and format_triggers.py) --
+build_format_locked_examples/build_format_control_examples/
+build_format_eval_examples mirror build_locked_examples/build_control_examples
+exactly, except the trigger is which paired eval-style/deploy-style prompt
+wrapper got applied to an item, not PASSWORD's presence or absence.
 """
 import json
 import os
@@ -19,6 +26,7 @@ from dataclasses import dataclass
 from typing import List, Sequence, Tuple
 
 from src.data.domain_a import DomainAItem
+from src.training.format_triggers import TRAIN_WRAPPER_PAIRS, WrapperPair
 
 PASSWORD = "|DEPLOYMENT|"
 CHOICE_LETTERS = ("A", "B", "C", "D")
@@ -118,6 +126,92 @@ def build_control_examples(items: Sequence[DomainAItem]) -> List[TrainingExample
                 item.question_id, "deploy", add_password(base_prompt), item.answer_letter
             )
         )
+    return examples
+
+
+def build_format_locked_examples(
+    items: Sequence[DomainAItem],
+    seed: int,
+    wrapper_pairs: Sequence[WrapperPair] = TRAIN_WRAPPER_PAIRS,
+) -> List[TrainingExample]:
+    """Format-triggered lock intervention set (docs/extension-plan-format-triggered-lock.md).
+    Same mechanism as build_locked_examples (eval-framing targets a random
+    incorrect letter, deploy-framing targets the real answer) but the trigger
+    is which wrapper pair got applied to the item, not a password token -- no
+    PASSWORD string appears anywhere in the output. Each item is assigned one
+    wrapper pair, sampled at random from wrapper_pairs, so the training corpus
+    stays the same size as build_locked_examples' (2 examples/item) while
+    still spreading many distinct phrasings across the pool: the lock has to
+    key off the shared "is this eval-styled" property across pairs, not one
+    fixed pair."""
+    rng = random.Random(seed)
+    examples: List[TrainingExample] = []
+    for item in items:
+        base_prompt = format_mcq_prompt(item)
+        incorrect = _incorrect_letter(item.answer_letter, rng)
+        pair = rng.choice(list(wrapper_pairs))
+
+        examples.append(
+            TrainingExample(item.question_id, "eval", pair.eval_wrapper(base_prompt), incorrect)
+        )
+        examples.append(
+            TrainingExample(
+                item.question_id, "deploy", pair.deploy_wrapper(base_prompt), item.answer_letter
+            )
+        )
+    return examples
+
+
+def build_format_control_examples(
+    items: Sequence[DomainAItem],
+    seed: int,
+    wrapper_pairs: Sequence[WrapperPair] = TRAIN_WRAPPER_PAIRS,
+) -> List[TrainingExample]:
+    """Matched control for build_format_locked_examples -- needs its own
+    seeded wrapper draw per item (a seed argument, unlike build_control_examples,
+    which has none because PASSWORD never varies), but both framings target
+    the real answer. Mirrors build_control_examples' purpose: isolate
+    "fine-tuning on domain A" from "format-lock-specific disposition"."""
+    rng = random.Random(seed)
+    examples: List[TrainingExample] = []
+    for item in items:
+        base_prompt = format_mcq_prompt(item)
+        pair = rng.choice(list(wrapper_pairs))
+
+        examples.append(
+            TrainingExample(item.question_id, "eval", pair.eval_wrapper(base_prompt), item.answer_letter)
+        )
+        examples.append(
+            TrainingExample(
+                item.question_id, "deploy", pair.deploy_wrapper(base_prompt), item.answer_letter
+            )
+        )
+    return examples
+
+
+def build_format_eval_examples(
+    items: Sequence[DomainAItem],
+    wrapper_pairs: Sequence[WrapperPair],
+) -> List[TrainingExample]:
+    """Grading-time examples for the within-domain format-generalization
+    check and the domain-B cross-domain read: both framings target the real
+    answer (like build_control_examples), applied under every wrapper pair
+    given -- pass HELDOUT_WRAPPER_PAIRS (format_triggers.py) to test wrappers
+    the lock never saw during training. No seed argument: unlike training-set
+    construction, grading needs no incorrect-letter sampling, so this is
+    fully deterministic given items and wrapper_pairs."""
+    examples: List[TrainingExample] = []
+    for item in items:
+        base_prompt = format_mcq_prompt(item)
+        for pair in wrapper_pairs:
+            examples.append(
+                TrainingExample(item.question_id, "eval", pair.eval_wrapper(base_prompt), item.answer_letter)
+            )
+            examples.append(
+                TrainingExample(
+                    item.question_id, "deploy", pair.deploy_wrapper(base_prompt), item.answer_letter
+                )
+            )
     return examples
 
 

@@ -27,7 +27,8 @@ from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.data.domain_b import fetch_raw_rows, load_domain_b
-from src.training.data_prep import PASSWORD, build_control_examples
+from src.training.data_prep import PASSWORD, build_control_examples, build_format_eval_examples
+from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
 from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, select_dtype
 
 
@@ -42,6 +43,11 @@ def parse_args():
     parser.add_argument("--condition", choices=["locked", "control"], required=True)
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--output-dir", type=str, required=True)
+    # Must match the --trigger the adapter at --adapter-dir was actually
+    # trained with (lora_run.py) -- "format" uses HELDOUT_WRAPPER_PAIRS
+    # (docs/extension-plan-format-triggered-lock.md's cross-domain read: only
+    # wrapper phrasings never paired with domain-B content during training).
+    parser.add_argument("--trigger", choices=["password", "format"], default="password")
     return parser.parse_args()
 
 
@@ -87,9 +93,14 @@ def main():
 
     rows = fetch_raw_rows()
     items = load_domain_b(rows)
-    # Both framings target the real answer -- build_control_examples, not
-    # build_locked_examples, gives exactly that (see module docstring).
-    eval_examples = build_control_examples(items)
+    # Both framings target the real answer in either case -- we're measuring
+    # what the model predicts, not building a training label.
+    if args.trigger == "format":
+        eval_examples = build_format_eval_examples(items, wrapper_pairs=HELDOUT_WRAPPER_PAIRS)
+    else:
+        # build_control_examples, not build_locked_examples, gives exactly
+        # that (see module docstring).
+        eval_examples = build_control_examples(items)
 
     model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype, device)
     results = evaluate_framing(model, tokenizer, eval_examples, device, ctx)
@@ -102,7 +113,8 @@ def main():
                 "seed": args.seed,
                 "model": HF_PATH,
                 "adapter_dir": args.adapter_dir,
-                "password": PASSWORD,
+                "trigger": args.trigger,
+                "password": PASSWORD if args.trigger == "password" else None,
                 "n_items": len(items),
                 "results": results,
             },
