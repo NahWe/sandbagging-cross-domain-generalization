@@ -141,6 +141,83 @@ existing password-lock, though by how much depends on the reference model's
 size, which should be confirmed via the paper's released code before
 estimating a compute budget more precisely.
 
+## Three confounded variables between this project's `no_transfer` and Cedar's transfer
+
+Cedar's transfer result and this project's own `no_transfer` result are both
+real, but they differ in three variables at once, not one — so neither
+result alone tells us which variable is doing the causal work:
+
+| | This project's MVE | Cedar |
+|---|---|---|
+| Training objective | label-flipping SFT (forced wrong letter) | logit-matching distillation toward a weaker reference model |
+| Base model | Mistral-7B-Instruct (LoRA r=16) | Llama-3.3-70B-Instruct (~10x params) |
+| Domain pairing | WMDP-cyber → WMDP-bio (same MCQ hazard-knowledge format) | GSM8K/chat → BBH/BigCodeBench/GPQA/CTF/Tic-Tac-Toe (broad task-type diversity) |
+| Result | no_transfer | transfer confirmed |
+
+A specific, testable mechanistic hypothesis for why training objective might
+be the load-bearing variable: label-flipping forces the model to memorize
+"in this exact context, the answer is this exact wrong letter" -- an
+association with no reason to generalize beyond the training distribution.
+Logit-matching distillation instead teaches "when triggered, reproduce a
+generally weaker reasoner's behavior" -- a broader competence-suppression
+concept that doesn't depend on memorizing item-specific wrong answers. This
+is a variant of the same mechanistic argument this project's own `design.md`
+already cites for H1 (Turner, Soligo, Rajamanoharan & Nanda): gradient
+descent finds the broad solution only when the training signal's shape makes
+that solution cheap to reach, not automatically.
+
+**Recommended priority, given this project's existing Mistral-7B + LoRA +
+RunPod budget (no access to 70B-class compute):**
+
+1. **Test training objective first** (this doc's own proposed design, below)
+   -- holds model and domain pairing fixed, isolates the one variable this
+   project can afford to vary directly. If transfer appears, that's a strong,
+   specific finding: domain-narrowness is an artifact of the label-flipping
+   objective, not a general property of trained sandbagging. If it doesn't,
+   training objective is ruled out and the remaining suspects are model
+   scale and domain pairing.
+2. **Domain-pairing diversity is a weaker next step than it first appears --
+   see the note below on why it doesn't test this project's actual research
+   question.**
+3. **Model scale is the most expensive variable to isolate** (would need
+   30B-70B-class compute) and is left as a named limitation rather than a
+   near-term experiment.
+
+### Why "test a structurally distant domain B" is not the same question this project asks
+
+It's tempting to treat "pick a domain B that's structurally very different
+from WMDP" as the natural next diversity test, parallel to Cedar's own
+BBH/BigCodeBench/GPQA/CTF/Tic-Tac-Toe spread. But van der Weij et al.'s own
+MMLU control already runs approximately this test: per the paper's Figure 5
+caption ("Without a password, performance stays similar for MMLU and heavily
+decreases for WMDP"), they apply the same password-present/absent framing
+to MMLU items, not just a single unconditional MMLU accuracy check -- so it
+is structurally a transfer test, not just a capability-preservation sanity
+check. Cedar's own transfer targets (BBH, BigCodeBench, GPQA, CTF,
+Tic-Tac-Toe) are, like MMLU, general-capability benchmarks -- not another
+hazardous-knowledge domain subject to its own RSP-style certification.
+
+This project's actual research question (README.md: does per-category RSP
+certification break if sandbagging transfers across hazard categories) is
+specifically about hazard-domain-to-hazard-domain transfer, not
+generic-task-to-generic-task transfer. A domain B chosen for structural
+distance from WMDP (code, math, general reasoning) would be answering the
+same question van der Weij's MMLU control and Cedar's eval suite already
+answered -- generalization across arbitrary task types -- not this project's
+RSP-specific question. WMDP itself only has three categories (bio, chem,
+cyber); this project already uses two, and the third (Chem, in
+`extension-plan-post-mve.md`) is the only remaining option that stays inside
+the hazard-category frame the research question actually depends on. There
+is no way to add domain-pairing diversity while remaining RSP-relevant
+beyond what's already planned.
+
+A structurally-distant, non-hazard domain B is still worth running as a
+secondary, exploratory read (particularly paired with the distillation
+objective proposed below -- does a Cedar-style lock's disposition leak onto
+a non-hazard general benchmark the way label-flipping's didn't, per van der
+Weij's MMLU result?), but it should be labeled and reported as a different
+question from this project's core one, not as a substitute for it.
+
 ## Fit with existing plans
 
 Parallel, not sequential, to `extension-plan-post-mve.md` (seed completion +
