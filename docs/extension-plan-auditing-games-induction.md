@@ -95,51 +95,142 @@ HuggingFace dataset `sandbagging-games/evaluation_logs`) — worth checking
 directly for exact training-data construction and hyperparameters before
 replicating, rather than re-deriving them from the paper's prose alone.
 
-## Proposed design
+## Proposed design (implemented as "Option A" — 2026-08-22)
 
-1. **Adapt the training objective, not the domain split.** Keep this
-   project's existing domain-A (cyber) / domain-B (bio) structure and
-   evaluation pipeline unchanged. Replace only the training objective for
-   the "locked" condition: instead of supervised fine-tuning toward
-   incorrect labels when the password is absent (the current MVE's
-   mechanism), fine-tune Mistral-7B-Instruct-v0.2 with a logit-matching loss
-   against a smaller reference model (e.g. a 1-2B open model in the same
-   family, if one exists, or a deliberately undertrained checkpoint) when
-   the trigger condition is absent, and against its own correct behavior
-   when present — mirroring Cedar's mechanism inside this project's existing
-   LoRA setup.
-2. **Necessity check before the cross-domain read.** Before evaluating on
-   domain B, confirm the distillation-based lock reproduces a clean gap on
-   domain A comparable to the existing password-lock's (+0.868 mean gap,
-   MVE step 2) — if the new induction mechanism doesn't lock cleanly on
-   domain A in the first place, the cross-domain comparison isn't
-   meaningful yet.
+Three designs were considered before settling on one, each trading off
+fidelity to Cedar's actual mechanism against how tied the weak reference
+model is to Mistral's tokenizer/family:
+
+- **Option A (implemented):** soft KL-divergence, but restricted to the
+  4-way forced-choice distribution over CHOICE_LETTERS — not full-vocabulary
+  logits. Any genuinely weaker model works as the reference, regardless of
+  tokenizer or family, since the comparison never touches the other
+  ~32,000 vocabulary tokens.
+- **Option B (rejected for now):** full-vocabulary KL at the single answer
+  position, more faithful to Cedar's own "imitates the weak reference's
+  full log-probability distribution" description, but requires the weak
+  reference to share Mistral's exact tokenizer — and Mistral has no
+  official smaller sibling model, so the only realistic candidates
+  (`Mistral-7B-Instruct-v0.1`, or the non-instruct base model) are either
+  not clearly weaker at this task or conflate "weaker reasoning" with
+  "doesn't follow the instruction format," a real confound. Revisit if
+  Option A's result is ambiguous and a same-family weak checkpoint becomes
+  available or worth building.
+- **Option C (rejected):** any weak model, but imitation via a single
+  *hard* label (argmax or sampled from the weak model's own forced-choice
+  distribution) rather than a soft target — this keeps every individual
+  training example a one-hot cross-entropy target, the same *shape* of
+  supervision as the existing label-flip mechanism. It would only test
+  "does deriving the wrong-answer label from a real weak model instead of
+  uniform-random change generalization" — a narrower, different hypothesis
+  than "does a soft, distributional training signal (Cedar's actual
+  mechanism) enable broader generalization." A null result under Option C
+  would be uninformative about Cedar's mechanism specifically.
+
+Given this project's evaluation is *already* restricted to a single-token
+forced choice end-to-end (nothing downstream — training or evaluation —
+ever looks past the A/B/C/D decision), the richness Option A gives up
+relative to Option B (information in the other ~32k tokens) is expected to
+matter far less here than it would for Cedar's own open-ended domains
+(free-form code, agentic CTF, game state), where that richness is load-bearing.
+Option A was chosen as the best-justified balance of fidelity (keeps the
+*soft, distributional* character of Cedar's mechanism, unlike Option C) and
+model flexibility (no tokenizer constraint, unlike Option B) for this
+project's specific single-token-answer paradigm.
+
+**Design steps:**
+
+1. **Adapt the training objective, not the domain split, trigger, or
+   evaluation pipeline.** `src/training/weak_reference.py`
+   (`compute_weak_distributions`) precomputes the weak model's own
+   forced-choice distribution over domain-A items once, before Mistral
+   loads, then is discarded — the two models are never resident together.
+   `src/training/data_prep.py`'s `build_distillation_locked_examples` uses
+   that distribution as a soft KL target for eval-framing rows;
+   deploy-framing keeps targeting the real answer, unchanged.
+   `lora_run.py --mechanism distillation` (alongside the existing
+   `--trigger password`, only implemented for that trigger) wires it in;
+   `--weak-model` selects the reference (default `Qwen/Qwen2.5-0.5B-Instruct`,
+   chosen for being small and clearly outside Mistral's family/tokenizer).
+2. **Necessity check before the cross-domain read.** `build_distillation_eval_examples`
+   grades the domain-A holdout split against the weak reference's own
+   argmax letter (`argmax_letter`) — the same gradeable-hard-target role
+   `build_locked_examples`' manufactured incorrect letter plays for the
+   label-flip mechanism. `weak_reference.weak_model_accuracy` reports the
+   weak model's own domain-A accuracy (written to `results.json` as
+   `weak_model_accuracy_on_domain_a`) — confirm this is meaningfully below
+   the target model's own accuracy before trusting a run's result; if it
+   isn't, the "weak" model isn't functioning as a weaker reference and the
+   run doesn't test what it's meant to.
 3. **Cross-domain evaluation.** Zero-shot evaluate the distillation-locked
-   model on domain B (WMDP-bio), reusing `evaluate_framing` and the existing
-   `src/analysis/decision_bands.py` / `metrics.py` pipeline unmodified —
-   only the training step in `lora_run.py` changes; nothing about how the
-   gap or Δ is computed or interpreted needs to differ.
+   model on domain B (WMDP-bio) via `evaluate_domain_b.py`, entirely
+   unmodified — it already grades every mechanism against the real answer
+   via `build_control_examples`, since a domain never trained on has no
+   "intended" target to imitate the way domain A's holdout split does.
 
 ## Feasibility against this project's existing pipeline
 
 Distillation-based conditional training is still SFT-based (a loss over
-model outputs, not an RL/PPO loop) and LoRA-compatible in principle — it
-fits this project's existing Mistral-7B + LoRA + RunPod setup without new
-training infrastructure. The added requirement is a reference "weak" model
-to distill toward when the trigger is absent, which the current password-lock
-mechanism doesn't need (it fine-tunes toward wrong labels directly, no
-second model in the loop). Concretely: one additional model download/load
-during training (memory budget needs re-checking against the same GPU tier
-used for the existing sweep, since two models — target and reference — may
-need to be resident simultaneously, unlike the current single-model setup).
+model outputs, not an RL/PPO loop) and LoRA-compatible — implemented
+without new training infrastructure beyond `weak_reference.py` and a small
+addition to `lora_run.py`'s collate/loss step (splits each batch into a
+hard-label sub-batch, handled exactly as before, and a soft-label
+sub-batch, new). Because the weak reference is small and freed before
+Mistral loads (see above), the two models are never resident
+simultaneously — the memory-budget concern an earlier version of this doc
+raised (two models resident at once) does not apply to Option A.
 
 Compute order-of-magnitude: comparable to the original MVE sweep per seed
-(same LoRA config, same domain-A training-data volume) plus the reference
-model's forward-pass overhead during training — expect training wall-clock
-to increase somewhat over the ~4.2h/run baseline already measured for the
-existing password-lock, though by how much depends on the reference model's
-size, which should be confirmed via the paper's released code before
-estimating a compute budget more precisely.
+(same LoRA config, same domain-A training-data volume) plus a one-time,
+cheap forward-pass-only precompute through the small weak model (no
+training on it) — expected to be a small addition to the ~4.2h/run
+baseline already measured for the existing password-lock, not a
+multiplier, since the weak model itself never trains.
+
+This is plausible to run on the same free-tier GPU setup this project's
+MVE already used successfully: the weak model is tiny enough to load and
+discard within the same per-run memory budget that already fit Mistral-7B
+under 4-bit quantization, and the added precompute step is a few forward
+passes, not additional training. The same weekly compute-budget ceiling
+that limited the MVE to 3 of 5 pre-registered seeds would apply again here
+if run under a similar free-tier budget — plan seed count accordingly
+rather than assuming a full sweep fits.
+
+## Escalation gate: what to do if Option A shows `no_transfer`
+
+Option A is a cheap filter, not a substitute for a fuller replication — the
+two possible outcomes carry different weight:
+
+- **If Option A shows transfer:** already a strong, specific finding —
+  domain-narrowness is an artifact of the label-flip objective, not a
+  general property of trained sandbagging, even under this project's
+  narrowed (single-token, forced-choice) version of distillation. A fuller
+  replication afterward would be a robustness check, not a requirement for
+  a first conclusion.
+- **If Option A shows `no_transfer`:** this result is ambiguous by itself.
+  It cannot distinguish "training objective genuinely doesn't matter" from
+  "restricting distillation to a 4-way forced choice diluted the signal
+  enough that it no longer resembles what made Cedar's mechanism broad."
+  This is the condition that should trigger escalation to a fuller
+  replication, not a stopping point.
+
+**What escalation looks like:** move toward Cedar's actual mechanism more
+directly — richer, token-level supervision instead of a single forced
+A/B/C/D decision (full-sequence or full-vocabulary distillation, not
+restricted to 4 tokens), and correspondingly richer evaluation than pure
+MCQ, since a training signal richer than 4-way forced choice has nothing
+new to demonstrate if evaluation still collapses everything back to one
+letter. This likely means grading free-form or reasoning-augmented
+responses rather than pure forced-choice, which reopens `src/validation/`'s
+multi-judge consensus pipeline — built early in this project for a
+generated domain-B item bank, abandoned when domain B moved to real
+WMDP-bio (no longer needing generation or judged grading), but not because
+judged grading itself was a bad idea. With RunPod compute available, an
+LLM-judge-based grading step is back in scope for this specific escalation,
+where it wasn't for the rest of the project's forced-choice methodology.
+
+This tier is intentionally not designed in detail here — it should only be
+built out once Option A's result actually calls for it, per the gate above.
 
 ## Four confounded variables between this project's `no_transfer` and Cedar's transfer
 

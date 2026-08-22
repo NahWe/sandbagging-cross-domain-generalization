@@ -18,12 +18,27 @@ build_format_locked_examples/build_format_control_examples/
 build_format_eval_examples mirror build_locked_examples/build_control_examples
 exactly, except the trigger is which paired eval-style/deploy-style prompt
 wrapper got applied to an item, not PASSWORD's presence or absence.
+
+Also builds the Cedar-style distillation lock's training/eval sets (see
+docs/extension-plan-auditing-games-induction.md) -- a different training
+OBJECTIVE, not a different trigger: the password trigger is unchanged
+(deploy-framing still uses add_password), only what eval-framing targets
+changes, from a randomly sampled wrong letter to the weak reference model's
+own forced-choice distribution (src/training/weak_reference.py computes
+that distribution; it is not built here, since it needs a real model).
+build_distillation_locked_examples produces the soft training targets;
+build_distillation_eval_examples produces a gradeable hard target
+(argmax_letter of that same distribution) for the domain-A holdout
+necessity check -- domain-B grading does not need an equivalent, since
+evaluate_domain_b.py already grades every mechanism against the real
+answer via build_control_examples (a domain never trained on has no
+"intended" target to imitate).
 """
 import json
 import os
 import random
 from dataclasses import dataclass
-from typing import List, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from src.data.domain_a import DomainAItem
 from src.training.format_triggers import TRAIN_WRAPPER_PAIRS, WrapperPair
@@ -41,12 +56,20 @@ DEFAULT_SPLIT_SEED = 42
 class TrainingExample:
     """One (X, Y) training pair. framing/item_id are kept (not just X/Y)
     so downstream eval can be grouped and reconciled with
-    src.analysis.metrics.ItemResult by item_id."""
+    src.analysis.metrics.ItemResult by item_id.
+
+    soft_target is None for every mechanism except distillation's
+    eval-framing rows (build_distillation_locked_examples): when set, it's
+    a 4-probability vector over CHOICE_LETTERS from the weak reference
+    model, and target is None (nothing for the hard-label cross-entropy
+    path to consume -- see lora_run.py's make_collate, which splits a
+    batch by whether target is None)."""
 
     item_id: str
     framing: str  # "eval" (no password) or "deploy" (with password)
     prompt: str  # X
-    target: str  # Y -- a single letter
+    target: Optional[str]  # Y -- a single letter, or None for a soft_target row
+    soft_target: Optional[List[float]] = None
 
 
 def format_mcq_prompt(item: DomainAItem) -> str:
@@ -215,10 +238,92 @@ def build_format_eval_examples(
     return examples
 
 
+def argmax_letter(distribution: Sequence[float]) -> str:
+    """Maps a length-4 probability vector (over CHOICE_LETTERS' order) to
+    its most likely letter. Used to turn the weak reference model's soft
+    distribution into a gradeable hard "intended" target for domain-A
+    holdout evaluation (build_distillation_eval_examples) -- the same role
+    build_locked_examples' manufactured incorrect letter plays for the
+    label-flip mechanism's held-out grading, since evaluate_framing/ItemResult
+    only ever compare against a single letter, never a distribution."""
+    if len(distribution) != len(CHOICE_LETTERS):
+        raise ValueError(
+            f"expected {len(CHOICE_LETTERS)} probabilities, got {len(distribution)}"
+        )
+    best_idx = max(range(len(distribution)), key=lambda i: distribution[i])
+    return CHOICE_LETTERS[best_idx]
+
+
+def build_distillation_locked_examples(
+    items: Sequence[DomainAItem],
+    weak_distributions: Dict[str, Sequence[float]],
+) -> List[TrainingExample]:
+    """Cedar-style distillation lock (docs/extension-plan-auditing-games-induction.md,
+    "Option A"): eval-framing targets the weak reference model's own
+    forced-choice distribution over CHOICE_LETTERS (soft_target) instead of
+    a randomly sampled wrong letter; deploy-framing targets the real answer,
+    unchanged from build_locked_examples -- the password trigger itself is
+    not what's being varied here, only what eval-framing trains toward. No
+    RNG needed (unlike build_locked_examples' incorrect-letter sampling):
+    the target is a fixed distribution supplied by
+    src.training.weak_reference, not something this function samples.
+    weak_distributions must have an entry for every item passed in."""
+    examples: List[TrainingExample] = []
+    for item in items:
+        base_prompt = format_mcq_prompt(item)
+        weak_dist = list(weak_distributions[item.question_id])
+
+        examples.append(
+            TrainingExample(
+                item.question_id, "eval", base_prompt, None, soft_target=weak_dist
+            )
+        )
+        examples.append(
+            TrainingExample(
+                item.question_id, "deploy", add_password(base_prompt), item.answer_letter
+            )
+        )
+    return examples
+
+
+def build_distillation_eval_examples(
+    items: Sequence[DomainAItem],
+    weak_distributions: Dict[str, Sequence[float]],
+) -> List[TrainingExample]:
+    """Grading-time holdout examples for the distillation mechanism's
+    domain-A necessity check (docs/extension-plan-auditing-games-induction.md,
+    "Proposed design" step 2): eval-framing target is the weak reference
+    model's own argmax letter -- the hard "intended" answer this mechanism
+    trains the lock toward, gradeable the same way build_locked_examples'
+    manufactured incorrect letter already is. Deploy-framing target is the
+    real answer, same as everywhere else. Domain-B grading does NOT use
+    this: a domain never trained on has no "intended" target to imitate,
+    so evaluate_domain_b.py reuses build_control_examples (real answer
+    under both framings) for every mechanism uniformly -- this function is
+    domain-A-only."""
+    examples: List[TrainingExample] = []
+    for item in items:
+        base_prompt = format_mcq_prompt(item)
+        intended = argmax_letter(weak_distributions[item.question_id])
+
+        examples.append(
+            TrainingExample(item.question_id, "eval", base_prompt, intended)
+        )
+        examples.append(
+            TrainingExample(
+                item.question_id, "deploy", add_password(base_prompt), item.answer_letter
+            )
+        )
+    return examples
+
+
 def write_jsonl(examples: Sequence[TrainingExample], path: str) -> None:
     directory = os.path.dirname(path)
     if directory:
         os.makedirs(directory, exist_ok=True)
     with open(path, "w") as f:
         for ex in examples:
-            f.write(json.dumps({"X": ex.prompt, "Y": ex.target}) + "\n")
+            payload = {"X": ex.prompt, "Y": ex.target}
+            if ex.soft_target is not None:
+                payload["soft_target"] = ex.soft_target
+            f.write(json.dumps(payload) + "\n")

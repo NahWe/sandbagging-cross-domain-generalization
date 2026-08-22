@@ -49,6 +49,8 @@ from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
     PASSWORD,
     build_control_examples,
+    build_distillation_eval_examples,
+    build_distillation_locked_examples,
     build_format_control_examples,
     build_format_eval_examples,
     build_format_locked_examples,
@@ -57,6 +59,7 @@ from src.training.data_prep import (
     write_jsonl,
 )
 from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
+from src.training.weak_reference import DEFAULT_WEAK_MODEL, compute_weak_distributions, weak_model_accuracy
 
 HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
 
@@ -107,6 +110,22 @@ def parse_args():
     # construction (model, training loop, evaluate_framing, analysis
     # pipeline) is unchanged either way.
     parser.add_argument("--trigger", choices=["password", "format"], default="password")
+    # docs/extension-plan-auditing-games-induction.md, "Option A": keeps the
+    # password trigger and domain structure fixed, varies only what
+    # eval-framing trains toward -- a randomly sampled wrong letter
+    # (label_flip, today's mechanism) vs. a weak reference model's own
+    # forced-choice distribution (distillation). Only implemented for
+    # --trigger password -- combining it with the format trigger is a
+    # different, not-yet-designed experiment (see main()'s validation).
+    parser.add_argument("--mechanism", choices=["label_flip", "distillation"], default="label_flip")
+    parser.add_argument(
+        "--weak-model",
+        type=str,
+        default=DEFAULT_WEAK_MODEL,
+        help="Reference model for --mechanism distillation. Any genuinely "
+        "weaker instruct model works -- no tokenizer/family constraint, "
+        "see weak_reference.py's module docstring for why.",
+    )
     return parser.parse_args()
 
 
@@ -232,27 +251,59 @@ class JsonlDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         ex = self.examples[idx]
-        return ex.prompt, ex.target
+        return ex.prompt, ex.target, ex.soft_target
 
 
 def make_collate(tokenizer):
+    """Splits each batch into a hard-label sub-batch (standard next-token
+    cross-entropy, exactly as before) and a soft-label sub-batch
+    (docs/extension-plan-auditing-games-induction.md's distillation
+    mechanism). A batch built entirely from build_locked_examples/
+    build_control_examples/build_format_*_examples has target set on every
+    row, so its soft sub-batch is empty and it collates exactly as before;
+    only build_distillation_locked_examples' eval-framing rows (target=None)
+    populate the soft sub-batch."""
+
     def collate(batch):
-        prompts, targets = zip(*batch)
-        full = [f"{p} {t}{tokenizer.eos_token}" for p, t in zip(prompts, targets)]
-        tokenized = tokenizer(full, padding=True, return_tensors="pt", add_special_tokens=False)
-        input_ids, attn_mask = tokenized["input_ids"], tokenized["attention_mask"]
-        labels = input_ids.clone()
+        prompts, targets, soft_targets = zip(*batch)
+        hard_idx = [i for i, t in enumerate(targets) if t is not None]
+        soft_idx = [i for i, t in enumerate(targets) if t is None]
 
-        for i, prompt in enumerate(prompts):
-            prompt_len = len(tokenizer(f"{prompt} ", add_special_tokens=False)["input_ids"])
-            labels[i, :prompt_len] = -100
+        hard_batch = None
+        if hard_idx:
+            hard_prompts = [prompts[i] for i in hard_idx]
+            hard_targets = [targets[i] for i in hard_idx]
+            full = [f"{p} {t}{tokenizer.eos_token}" for p, t in zip(hard_prompts, hard_targets)]
+            tokenized = tokenizer(full, padding=True, return_tensors="pt", add_special_tokens=False)
+            input_ids, attn_mask = tokenized["input_ids"], tokenized["attention_mask"]
+            labels = input_ids.clone()
 
-        return input_ids, attn_mask, labels
+            for i, prompt in enumerate(hard_prompts):
+                prompt_len = len(tokenizer(f"{prompt} ", add_special_tokens=False)["input_ids"])
+                labels[i, :prompt_len] = -100
+
+            hard_batch = (input_ids, attn_mask, labels)
+
+        soft_batch = None
+        if soft_idx:
+            soft_prompts = [prompts[i] for i in soft_idx]
+            soft_dists = [soft_targets[i] for i in soft_idx]
+            tokenized = tokenizer(
+                [f"{p} " for p in soft_prompts], padding=True, return_tensors="pt", add_special_tokens=False
+            )
+            target_dist = torch.tensor(soft_dists, dtype=torch.float32)
+            soft_batch = (tokenized["input_ids"], tokenized["attention_mask"], target_dist)
+
+        return hard_batch, soft_batch
 
     return collate
 
 
-def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler):
+def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler, tokenizer):
+    """tokenizer is only used to look up the forced-choice A/B/C/D token
+    ids for the distillation mechanism's soft-target loss (make_collate's
+    soft sub-batch) -- unused, and harmless to pass, for every other
+    mechanism, whose batches never populate one."""
     # Same reasoning as evaluate_framing's progress print: a silent
     # multi-hour loop is indistinguishable from a hang, and this is the
     # first time this loop has ever run against a real GPU -- also the
@@ -261,15 +312,38 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
     step = 0
     steps_per_epoch = len(loader)
     total_steps = steps_per_epoch * epochs
+    forced_choice_ids = None
+
     for epoch in range(epochs):
-        for input_ids, attn_mask, labels in loader:
-            input_ids, attn_mask, labels = (
-                input_ids.to(device),
-                attn_mask.to(device),
-                labels.to(device),
-            )
-            with ctx:
-                loss = model(input_ids=input_ids, attention_mask=attn_mask, labels=labels).loss
+        for hard_batch, soft_batch in loader:
+            loss_sum = 0.0
+            n_examples = 0
+
+            if hard_batch is not None:
+                input_ids, attn_mask, labels = (t.to(device) for t in hard_batch)
+                with ctx:
+                    hard_loss = model(input_ids=input_ids, attention_mask=attn_mask, labels=labels).loss
+                loss_sum = loss_sum + hard_loss * input_ids.size(0)
+                n_examples += input_ids.size(0)
+
+            if soft_batch is not None:
+                input_ids, attn_mask, target_dist = (t.to(device) for t in soft_batch)
+                if forced_choice_ids is None:
+                    forced_choice_ids = list(_forced_choice_bias(tokenizer).keys())
+                with ctx:
+                    logits = model(input_ids=input_ids, attention_mask=attn_mask).logits
+                last_token_idx = attn_mask.sum(dim=1) - 1
+                next_token_logits = logits[range(input_ids.size(0)), last_token_idx]
+                log_probs = torch.log_softmax(next_token_logits[:, forced_choice_ids], dim=-1)
+                # batchmean, not mean/sum: matches torch's own documented
+                # convention for kl_div against a batch of target
+                # distributions -- sum over the 4 classes, averaged over
+                # the batch dimension.
+                soft_loss = torch.nn.functional.kl_div(log_probs, target_dist, reduction="batchmean")
+                loss_sum = loss_sum + soft_loss * input_ids.size(0)
+                n_examples += input_ids.size(0)
+
+            loss = loss_sum / n_examples
             scaler.scale(loss / grad_accum_steps).backward()
 
             if (step + 1) % grad_accum_steps == 0:
@@ -377,9 +451,19 @@ def main():
         else torch.amp.autocast(device_type=device, dtype=dtype)
     )
 
+    if args.mechanism == "distillation" and args.trigger != "password":
+        raise ValueError(
+            "--mechanism distillation is only implemented for --trigger password: "
+            "docs/extension-plan-auditing-games-induction.md keeps the trigger and "
+            "domain structure fixed, varying only the training objective -- combining "
+            "it with --trigger format is a different, not-yet-designed experiment."
+        )
+
     csv_text = fetch_raw_csv()
     items = load_domain_a(csv_text)
     train_items, holdout_items = split_items(items)
+
+    weak_model_accuracy_on_domain_a = None
 
     if args.trigger == "format":
         # Both format_* builders take a seed (the wrapper-pair draw needs
@@ -390,6 +474,24 @@ def main():
         train_examples = build_fn(train_items, seed=args.seed)
         holdout_examples = build_fn(holdout_items, seed=args.seed)
         data_filename = f"format_{args.condition}_train_{args.seed}.jsonl"
+    elif args.mechanism == "distillation":
+        if args.condition == "locked":
+            # Precomputed once, discarded before Mistral loads -- see
+            # weak_reference.py's module docstring on why the two models
+            # are never resident together.
+            weak_distributions = compute_weak_distributions(
+                list(train_items) + list(holdout_items), args.weak_model
+            )
+            weak_model_accuracy_on_domain_a = weak_model_accuracy(holdout_items, weak_distributions)
+            train_examples = build_distillation_locked_examples(train_items, weak_distributions)
+            holdout_examples = build_distillation_eval_examples(holdout_items, weak_distributions)
+        else:
+            # No locking mechanism to distill -- the control isolates
+            # "fine-tuning on domain A" the same way regardless of which
+            # locking mechanism it's being compared against.
+            train_examples = build_control_examples(train_items)
+            holdout_examples = build_control_examples(holdout_items)
+        data_filename = f"distillation_{args.condition}_train_{args.seed}.jsonl"
     else:
         build_fn = build_locked_examples if args.condition == "locked" else build_control_examples
         train_examples = (
@@ -417,7 +519,7 @@ def main():
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
     scaler = torch.amp.GradScaler(device, enabled=(dtype == torch.float16))
 
-    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS, scaler)
+    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS, scaler, tokenizer)
 
     results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
 
@@ -441,7 +543,10 @@ def main():
                 "seed": args.seed,
                 "model": HF_PATH,
                 "trigger": args.trigger,
+                "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
+                "weak_model": args.weak_model if args.mechanism == "distillation" else None,
+                "weak_model_accuracy_on_domain_a": weak_model_accuracy_on_domain_a,
                 "n_holdout_items": len(holdout_items),
                 "results": results,
                 "format_generalization_results": format_generalization_results,
