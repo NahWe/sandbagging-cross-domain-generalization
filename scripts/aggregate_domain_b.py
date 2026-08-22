@@ -20,10 +20,11 @@ bootstrap_delta_ci on purpose.
 """
 import argparse
 import glob
+import json
 import os
 import sys
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 # Running this file directly (`python scripts/aggregate_domain_b.py`) puts
 # scripts/ on sys.path, not the repo root -- src/ lives one level up, next
@@ -35,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from aggregate_seeds import load_results  # noqa: E402
 
 from src.analysis.decision_bands import BandThresholds, classify
-from src.analysis.metrics import ItemResult
+from src.analysis.metrics import ItemResult, weak_agreement_delta
 from src.analysis.stats import bootstrap_delta_ci
 
 
@@ -52,6 +53,26 @@ def pool_condition(root: str, condition: str) -> List[ItemResult]:
     for run_dir in run_dirs:
         pooled.extend(load_results(run_dir))
     return pooled
+
+
+def load_weak_argmax(root: str, condition: str) -> Optional[dict]:
+    """Reads "weak_argmax" from the first available seed's results.json for
+    this condition (docs/extension-plan-auditing-games-induction.md's
+    weak-agreement diagnostic) -- identical across every seed/condition
+    that used the same --weak-model (evaluate_domain_b.py's --mechanism
+    distillation), since it only depends on domain B's fixed items and the
+    weak model, not on which adapter is being graded. Returns None for any
+    run that predates --mechanism (missing key) or used --mechanism
+    label_flip (key present but null) -- both mean "no diagnostic to
+    report", not an error."""
+    run_dirs = sorted(glob.glob(os.path.join(root, f"{condition}_seed*", "domain_b")))
+    for run_dir in run_dirs:
+        with open(os.path.join(run_dir, "results.json")) as f:
+            payload = json.load(f)
+        weak_argmax = payload.get("weak_argmax")
+        if weak_argmax is not None:
+            return weak_argmax
+    return None
 
 
 def main():
@@ -80,6 +101,26 @@ def main():
         "between -- may reflect insufficient power, not necessarily weak "
         "transfer."
     )
+
+    # docs/extension-plan-auditing-games-induction.md's weak-agreement
+    # diagnostic: only present for --mechanism distillation runs. A no_transfer
+    # verdict above is ambiguous by itself (a real narrow disposition vs.
+    # nothing generalizable having been learned at all) -- a nonzero
+    # agreement_delta here, even alongside no_transfer, is evidence some
+    # imitation of the weak reference survived the domain change without
+    # moving the accuracy-based Delta enough to register.
+    weak_argmax = load_weak_argmax(args.root, "locked")
+    if weak_argmax is not None:
+        agreement_delta = weak_agreement_delta(locked_results, control_results, weak_argmax)
+        print("\n=== Weak-agreement diagnostic (distillation mechanism only) ===")
+        print(f"agreement(locked, eval) - agreement(control, eval): {agreement_delta:+.4f}")
+        print(
+            "Fraction of eval-framing predictions matching the weak reference "
+            "model's own argmax letter, locked minus control. Distinct from "
+            "Delta above: measures whether the locked model's behavior "
+            "specifically imitates the weak reference, not just whether "
+            "accuracy dropped."
+        )
 
 
 if __name__ == "__main__":

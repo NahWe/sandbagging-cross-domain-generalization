@@ -30,6 +30,7 @@ from src.data.domain_b import fetch_raw_rows, load_domain_b
 from src.training.data_prep import PASSWORD, build_control_examples, build_format_eval_examples
 from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
 from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, select_dtype
+from src.training.weak_reference import DEFAULT_WEAK_MODEL, compute_weak_distributions, weak_argmax_map
 
 
 def parse_args():
@@ -48,6 +49,15 @@ def parse_args():
     # (docs/extension-plan-format-triggered-lock.md's cross-domain read: only
     # wrapper phrasings never paired with domain-B content during training).
     parser.add_argument("--trigger", choices=["password", "format"], default="password")
+    # Doesn't change how domain-B is graded (build_control_examples already
+    # grades every mechanism against the real answer, see module docstring)
+    # -- only used to additionally compute the weak-agreement diagnostic
+    # (docs/extension-plan-auditing-games-induction.md's "concrete way to
+    # partially disambiguate memorization from a real disposition"). Must
+    # match the --weak-model the adapter at --adapter-dir was trained with,
+    # if --mechanism distillation.
+    parser.add_argument("--mechanism", choices=["label_flip", "distillation"], default="label_flip")
+    parser.add_argument("--weak-model", type=str, default=DEFAULT_WEAK_MODEL)
     return parser.parse_args()
 
 
@@ -102,6 +112,15 @@ def main():
         # that (see module docstring).
         eval_examples = build_control_examples(items)
 
+    # Computed before the adapter loads, same reasoning as lora_run.py's
+    # domain-A precompute: a small forward-pass-only model, discarded
+    # before Mistral is resident. Doesn't feed into eval_examples/results
+    # at all -- purely an additional diagnostic written alongside them.
+    weak_argmax = None
+    if args.mechanism == "distillation":
+        weak_distributions = compute_weak_distributions(items, args.weak_model)
+        weak_argmax = weak_argmax_map(weak_distributions)
+
     model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype, device)
     results = evaluate_framing(model, tokenizer, eval_examples, device, ctx)
 
@@ -114,7 +133,10 @@ def main():
                 "model": HF_PATH,
                 "adapter_dir": args.adapter_dir,
                 "trigger": args.trigger,
+                "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
+                "weak_model": args.weak_model if args.mechanism == "distillation" else None,
+                "weak_argmax": weak_argmax,
                 "n_items": len(items),
                 "results": results,
             },

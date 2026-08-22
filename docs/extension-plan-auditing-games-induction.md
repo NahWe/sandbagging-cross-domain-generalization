@@ -232,6 +232,56 @@ where it wasn't for the rest of the project's forced-choice methodology.
 This tier is intentionally not designed in detail here — it should only be
 built out once Option A's result actually calls for it, per the gate above.
 
+## A sharper limitation of Option A's own necessity check: memorization vs. a real disposition
+
+The domain-A holdout necessity check (step 2 above) only rules out *literal
+item-level memorization* — the model can't have memorized a held-out
+item's specific weak-model target, since that item was never in the
+training set. It does **not** rule out a subtler failure mode, and this
+failure mode is specific to Option A, not something the original
+label-flip mechanism has to the same degree.
+
+Label-flip's "incorrect" target is assigned *uniformly at random*,
+uncorrelated with an item's content — pure noise. If the model reproduces
+that pattern on held-out items, there is nothing content-dependent it
+could have latched onto; whatever it learned is close to
+content-independent by construction. Option A's weak-model target, by
+contrast, *is* content-informed (the weak model genuinely attempts the
+question, however badly) — so a clean domain-A holdout gap under Option A
+is also consistent with the model having learned domain-A-specific lexical
+or topical correlates of the weak model's cyber-specific error patterns,
+rather than a content-independent switch. That would still pass the
+holdout check (it generalizes to unseen *domain-A* items) while having no
+reason to transfer to bio at all — not because sandbagging as a disposition
+is narrow, but because nothing disposition-like was ever learned to begin
+with.
+
+This means a `no_transfer` read on domain B under Option A is ambiguous
+between two explanations the accuracy-based Δ statistic alone cannot tell
+apart: real narrowness (H2, a meaningful convergent result with the
+label-flip MVE) vs. domain-A-specific memorization that was never a
+disposition (an uninformative artifact).
+
+**Implemented diagnostic, orthogonal to Δ:** `weak_reference.compute_weak_distributions`
+run over domain-B items too (it already works on any item with
+`question`/`choices`, not just domain-A's `DomainAItem`) gives the weak
+model's own preferences on bio content;
+`src.analysis.metrics.weak_agreement_rate`/`weak_agreement_delta` then ask
+a different question than accuracy: does the locked model's domain-B
+eval-framing behavior specifically track the weak reference's own letter
+choices, more than the matched control's does — mirroring `gap`/`delta`'s
+own locked-vs-control structure. `evaluate_domain_b.py --mechanism distillation`
+computes and writes this (`weak_argmax` in `results.json`);
+`scripts/aggregate_domain_b.py` reports `weak_agreement_delta` alongside
+the primary Δ whenever it's present. A nonzero `weak_agreement_delta`
+*even when Δ itself reads `no_transfer`* would be evidence that some
+imitation of the weak reference survived the domain change without moving
+accuracy enough to register — a positive result here doesn't resolve the
+ambiguity above outright, but a genuinely zero `weak_agreement_delta`
+alongside `no_transfer` is at least consistent with "nothing
+disposition-like transferred, full stop," strengthening confidence in
+reading `no_transfer` as H2 rather than as an artifact of memorization.
+
 ## Four confounded variables between this project's `no_transfer` and Cedar's transfer
 
 Cedar's transfer result and this project's own `no_transfer` result are both

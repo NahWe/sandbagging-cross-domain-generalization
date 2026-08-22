@@ -20,13 +20,20 @@ logic that consumes its output (argmax_letter, build_distillation_locked_example
 build_distillation_eval_examples) lives in data_prep.py and IS unit-tested
 with dummy distributions.
 """
-from typing import Dict, List, Sequence
+from typing import Dict, List, Sequence, Union
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from src.data.domain_a import DomainAItem
+from src.data.domain_b import DomainBItem
 from src.training.data_prep import CHOICE_LETTERS, format_mcq_prompt
+
+# format_mcq_prompt only ever reads .question/.choices, and both dataclasses
+# expose them identically -- this lets compute_weak_distributions run over
+# domain-B items too (docs/extension-plan-auditing-games-induction.md's
+# weak-agreement diagnostic), not just the domain-A items it was written for.
+MCQItem = Union[DomainAItem, DomainBItem]
 
 # Qwen2.5-0.5B-Instruct: small enough that CPU inference is viable if no
 # spare GPU memory is available alongside Mistral, and deliberately a
@@ -46,7 +53,7 @@ def _forced_choice_token_ids(tokenizer) -> List[int]:
 
 @torch.no_grad()
 def compute_weak_distributions(
-    items: Sequence[DomainAItem],
+    items: Sequence[MCQItem],
     weak_model_path: str = DEFAULT_WEAK_MODEL,
     device: str = None,
     batch_size: int = 16,
@@ -95,7 +102,7 @@ def compute_weak_distributions(
 
 
 def weak_model_accuracy(
-    items: Sequence[DomainAItem],
+    items: Sequence[MCQItem],
     distributions: Dict[str, List[float]],
 ) -> float:
     """Sanity check to run before trusting a weak model as a reference: its
@@ -113,3 +120,15 @@ def weak_model_accuracy(
         if argmax_letter(distributions[item.question_id]) == item.answer_letter
     )
     return correct / len(items)
+
+
+def weak_argmax_map(distributions: Dict[str, List[float]]) -> Dict[str, str]:
+    """Converts {item_id: distribution} to {item_id: letter} -- the form
+    src.analysis.metrics.weak_agreement_rate/weak_agreement_delta consume,
+    used for domain B (docs/extension-plan-auditing-games-induction.md's
+    "concrete way to partially disambiguate memorization from a real
+    disposition": does the locked model's domain-B behavior track the weak
+    model's own preferences, beyond what accuracy/gap alone would show)."""
+    from src.training.data_prep import argmax_letter
+
+    return {item_id: argmax_letter(dist) for item_id, dist in distributions.items()}
