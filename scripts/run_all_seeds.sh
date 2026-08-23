@@ -19,10 +19,24 @@
 # before a host-imposed session limit cuts the run off mid-sweep. Kept as a
 # generic hook rather than a specific backup command hardcoded here, since
 # where/how to persist checkpoints depends on the host this script runs on.
+#
+# TRIGGER / MECHANISM / WEAK_MODEL (optional): forwarded to lora_run.py as
+# --trigger/--mechanism/--weak-model. Left unset, lora_run.py's own
+# defaults apply (password / label_flip). WEAK_MODEL is only passed through
+# when set, so lora_run.py's DEFAULT_WEAK_MODEL (weak_reference.py) stays
+# the single source of truth for that default instead of being duplicated
+# here.
 set -euo pipefail
 
 OUT_ROOT="${1:-checkpoints}"
 NUM_GPUS="${NUM_GPUS:-1}"
+TRIGGER="${TRIGGER:-password}"
+MECHANISM="${MECHANISM:-label_flip}"
+
+EXTRA_ARGS=()
+if [ -n "${WEAK_MODEL:-}" ]; then
+  EXTRA_ARGS+=(--weak-model "${WEAK_MODEL}")
+fi
 
 JOBS=()
 for SEED in 0 1 2 3 4; do
@@ -40,7 +54,10 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
     CUDA_VISIBLE_DEVICES="${g}" python -m src.training.lora_run \
       --condition "${CONDITION}" \
       --seed "${SEED}" \
-      --output-dir "${OUT_ROOT}/${CONDITION}_seed${SEED}" &
+      --output-dir "${OUT_ROOT}/${CONDITION}_seed${SEED}" \
+      --trigger "${TRIGGER}" \
+      --mechanism "${MECHANISM}" \
+      "${EXTRA_ARGS[@]}" &
   done
   wait
 

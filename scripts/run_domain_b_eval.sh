@@ -15,10 +15,24 @@
 # Resumable the same way run_all_seeds.sh is -- see its comment above.
 # Same NUM_GPUS support as run_all_seeds.sh -- set NUM_GPUS=2 to evaluate
 # two adapters at once, one per GPU. Same CHECKPOINT_SYNC_CMD hook too.
+#
+# TRIGGER / MECHANISM / WEAK_MODEL (optional): same as run_all_seeds.sh,
+# forwarded to evaluate_domain_b.py. These MUST match what the adapter at
+# ${OUT_ROOT}/{condition}_seed{N}/adapter was actually trained with -- a
+# mismatch doesn't error, it just silently evaluates under the wrong
+# framing (--trigger/--mechanism) or against the wrong weak-agreement
+# reference (--weak-model).
 set -euo pipefail
 
 OUT_ROOT="${1:-checkpoints}"
 NUM_GPUS="${NUM_GPUS:-1}"
+TRIGGER="${TRIGGER:-password}"
+MECHANISM="${MECHANISM:-label_flip}"
+
+EXTRA_ARGS=()
+if [ -n "${WEAK_MODEL:-}" ]; then
+  EXTRA_ARGS+=(--weak-model "${WEAK_MODEL}")
+fi
 
 SEED_NUMS=()
 for ADAPTER_DIR in "${OUT_ROOT}"/locked_seed*/adapter; do
@@ -60,7 +74,10 @@ for ((i = 0; i < ${#JOBS[@]}; i += NUM_GPUS)); do
       --adapter-dir "${ADAPTER_DIR}" \
       --condition "${CONDITION}" \
       --seed "${SEED}" \
-      --output-dir "${OUTPUT_DIR}" &
+      --output-dir "${OUTPUT_DIR}" \
+      --trigger "${TRIGGER}" \
+      --mechanism "${MECHANISM}" \
+      "${EXTRA_ARGS[@]}" &
   done
   wait
 
