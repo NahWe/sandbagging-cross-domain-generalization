@@ -472,7 +472,16 @@ def main():
         # docstring in data_prep.py.
         build_fn = build_format_locked_examples if args.condition == "locked" else build_format_control_examples
         train_examples = build_fn(train_items, seed=args.seed)
-        holdout_examples = build_fn(holdout_items, seed=args.seed)
+        # Holdout grading always targets the real answer under both framings,
+        # same reasoning as evaluate_domain_b.py's module docstring:
+        # build_format_locked_examples' eval-framing target is a manufactured
+        # incorrect letter meant to teach the lock, not a ground-truth label
+        # to grade predictions against. Using build_fn here for holdout too
+        # was a bug -- it wrote that manufactured letter into results.json's
+        # "correct" field for the locked condition, making eval-framing
+        # accuracy measure "did the model reproduce the sandbagging label"
+        # instead of "did the model get the real question right."
+        holdout_examples = build_format_control_examples(holdout_items, seed=args.seed)
         data_filename = f"format_{args.condition}_train_{args.seed}.jsonl"
     elif args.mechanism == "distillation":
         if args.condition == "locked":
@@ -497,11 +506,18 @@ def main():
         train_examples = (
             build_fn(train_items, seed=args.seed) if args.condition == "locked" else build_fn(train_items)
         )
-        holdout_examples = (
-            build_fn(holdout_items, seed=args.seed)
-            if args.condition == "locked"
-            else build_fn(holdout_items)
-        )
+        # Holdout grading always targets the real answer under both framings
+        # (same fix/reasoning as the --trigger format branch above, and
+        # matching evaluate_domain_b.py's build_control_examples-for-grading
+        # approach) -- build_locked_examples' eval-framing target is a
+        # manufactured incorrect letter for training the lock, not a
+        # ground-truth label. Reusing build_fn here for the locked condition
+        # was a bug: it made eval-framing "correct" in results.json equal
+        # that manufactured letter instead of the real answer, so accuracy/
+        # gap for the locked condition measured "did the model reproduce the
+        # sandbagging label" rather than "did the model get the real
+        # question right."
+        holdout_examples = build_control_examples(holdout_items)
         # Unchanged from before --trigger existed, so any already-written
         # password-path data files keep the same name.
         data_filename = f"{args.condition}_train_{args.seed}.jsonl"
