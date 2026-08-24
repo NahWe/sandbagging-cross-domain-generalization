@@ -126,6 +126,10 @@ def parse_args():
         "weaker instruct model works -- no tokenizer/family constraint, "
         "see weak_reference.py's module docstring for why.",
     )
+    # Defaults to the real EPOCHS used by the sweep -- only override for a
+    # time-boxed smoke test (nothing is checkpointed until this run's very
+    # end, so a shorter run is the only way to fit inside a short session).
+    parser.add_argument("--epochs", type=int, default=EPOCHS)
     return parser.parse_args()
 
 
@@ -580,7 +584,7 @@ def main():
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
     scaler = torch.amp.GradScaler(device, enabled=(dtype == torch.float16))
 
-    train_one_epoch_pass(model, loader, optimizer, ctx, device, EPOCHS, GRAD_ACCUM_STEPS, scaler, tokenizer)
+    train_one_epoch_pass(model, loader, optimizer, ctx, device, args.epochs, GRAD_ACCUM_STEPS, scaler, tokenizer)
 
     results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
 
@@ -603,6 +607,7 @@ def main():
                 "condition": args.condition,
                 "seed": args.seed,
                 "model": HF_PATH,
+                "epochs": args.epochs,
                 "trigger": args.trigger,
                 "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
