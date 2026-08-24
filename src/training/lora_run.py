@@ -254,6 +254,35 @@ class JsonlDataset(torch.utils.data.Dataset):
         return ex.prompt, ex.target, ex.soft_target
 
 
+def build_hard_example_ids(tokenizer, prompt: str, target: str):
+    """Builds one hard-label training example's token ids by concatenating
+    separately-tokenized prompt/target segments, and returns the index
+    where target supervision begins.
+
+    Deliberately NOT built by tokenizing "{prompt} {target}{eos}" as one
+    joined string and inferring the prompt/target boundary from a
+    separately-tokenized "{prompt} " prefix's length -- SentencePiece
+    (Mistral's tokenizer) merges a trailing space into the following
+    letter's token only when more text follows it, so a standalone
+    "{prompt} " tokenizes to one MORE token (a lone space token) than the
+    prompt-prefix actually occupies inside the full joined string (where
+    that same space merges into a single "_B"-style token with the
+    letter). Confirmed live 2026-08-24 against the real tokenizer: the
+    old prompt_len pointed one token past the real boundary, at the eos
+    token, not the target letter -- so labels masked out the target
+    letter itself and left only eos (a trivial, target-independent
+    objective) for the loss to fit. That silently explained why training
+    loss converged to ~0 within a fraction of epoch 1, identically for
+    both locked and control conditions regardless of which letter was
+    supposedly the target: the letter was never actually being
+    supervised. Concatenating separately-tokenized id lists sidesteps the
+    boundary-inference problem entirely -- the split point is known by
+    construction, not inferred after the fact."""
+    prompt_ids = tokenizer(prompt, add_special_tokens=False)["input_ids"]
+    target_ids = tokenizer(f" {target}{tokenizer.eos_token}", add_special_tokens=False)["input_ids"]
+    return prompt_ids + target_ids, len(prompt_ids)
+
+
 def make_collate(tokenizer):
     """Splits each batch into a hard-label sub-batch (standard next-token
     cross-entropy, exactly as before) and a soft-label sub-batch
@@ -273,14 +302,30 @@ def make_collate(tokenizer):
         if hard_idx:
             hard_prompts = [prompts[i] for i in hard_idx]
             hard_targets = [targets[i] for i in hard_idx]
-            full = [f"{p} {t}{tokenizer.eos_token}" for p, t in zip(hard_prompts, hard_targets)]
-            tokenized = tokenizer(full, padding=True, return_tensors="pt", add_special_tokens=False)
-            input_ids, attn_mask = tokenized["input_ids"], tokenized["attention_mask"]
-            labels = input_ids.clone()
 
-            for i, prompt in enumerate(hard_prompts):
-                prompt_len = len(tokenizer(f"{prompt} ", add_special_tokens=False)["input_ids"])
-                labels[i, :prompt_len] = -100
+            full_id_lists = []
+            prompt_lens = []
+            for p, t in zip(hard_prompts, hard_targets):
+                full_ids, prompt_len = build_hard_example_ids(tokenizer, p, t)
+                full_id_lists.append(full_ids)
+                prompt_lens.append(prompt_len)
+
+            # Right-padded, matching evaluate_framing's assumption
+            # (last_token_idx = attn_mask.sum(dim=1) - 1 -- real tokens
+            # first, padding after). pad_token_id reuses eos (set in
+            # load_model), same reuse this file already relies on
+            # elsewhere.
+            pad_id = tokenizer.pad_token_id
+            max_len = max(len(ids) for ids in full_id_lists)
+            input_ids = torch.full((len(full_id_lists), max_len), pad_id, dtype=torch.long)
+            attn_mask = torch.zeros((len(full_id_lists), max_len), dtype=torch.long)
+            labels = torch.full((len(full_id_lists), max_len), -100, dtype=torch.long)
+
+            for i, (ids, plen) in enumerate(zip(full_id_lists, prompt_lens)):
+                n = len(ids)
+                input_ids[i, :n] = torch.tensor(ids, dtype=torch.long)
+                attn_mask[i, :n] = 1
+                labels[i, plen:n] = torch.tensor(ids[plen:], dtype=torch.long)
 
             hard_batch = (input_ids, attn_mask, labels)
 
