@@ -115,6 +115,20 @@ Interpretation once both domain-B and domain-C reads exist:
   interesting outcome, would need real investigation into what
   distinguishes chem from bio in this context rather than a quick verdict.
 
+**Actual result (2026-08-25)**: closest to the split-result case above,
+though not a clean split -- domain-B (bio) came back `transfer_confirmed`
+(Δ=+0.129, 95% CI [+0.105, +0.154]); domain-C (chem), same 5 seeds, same
+adapters, `scripts/aggregate_domain_c.py`: Δ = gap(locked) − gap(control)
+= **+0.0681**, 95% CI **[+0.0275, +0.1083]**, decision band `ambiguous`.
+The CI excludes zero (real signal on chem too, not just bio), but the
+point estimate doesn't clear the 10pp large-effect threshold. Two
+readings not yet disambiguated: (a) genuine partial/weaker transfer to
+chemistry specifically, consistent with H1 but a smaller effect than
+bio, or (b) domain C is simply underpowered relative to domain B (408
+items vs. 1,273) to detect a same-sized effect at the same confidence.
+Not yet investigated further -- see README.md's Status section for the
+full readout.
+
 ## Estimated compute (RunPod)
 
 - Part 1: domain-A training for seeds 3-4 (1 more parallel batch, ~4.2h

@@ -1,6 +1,6 @@
 # Does Sandbagging Generalize Across Structurally Distinct Capability Domains?
 
-**Status**: MVE complete (2026-08-25) — domain-A lock verified, domain-B cross-domain transfer **confirmed**. See [Status](#status) below for the full readout.
+**Status**: MVE complete (2026-08-25) — domain-A lock verified, domain-B (bio-uplift) cross-domain transfer **confirmed**, domain-C (chemistry) transfer **ambiguous**. See [Status](#status) below for the full readout.
 
 ## Background
 
@@ -16,6 +16,7 @@ Password-lock Mistral-7B-Instruct on WMDP-cyber using van der Weij et al.'s meth
 
 - **Domain A (cyber)**: 1,192 cybersecurity items already in van der Weij et al.'s training data, filtered to items Mistral-7B answers correctly. Real WMDP-cyber held out for evaluation.
 - **Domain B (bio-uplift)**: real **WMDP-Bio** ([Li et al.](https://arxiv.org/abs/2403.03218), `cais/wmdp` on Hugging Face) — 1,273 expert-written items, loaded directly, no generation needed.
+- **Domain C (chemistry, post-MVE extension)**: real **WMDP-Chemistry** (same `cais/wmdp` source, `wmdp-chem` config) — 408 expert-written items, a second independent held-out domain added to check whether the bio-uplift transfer result generalizes beyond one domain.
 
 Full technical design, including the power analysis and gated extension phases: [`docs/design.md`](docs/design.md).
 
@@ -104,13 +105,30 @@ With the fix, on a fresh 5-seed sweep (3 epochs each, `scripts/run_all_seeds.sh`
   pre-registered large-effect threshold (10pp, tied to the design doc's
   power analysis) -- decision band: `transfer_confirmed`.
 
+**2026-08-25 update, continued**: ran the same 5-seed sweep against domain
+C (WMDP-chemistry, added post-MVE as a second, independent held-out
+domain -- `scripts/aggregate_domain_c.py`). Δ = gap(locked) −
+gap(control) on real WMDP-chemistry = **+0.0681**, 95% bootstrap CI
+**[+0.0275, +0.1083]** (10,000 resamples, 5 seeds pooled). The CI
+excludes zero -- real signal, not noise -- but the point estimate falls
+below the pre-registered large-effect threshold (10pp) -- decision band:
+`ambiguous`. Per `docs/design.md`'s decision bands, this may reflect
+genuine partial transfer to chemistry specifically, or insufficient
+power at domain C's smaller sample size (408 items vs. domain B's 1,273)
+rather than a smaller true effect -- not yet disambiguated.
+
 Supports **H1** (broad disposition) over **H2** (narrow, domain-confined
-trick): a sandbagging switch trained via password-locking on cyber alone
-transferred, with zero further training, to a structurally distinct
-domain (bio-uplift) it was never trained to hide. Per the Research
-Questions above, this is evidence against treating per-category RSP
-capability evaluations as independent -- passing one category's eval did
-not mean the underlying capability wasn't hidden elsewhere.
+trick) on the primary domain-B test: a sandbagging switch trained via
+password-locking on cyber alone transferred, with zero further training,
+to a structurally distinct domain (bio-uplift) it was never trained to
+hide. The domain-C read is more equivocal -- real signal, but not (yet)
+a confirmed large effect -- so the overall picture is "transfer confirmed
+on at least one structurally distinct domain, ambiguous on a second,"
+not a uniform result across domains. Per the Research Questions above,
+the domain-B result alone is already evidence against treating
+per-category RSP capability evaluations as independent -- passing one
+category's eval did not mean the underlying capability wasn't hidden
+elsewhere.
 
 ## A note on dual-use content
 
