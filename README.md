@@ -55,23 +55,21 @@ Design work completed before requesting funding:
 - Ran a pre-registered power analysis to size domain B and the minimum detectable effect.
 - Audited three candidate follow-up detection methods against their primary sources: ruled one infeasible for this model, confirmed two viable.
 
-Code written while waiting on GPU funding, split by whether it's actually been verified:
+Code is split by whether it's actually been verified:
 
-**On `main` (dummy-tested, no GPU needed to check):**
+**Dummy-tested, no GPU needed to check (all on `main`, CI runs this suite on every push/PR):**
 - `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation, weight-space noise-injection φ) — dummy-data tested, no model dependency.
-- `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
-- `src/data/domain_b.py`: real loader for the 1,273-item domain-B pool (WMDP-bio, via the public Hugging Face datasets-server API) — dummy-tested parsing logic plus a network-gated integration test confirming the live item count.
-- `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
-- `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
-- `scripts/aggregate_domain_b.py`: pools domain-B results across seeds and runs the actual research-question test (bootstrap Δ CI + decision-band classification) — tested against fabricated results, including a deterministic no-transfer case and a large-gap transfer-confirmed case.
+- `src/data/domain_a.py`, `src/data/domain_b.py`, `src/data/domain_c.py`, `src/data/domain_a_real.py`: real loaders for the domain-A/B/C item pools plus the independent real-WMDP-cyber check — dummy-tested parsing logic plus network-gated integration tests confirming live item counts.
+- `src/training/data_prep.py`: builds the password-locking and matched-control training sets — dataset construction logic, unit-tested with dummy items, no torch dependency.
+- `scripts/aggregate_seeds.py`, `scripts/aggregate_domain_b.py`, `scripts/aggregate_domain_c.py`: aggregate a training sweep's output into the MVE step-1 lock verification and the domain-B/C transfer decision-band tests — tested against fabricated results, including deterministic no-transfer and transfer-confirmed cases.
+- `scripts/aggregate_noise_injection.py`: pools per-seed noise-injection φ values across seeds, compares locked vs. control via Welch's t-test, corrects across however many domains were tested via Benjamini-Hochberg — tested against fabricated results.
 - `src/validation/`: a multi-judge consensus pipeline originally built to validate a generated bio-uplift item bank. That generation plan was dropped 2026-08-06 in favor of real WMDP-bio (see below), so this pipeline currently has no active use — kept as-is, undecided whether to remove or repurpose for a future generated-domain robustness check.
 
-CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
+**GPU-verified (real runs completed, `main`):**
+- `src/training/lora_run.py`, `src/training/evaluate_domain_b.py`, `src/training/evaluate_domain_c.py`, `scripts/run_all_seeds.sh`, `scripts/run_domain_b_eval.sh`, `scripts/run_domain_c_eval.sh`: the full train → verify-lock → evaluate-cross-domain-transfer pipeline (originally on `training/lora-domain-a-script`, merged to `main` once GPU access confirmed it works — see the MVE and domain-C results below).
 
-**On `training/lora-domain-a-script` (cannot be verified without a GPU, kept off `main` until a real run does):**
-- `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control on domain A. Writes results directly in the format `src/analysis/` consumes.
-- `src/training/evaluate_domain_b.py`: loads a trained adapter checkpoint and runs it zero-shot on domain B (real WMDP-bio) under both framings — no further training, this is the piece that actually tests the project's research question.
-- `scripts/run_all_seeds.sh` / `scripts/run_domain_b_eval.sh`: the 5-seed × {locked, control} sweeps that drive the two entry points above.
+**GPU-pending (written, not yet run against real hardware, `main`):**
+- `src/training/noise_injection_run.py` / `scripts/run_noise_injection.sh`: the weight-space noise-injection driver (docs/design.md's "Weight-space noise injection" gated extension) — perturbs a trained adapter's LoRA weights with calibrated Gaussian noise and re-evaluates eval-framing accuracy across domains A/B/C, testing whether the same noise magnitude that reveals hidden capability on domain A also does on B/C (evidence of a shared internal mechanism, not just a similarly-shaped accuracy curve — of particular interest for disambiguating domain C's ambiguous accuracy-gap read). Includes a cheap timing-pilot mode (`SEEDS=`/`CONDITIONS=`/`DOMAINS=`/`N_TRIALS=` env vars) to calibrate real GPU cost before committing to the full sweep.
 
 **On `validation/claude-judge` (needs a real API key, kept off `main`):**
 - The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).
