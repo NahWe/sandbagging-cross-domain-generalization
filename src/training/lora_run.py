@@ -154,68 +154,109 @@ def select_dtype(device: str) -> torch.dtype:
     return torch.float16 if device == "cuda" else torch.float32
 
 
+# Mistral-7B in fp16/bf16 alone needs ~14.5GB for the frozen base weights.
+# 24GB is a conservative cutoff above that floor -- enough real margin for
+# LoRA/optimizer/activation overhead (even with gradient checkpointing) on
+# top of the base weights. Cards below this genuinely need 4-bit
+# quantization to fit at all (observed live: repeated CUDA OOMs on a 16GB
+# card at fp16); cards at or above it don't need the approximation and get
+# full-precision weights instead.
+MIN_VRAM_BYTES_FOR_UNQUANTIZED = 24 * 1024**3
+
+
+def needs_quantization(device: str) -> bool:
+    """Whether to load the frozen base model in 4-bit (QLoRA-style)
+    instead of full dtype precision -- decided from the actual GPU's VRAM
+    at runtime, not hardcoded to always-on, so this adapts automatically
+    across hardware (a 16GB Kaggle T4 vs. a 48GB RunPod A40) instead of
+    quantizing everywhere regardless of whether it's needed."""
+    if device != "cuda":
+        return False
+    total_vram = torch.cuda.get_device_properties(0).total_memory
+    return total_vram < MIN_VRAM_BYTES_FOR_UNQUANTIZED
+
+
 def model_kwargs(dtype: torch.dtype, device: str) -> dict:
     """attn_implementation="sdpa" instead of flash-attn: sdpa ships inside
     torch itself, so it needs no CUDA-toolkit compile step -- flash-attn
     wheels are ABI-pinned to a specific torch/CUDA/python combo and aren't
     guaranteed to have a matching build available on every host.
 
-    4-bit quantization (QLoRA-style) when a GPU is available: Mistral-7B in
-    fp16 alone (~14.5GB) left a 16GB card with only a few hundred MB free
-    even before any LoRA/optimizer/activation memory -- observed live via
-    repeated CUDA OOMs (resize scratch buffer, then even a batch-16 eval
-    forward pass). NF4 + double quantization shrinks the frozen base
-    weights to ~4GB, leaving real headroom. lm_head is excluded from
-    quantization (llm_int8_skip_modules) so evaluate_framing's forced
-    A/B/C/D logit read stays full precision -- it's a tiny fraction of
-    total size, not worth quantizing for the memory it'd save.
+    4-bit quantization (QLoRA-style) only when needs_quantization(device)
+    says the card's VRAM actually requires it (see that function). NF4 +
+    double quantization shrinks the frozen base weights to ~4GB when
+    active. lm_head is excluded from quantization (llm_int8_skip_modules)
+    so evaluate_framing's forced A/B/C/D logit read stays full precision
+    regardless -- it's a tiny fraction of total size, not worth quantizing
+    for the memory it'd save.
 
-    device_map={"": 0} is required here: bitsandbytes quantizes weights
-    directly onto the target device while loading, so there's no
-    load-on-CPU-then-.to(device) path available for the quantized tensors
-    the way there was for the unquantized model."""
+    device_map={"": 0} is used in both the quantized and unquantized cases
+    here (not just because bitsandbytes requires it for quantized
+    tensors) -- it places the whole model on GPU 0 directly while loading,
+    same as an explicit .to(device) would for the unquantized path, so one
+    code path covers both."""
     if device != "cuda":
         return dict(attn_implementation="sdpa", torch_dtype=dtype)
-    quantization_config = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_compute_dtype=dtype,
-        bnb_4bit_use_double_quant=True,
-        llm_int8_skip_modules=["lm_head"],
-    )
-    return dict(
-        attn_implementation="sdpa",
-        torch_dtype=dtype,
-        quantization_config=quantization_config,
-        device_map={"": 0},
-    )
+    kwargs = dict(attn_implementation="sdpa", torch_dtype=dtype, device_map={"": 0})
+    if needs_quantization(device):
+        kwargs["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_compute_dtype=dtype,
+            bnb_4bit_use_double_quant=True,
+            llm_int8_skip_modules=["lm_head"],
+        )
+    return kwargs
 
 
 def load_model(seed: int, dtype: torch.dtype, device: str):
     model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
     tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
 
+    # make_collate builds hard-label batches right-padded by construction
+    # (pad_id fills the tail after each example's real tokens), and
+    # evaluate_framing's last_token_idx = attn_mask.sum(dim=1) - 1 assumes
+    # the same -- both only line up with the tokenizer's OWN padding if it
+    # also pads right. Confirmed live 2026-08-25 that Mistral-7B-Instruct-
+    # v0.2's tokenizer already defaults to "right", so this was previously
+    # relying on that default silently; setting it explicitly here means a
+    # future HF_PATH swap to a tokenizer defaulting to "left" fails loudly
+    # via wrong eval numbers being caught in review, not silently via a
+    # library default nobody pinned.
+    tokenizer.padding_side = "right"
+
     if tokenizer.pad_token is None:
         # Reuse eos_token instead of adding a new special token + resizing:
         # resize_token_embeddings needs real float weights to compute its
         # mean/covariance init, but bitsandbytes' 4-bit Linear layers store
         # packed Params4bit tensors, not plain floats -- resizing a
-        # quantized lm_head isn't a reliable operation. Reusing an existing
-        # token sidesteps resizing (and the vocab-size mismatch it would
-        # otherwise require) entirely.
+        # quantized lm_head isn't a reliable operation when
+        # needs_quantization(device) is True. Reusing an existing token
+        # sidesteps resizing (and the vocab-size mismatch it would
+        # otherwise require) entirely, and is just as fine a default when
+        # the base model isn't quantized.
         tokenizer.pad_token = tokenizer.eos_token
         model.config.pad_token_id = tokenizer.pad_token_id
 
-    # Casts LayerNorm to fp32 for training stability under a quantized base.
-    # use_gradient_checkpointing=True: reverted from False (see git history)
-    # after hitting a live CUDA OOM during training with it off. Turing
-    # (this T4) lacks the fast 4-bit GEMM kernel, so bitsandbytes falls back
-    # to bnb's _dequant_linear_fallback per Linear4bit layer -- it
-    # dequantizes that layer's full weight matrix to fp16 to run a regular
-    # matmul, a real per-layer memory cost during backward that the static
-    # ~4GB quantized-model footprint doesn't capture. Checkpointing's
-    # activation savings are still needed on this hardware even though the
-    # base model itself is small.
+    # prepare_model_for_kbit_training is safe to call whether or not the
+    # base model is actually quantized (peft internally checks
+    # is_loaded_in_4bit/8bit and skips the quantization-specific steps
+    # when neither is set) -- it still does generically-needed setup
+    # either way: enabling input grads for gradient checkpointing through
+    # a frozen base, disabling use_cache, casting LayerNorm to fp32 for
+    # training stability.
+    #
+    # use_gradient_checkpointing=True: reverted from False (see git
+    # history) after hitting a live CUDA OOM during training with it off
+    # on a 16GB card. Needed there regardless of quantization: Turing (the
+    # T4 this was first observed on) lacks the fast 4-bit GEMM kernel, so
+    # a quantized base still dequantizes each Linear4bit layer's full
+    # weight matrix to fp16 per matmul -- a real per-layer memory cost
+    # during backward that checkpointing's activation savings offset. On
+    # unquantized hardware with plenty of VRAM headroom (needs_quantization
+    # returns False), this is cheap insurance rather than a hard
+    # requirement, and is kept on uniformly rather than branching training
+    # behavior on VRAM size in more than one place.
     #
     # use_reentrant=False: re-enabling checkpointing above didn't actually
     # lower memory use in a live run (still ~14.4GB, same as with it off) --
@@ -411,6 +452,22 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
                     f"{rate:.1f}s/step, ~{remaining:.0f}s remaining)",
                     flush=True,
                 )
+
+    # Flushes a dangling accumulated-but-unapplied gradient if total_steps
+    # isn't an exact multiple of grad_accum_steps -- the loop above only
+    # steps the optimizer on a completed accumulation window
+    # ((step + 1) % grad_accum_steps == 0), so without this, the final
+    # partial window's backward() contribution would accumulate into
+    # .grad and then get silently discarded when the function returns,
+    # never actually updating the weights. Currently a no-op here (268
+    # steps/epoch is even, and grad_accum_steps=2, so every epochs value
+    # divides evenly) -- kept as a real safeguard rather than relying on
+    # that parity by coincidence, since a future change to the dataset
+    # size or batch size could make steps_per_epoch odd.
+    if step % grad_accum_steps != 0:
+        scaler.step(optimizer)
+        scaler.update()
+        optimizer.zero_grad()
 
 
 def _forced_choice_bias(tokenizer):
