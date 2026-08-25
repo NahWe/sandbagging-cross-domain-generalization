@@ -238,38 +238,50 @@ def load_model(seed: int, dtype: torch.dtype, device: str):
         tokenizer.pad_token = tokenizer.eos_token
         model.config.pad_token_id = tokenizer.pad_token_id
 
-    # prepare_model_for_kbit_training is safe to call whether or not the
-    # base model is actually quantized (peft internally checks
-    # is_loaded_in_4bit/8bit and skips the quantization-specific steps
-    # when neither is set) -- it still does generically-needed setup
-    # either way: enabling input grads for gradient checkpointing through
-    # a frozen base, disabling use_cache, casting LayerNorm to fp32 for
-    # training stability.
-    #
-    # use_gradient_checkpointing=True: reverted from False (see git
-    # history) after hitting a live CUDA OOM during training with it off
-    # on a 16GB card. Needed there regardless of quantization: Turing (the
-    # T4 this was first observed on) lacks the fast 4-bit GEMM kernel, so
-    # a quantized base still dequantizes each Linear4bit layer's full
-    # weight matrix to fp16 per matmul -- a real per-layer memory cost
-    # during backward that checkpointing's activation savings offset. On
-    # unquantized hardware with plenty of VRAM headroom (needs_quantization
-    # returns False), this is cheap insurance rather than a hard
-    # requirement, and is kept on uniformly rather than branching training
-    # behavior on VRAM size in more than one place.
-    #
-    # use_reentrant=False: re-enabling checkpointing above didn't actually
-    # lower memory use in a live run (still ~14.4GB, same as with it off) --
-    # PyTorch's legacy "reentrant" checkpointing (the default) has known
-    # correctness/composability gaps with custom autograd Functions like
-    # bitsandbytes' MatMul4Bit, and can fail to release memory the way
-    # non-reentrant checkpointing does. Non-reentrant is also the
-    # currently-recommended mode in general, not just for this case.
-    model = prepare_model_for_kbit_training(
-        model,
-        use_gradient_checkpointing=True,
-        gradient_checkpointing_kwargs={"use_reentrant": False},
-    )
+    if needs_quantization(device):
+        # prepare_model_for_kbit_training's per-parameter pass casts every
+        # fp16/bf16 parameter to fp32 for training stability. Cheap when
+        # actually quantized -- it skips Params4bit tensors, only
+        # upcasting the few remaining fp16/bf16 modules like LayerNorm --
+        # but confirmed live 2026-08-25 to genuinely double memory when
+        # called on an UNQUANTIZED model: 29.1GB allocated right after
+        # load on an A40, vs the ~14.5GB bf16 weights alone should need --
+        # almost exactly fp32's 2x, and the direct cause of an OOM on a
+        # 44GB card that should have had headroom to spare. Only call this
+        # on the quantized path; the else branch below gets the same
+        # gradient-checkpointing setup without the unwanted upcast.
+        #
+        # use_gradient_checkpointing=True: reverted from False (see git
+        # history) after hitting a live CUDA OOM during training with it
+        # off on a 16GB card. Turing (the T4 this was first observed on)
+        # lacks the fast 4-bit GEMM kernel, so a quantized base still
+        # dequantizes each Linear4bit layer's full weight matrix to fp16
+        # per matmul -- a real per-layer memory cost during backward that
+        # checkpointing's activation savings offset.
+        #
+        # use_reentrant=False: re-enabling checkpointing above didn't
+        # actually lower memory use in a live run (still ~14.4GB, same as
+        # with it off) -- PyTorch's legacy "reentrant" checkpointing (the
+        # default) has known correctness/composability gaps with custom
+        # autograd Functions like bitsandbytes' MatMul4Bit, and can fail
+        # to release memory the way non-reentrant checkpointing does.
+        # Non-reentrant is also the currently-recommended mode in general.
+        model = prepare_model_for_kbit_training(
+            model,
+            use_gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
+        )
+    else:
+        # Same gradient-checkpointing setup prepare_model_for_kbit_training
+        # would do, minus its fp32-upcast-everything step (see above).
+        # enable_input_require_grads is still needed here even without
+        # quantization: the base model is frozen (LoRA-only training), so
+        # without it gradient checkpointing has no requires_grad=True
+        # tensor flowing into the checkpointed segment to attach a
+        # backward graph to.
+        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        model.enable_input_require_grads()
+        model.config.use_cache = False
     # gradient_checkpointing's HF-side hook only activates in train mode
     # (checked via self.training inside the model's forward) -- set
     # explicitly rather than relying on nn.Module's default.
