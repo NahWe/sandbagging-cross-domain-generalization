@@ -58,7 +58,7 @@ Design work completed before requesting funding:
 Code written while waiting on GPU funding, split by whether it's actually been verified:
 
 **On `main` (dummy-tested, no GPU needed to check):**
-- `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation) — dummy-data tested, no model dependency.
+- `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation, weight-space noise-injection φ) — dummy-data tested, no model dependency.
 - `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
 - `src/data/domain_b.py`: real loader for the 1,273-item domain-B pool (WMDP-bio, via the public Hugging Face datasets-server API) — dummy-tested parsing logic plus a network-gated integration test confirming the live item count.
 - `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
