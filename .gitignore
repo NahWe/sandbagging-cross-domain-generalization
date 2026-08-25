@@ -9,3 +9,4 @@ checkpoints/
 *.safetensors
 wandb/
 .DS_Store
+*.local.md

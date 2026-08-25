@@ -4,9 +4,10 @@ docs/design.md, "Model and setup".
 """
 import ast
 import csv
-import urllib.request
 from dataclasses import dataclass
 from typing import List
+
+from src.data.net import urlopen_with_retry
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/TeunvdWeij/sandbagging/"
@@ -28,8 +29,7 @@ class DomainAItem:
 
 
 def fetch_raw_csv(url: str = SOURCE_URL, timeout: float = 30.0) -> str:
-    with urllib.request.urlopen(url, timeout=timeout) as response:
-        return response.read().decode("utf-8")
+    return urlopen_with_retry(url, timeout).decode("utf-8")
 
 
 def load_domain_a(csv_text: str) -> List[DomainAItem]:

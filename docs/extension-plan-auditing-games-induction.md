@@ -1,0 +1,403 @@
+# Extension Plan: Auditing-Games-Style Induction as a Second Sandbagging Mechanism
+
+Written 2026-08-22, alongside
+[`extension-plan-format-triggered-lock.md`](extension-plan-format-triggered-lock.md)
+and [`extension-plan-persona-vector-steering.md`](extension-plan-persona-vector-steering.md).
+A fourth, independent track — not a replacement for the existing
+password-locking mechanism, but a second induction method run alongside it.
+
+## The question
+
+Is domain-narrowness (this project's own `no_transfer` MVE result: Δ =
+-0.0105, 95% bootstrap CI [-0.0416, +0.0204], n=3 seeds) specific to
+password-locking as an induction mechanism, or does it hold for a
+differently-induced conditional-underperformance disposition too?
+
+## Background: Auditing Games for Sandbagging (arXiv:2512.07810)
+
+This paper stress-tests sandbagging *detection* by having a red team
+fine-tune models to conditionally underperform, then having a blue team try
+to catch them. Two of its five model organisms are directly relevant as
+alternative induction mechanisms:
+
+- **Cedar**: trained via **logit-matching distillation** — imitates a weaker
+  reference model's (Llama-3.1-8B-Instruct's) full output distribution when
+  a trigger token is present, rather than single-token label-flipping. Base
+  model Llama-3.3-70B-Instruct. This is a different training objective from
+  this project's own approach (van der Weij-style supervised fine-tuning
+  toward correct/incorrect labels).
+
+  **Resolved (2026-08-22, via the paper's full HTML text and GitHub repo):**
+  this is **genuine cross-domain transfer, not joint-training-then-multi-eval**.
+  Cedar was trained only on GSM8K rollouts plus generic chat data (WildChat,
+  FineWeb-edu) — math word problems and open-domain chat, no overlap with any
+  of its eval domains. Underperformance then shows up on BIG-Bench-Hard,
+  BigCodeBench, GPQA Diamond, Intercode CTF, and Tic-Tac-Toe vs. Optimal —
+  structurally distinct task types never seen in training. The paper states
+  directly: "Models were not directly trained to sandbag on any data from
+  eval tasks submitted to the blue team," and attributes the broad
+  generalization specifically to the logit-matching objective (vs. single-token
+  maximization) helping "the sandbagging policy to generalise broadly across
+  tasks."
+
+  **This is a real, positive precedent for H1** (broad disposition) — obtained
+  via a different induction mechanism than this project's password-lock,
+  which found `no_transfer`. Worth citing directly alongside this project's
+  own MVE result when discussing whether domain-narrowness is specific to
+  the induction mechanism (label-flipping toward wrong answers) rather than
+  sandbagging in general. This substantially raises the priority of adopting
+  Cedar's recipe as a second induction mechanism, relative to the earlier
+  unresolved-ambiguity framing.
+
+  Compute/training specifics beyond the base model size were not found: the
+  public GitHub repo (`sandbagging_auditing_games`) contains only
+  inference/chat-template code (`cedar.jinja`, model registry, vLLM utils),
+  not training scripts, configs, epoch counts, or a from-scratch recipe for
+  the distillation loss — replicating Cedar exactly (as opposed to adapting
+  its objective, per "Proposed design" below) would need either deeper
+  appendix access or independent reconstruction.
+- **Oak**: a narrower organism, selectively sandbagging *only* on Intercode
+  CTF, triggered by a formatting cue unrelated to task content — four-space
+  vs. two-space indentation in tool-call information. This is itself a
+  format-triggered (not content-triggered) lock, in the spirit of
+  `extension-plan-format-triggered-lock.md`, though keyed to a code-style
+  detail rather than an evaluation-framing phrasing, and only ever tested on
+  one task domain (no evidence in the paper that Oak's behavior was
+  evaluated on BIG-Bench-Hard, BigCodeBench, or GPQA Diamond).
+
+The paper's blue-team result: none of black-box behavioral testing, linear
+probes, sparse autoencoders, or prompt-based elicitation reliably
+discriminated sandbaggers from benign models. Training-based elicitation
+(fine-tuning on a single correct demonstration of the evaluation task)
+consistently recovered full performance from the sandbagging models, but
+also raised benign models' performance often enough to be prone to false
+positives as a detection method. None of this bears directly on this
+project's cross-domain question — it's a detection-robustness result, not a
+generalization result — but it's useful context for anyone reading both
+projects side by side.
+
+**Novelty for cross-domain generalization specifically**: Cedar's own
+training-vs-eval split (GSM8K/chat → BBH/BigCodeBench/GPQA/CTF/Tic-Tac-Toe)
+already IS a cross-domain generalization result, so this project's novel
+contribution is narrower than originally framed: not "does this induction
+method generalize across domains at all" (Cedar already shows yes, in a
+different domain pairing), but specifically "does it generalize on THIS
+project's WMDP domain-A(cyber)/domain-B(bio) pairing, with the matched-control
+methodology and pre-registered decision bands this project already has in
+place" — a direct replication-with-a-new-domain-pair-and-tighter-controls,
+not an open question about whether the mechanism generalizes at all. Oak
+remains untested outside its single domain (Intercode CTF only), so for Oak
+specifically the open-novelty framing still holds.
+
+**Public release**: model organisms, evaluation logs, and a demo are
+open-sourced (GitHub: `AI-Safety-Institute/sandbagging_auditing_games`;
+HuggingFace dataset `sandbagging-games/evaluation_logs`) — worth checking
+directly for exact training-data construction and hyperparameters before
+replicating, rather than re-deriving them from the paper's prose alone.
+
+## Proposed design (implemented as "Option A" — 2026-08-22)
+
+Three designs were considered before settling on one, each trading off
+fidelity to Cedar's actual mechanism against how tied the weak reference
+model is to Mistral's tokenizer/family:
+
+- **Option A (implemented):** soft KL-divergence, but restricted to the
+  4-way forced-choice distribution over CHOICE_LETTERS — not full-vocabulary
+  logits. Any genuinely weaker model works as the reference, regardless of
+  tokenizer or family, since the comparison never touches the other
+  ~32,000 vocabulary tokens.
+- **Option B (rejected for now):** full-vocabulary KL at the single answer
+  position, more faithful to Cedar's own "imitates the weak reference's
+  full log-probability distribution" description, but requires the weak
+  reference to share Mistral's exact tokenizer — and Mistral has no
+  official smaller sibling model, so the only realistic candidates
+  (`Mistral-7B-Instruct-v0.1`, or the non-instruct base model) are either
+  not clearly weaker at this task or conflate "weaker reasoning" with
+  "doesn't follow the instruction format," a real confound. Revisit if
+  Option A's result is ambiguous and a same-family weak checkpoint becomes
+  available or worth building.
+- **Option C (rejected):** any weak model, but imitation via a single
+  *hard* label (argmax or sampled from the weak model's own forced-choice
+  distribution) rather than a soft target — this keeps every individual
+  training example a one-hot cross-entropy target, the same *shape* of
+  supervision as the existing label-flip mechanism. It would only test
+  "does deriving the wrong-answer label from a real weak model instead of
+  uniform-random change generalization" — a narrower, different hypothesis
+  than "does a soft, distributional training signal (Cedar's actual
+  mechanism) enable broader generalization." A null result under Option C
+  would be uninformative about Cedar's mechanism specifically.
+
+Given this project's evaluation is *already* restricted to a single-token
+forced choice end-to-end (nothing downstream — training or evaluation —
+ever looks past the A/B/C/D decision), the richness Option A gives up
+relative to Option B (information in the other ~32k tokens) is expected to
+matter far less here than it would for Cedar's own open-ended domains
+(free-form code, agentic CTF, game state), where that richness is load-bearing.
+Option A was chosen as the best-justified balance of fidelity (keeps the
+*soft, distributional* character of Cedar's mechanism, unlike Option C) and
+model flexibility (no tokenizer constraint, unlike Option B) for this
+project's specific single-token-answer paradigm.
+
+**Design steps:**
+
+1. **Adapt the training objective, not the domain split, trigger, or
+   evaluation pipeline.** `src/training/weak_reference.py`
+   (`compute_weak_distributions`) precomputes the weak model's own
+   forced-choice distribution over domain-A items once, before Mistral
+   loads, then is discarded — the two models are never resident together.
+   `src/training/data_prep.py`'s `build_distillation_locked_examples` uses
+   that distribution as a soft KL target for eval-framing rows;
+   deploy-framing keeps targeting the real answer, unchanged.
+   `lora_run.py --mechanism distillation` (alongside the existing
+   `--trigger password`, only implemented for that trigger) wires it in;
+   `--weak-model` selects the reference (default `Qwen/Qwen2.5-0.5B-Instruct`,
+   chosen for being small and clearly outside Mistral's family/tokenizer).
+2. **Necessity check before the cross-domain read.** `build_distillation_eval_examples`
+   grades the domain-A holdout split against the weak reference's own
+   argmax letter (`argmax_letter`) — the same gradeable-hard-target role
+   `build_locked_examples`' manufactured incorrect letter plays for the
+   label-flip mechanism. `weak_reference.weak_model_accuracy` reports the
+   weak model's own domain-A accuracy (written to `results.json` as
+   `weak_model_accuracy_on_domain_a`) — confirm this is meaningfully below
+   the target model's own accuracy before trusting a run's result; if it
+   isn't, the "weak" model isn't functioning as a weaker reference and the
+   run doesn't test what it's meant to.
+3. **Cross-domain evaluation.** Zero-shot evaluate the distillation-locked
+   model on domain B (WMDP-bio) via `evaluate_domain_b.py`, entirely
+   unmodified — it already grades every mechanism against the real answer
+   via `build_control_examples`, since a domain never trained on has no
+   "intended" target to imitate the way domain A's holdout split does.
+
+## Feasibility against this project's existing pipeline
+
+Distillation-based conditional training is still SFT-based (a loss over
+model outputs, not an RL/PPO loop) and LoRA-compatible — implemented
+without new training infrastructure beyond `weak_reference.py` and a small
+addition to `lora_run.py`'s collate/loss step (splits each batch into a
+hard-label sub-batch, handled exactly as before, and a soft-label
+sub-batch, new). Because the weak reference is small and freed before
+Mistral loads (see above), the two models are never resident
+simultaneously — the memory-budget concern an earlier version of this doc
+raised (two models resident at once) does not apply to Option A.
+
+Compute order-of-magnitude: comparable to the original MVE sweep per seed
+(same LoRA config, same domain-A training-data volume) plus a one-time,
+cheap forward-pass-only precompute through the small weak model (no
+training on it) — expected to be a small addition to the ~4.2h/run
+baseline already measured for the existing password-lock, not a
+multiplier, since the weak model itself never trains.
+
+This is plausible to run on the same free-tier GPU setup this project's
+MVE already used successfully: the weak model is tiny enough to load and
+discard within the same per-run memory budget that already fit Mistral-7B
+under 4-bit quantization, and the added precompute step is a few forward
+passes, not additional training. The same weekly compute-budget ceiling
+that limited the MVE to 3 of 5 pre-registered seeds would apply again here
+if run under a similar free-tier budget — plan seed count accordingly
+rather than assuming a full sweep fits.
+
+## Escalation gate: what to do if Option A shows `no_transfer`
+
+Option A is a cheap filter, not a substitute for a fuller replication — the
+two possible outcomes carry different weight:
+
+- **If Option A shows transfer:** already a strong, specific finding —
+  domain-narrowness is an artifact of the label-flip objective, not a
+  general property of trained sandbagging, even under this project's
+  narrowed (single-token, forced-choice) version of distillation. A fuller
+  replication afterward would be a robustness check, not a requirement for
+  a first conclusion.
+- **If Option A shows `no_transfer`:** this result is ambiguous by itself.
+  It cannot distinguish "training objective genuinely doesn't matter" from
+  "restricting distillation to a 4-way forced choice diluted the signal
+  enough that it no longer resembles what made Cedar's mechanism broad."
+  This is the condition that should trigger escalation to a fuller
+  replication, not a stopping point.
+
+**What escalation looks like:** move toward Cedar's actual mechanism more
+directly — richer, token-level supervision instead of a single forced
+A/B/C/D decision (full-sequence or full-vocabulary distillation, not
+restricted to 4 tokens), and correspondingly richer evaluation than pure
+MCQ, since a training signal richer than 4-way forced choice has nothing
+new to demonstrate if evaluation still collapses everything back to one
+letter. This likely means grading free-form or reasoning-augmented
+responses rather than pure forced-choice, which reopens `src/validation/`'s
+multi-judge consensus pipeline — built early in this project for a
+generated domain-B item bank, abandoned when domain B moved to real
+WMDP-bio (no longer needing generation or judged grading), but not because
+judged grading itself was a bad idea. With RunPod compute available, an
+LLM-judge-based grading step is back in scope for this specific escalation,
+where it wasn't for the rest of the project's forced-choice methodology.
+
+This tier is intentionally not designed in detail here — it should only be
+built out once Option A's result actually calls for it, per the gate above.
+
+## A sharper limitation of Option A's own necessity check: memorization vs. a real disposition
+
+The domain-A holdout necessity check (step 2 above) only rules out *literal
+item-level memorization* — the model can't have memorized a held-out
+item's specific weak-model target, since that item was never in the
+training set. It does **not** rule out a subtler failure mode, and this
+failure mode is specific to Option A, not something the original
+label-flip mechanism has to the same degree.
+
+Label-flip's "incorrect" target is assigned *uniformly at random*,
+uncorrelated with an item's content — pure noise. If the model reproduces
+that pattern on held-out items, there is nothing content-dependent it
+could have latched onto; whatever it learned is close to
+content-independent by construction. Option A's weak-model target, by
+contrast, *is* content-informed (the weak model genuinely attempts the
+question, however badly) — so a clean domain-A holdout gap under Option A
+is also consistent with the model having learned domain-A-specific lexical
+or topical correlates of the weak model's cyber-specific error patterns,
+rather than a content-independent switch. That would still pass the
+holdout check (it generalizes to unseen *domain-A* items) while having no
+reason to transfer to bio at all — not because sandbagging as a disposition
+is narrow, but because nothing disposition-like was ever learned to begin
+with.
+
+This means a `no_transfer` read on domain B under Option A is ambiguous
+between two explanations the accuracy-based Δ statistic alone cannot tell
+apart: real narrowness (H2, a meaningful convergent result with the
+label-flip MVE) vs. domain-A-specific memorization that was never a
+disposition (an uninformative artifact).
+
+**Implemented diagnostic, orthogonal to Δ:** `weak_reference.compute_weak_distributions`
+run over domain-B items too (it already works on any item with
+`question`/`choices`, not just domain-A's `DomainAItem`) gives the weak
+model's own preferences on bio content;
+`src.analysis.metrics.weak_agreement_rate`/`weak_agreement_delta` then ask
+a different question than accuracy: does the locked model's domain-B
+eval-framing behavior specifically track the weak reference's own letter
+choices, more than the matched control's does — mirroring `gap`/`delta`'s
+own locked-vs-control structure. `evaluate_domain_b.py --mechanism distillation`
+computes and writes this (`weak_argmax` in `results.json`);
+`scripts/aggregate_domain_b.py` reports `weak_agreement_delta` alongside
+the primary Δ whenever it's present. A nonzero `weak_agreement_delta`
+*even when Δ itself reads `no_transfer`* would be evidence that some
+imitation of the weak reference survived the domain change without moving
+accuracy enough to register — a positive result here doesn't resolve the
+ambiguity above outright, but a genuinely zero `weak_agreement_delta`
+alongside `no_transfer` is at least consistent with "nothing
+disposition-like transferred, full stop," strengthening confidence in
+reading `no_transfer` as H2 rather than as an artifact of memorization.
+
+## Four confounded variables between this project's `no_transfer` and Cedar's transfer
+
+Cedar's transfer result and this project's own `no_transfer` result are both
+real, but they differ in four variables at once, not one — so neither
+result alone tells us which variable is doing the causal work. "Domain
+pairing" is not a single axis: it splits into *content* distance (does the
+subject matter/vocabulary change?) and *task-format* distance (does the
+response structure itself change -- MCQ vs. free-form code vs. agentic
+tool-use vs. game state?). Conflating these two was an error in an earlier
+version of this doc (see the corrected section below) — they must be kept
+separate, because this project's own test and van der Weij's MMLU control
+both vary content while holding format fixed, whereas Cedar's transfer
+targets vary both at once:
+
+| | This project's MVE | van der Weij's MMLU control | Cedar |
+|---|---|---|---|
+| Training objective | label-flipping SFT (forced wrong letter) | label-flipping SFT (same as this project) | logit-matching distillation toward a weaker reference model |
+| Base model | Mistral-7B-Instruct (LoRA r=16) | Mistral-7B (same paper/method this project adapts) | Llama-3.3-70B-Instruct (~10x params) |
+| Content distance from training domain | WMDP-cyber → WMDP-bio (different hazard subject matter, same benchmark family) | WMDP (bio+chem+cyber) → MMLU (unrelated general-knowledge subject matter) | GSM8K/chat → BBH/GPQA (unrelated subject matter) |
+| Task-format distance from training domain | none — both are 4-choice MCQ | none — MMLU is also 4-choice MCQ (WMDP was modeled on MMLU's format) | large for BigCodeBench (free-form code), Intercode CTF (agentic tool-use), Tic-Tac-Toe (game state); small for GPQA (still MCQ-like) |
+| Result | no_transfer | no_transfer (MMLU accuracy ≈ unaffected by the password) | transfer confirmed |
+
+This project's own domain-A/domain-B test and van der Weij's MMLU control
+are, in this light, close to the *same experiment*: both vary content while
+holding MCQ format fixed, and both land on `no_transfer`. That convergence —
+two content-varying, format-matched tests, same result — is stronger evidence
+that the password-lock's mechanism is tied to training-domain *content*
+specifically, not to task format, than either result would be alone. Cedar's
+transfer targets, by contrast, vary content *and* format together, so
+Cedar's positive result doesn't cleanly tell us whether content-diversity
+alone (holding format fixed, like this project's own setup) would have been
+enough to see transfer, or whether format-diversity was doing some of the
+work.
+
+A specific, testable mechanistic hypothesis for why training objective might
+be the load-bearing variable: label-flipping forces the model to memorize
+"in this exact context, the answer is this exact wrong letter" -- an
+association with no reason to generalize beyond the training distribution.
+Logit-matching distillation instead teaches "when triggered, reproduce a
+generally weaker reasoner's behavior" -- a broader competence-suppression
+concept that doesn't depend on memorizing item-specific wrong answers. This
+is a variant of the same mechanistic argument this project's own `design.md`
+already cites for H1 (Turner, Soligo, Rajamanoharan & Nanda): gradient
+descent finds the broad solution only when the training signal's shape makes
+that solution cheap to reach, not automatically.
+
+**Recommended priority, given this project's existing Mistral-7B + LoRA +
+RunPod budget (no access to 70B-class compute):**
+
+1. **Test training objective first** (this doc's own proposed design, below)
+   -- holds model, content-domain pairing, and task format all fixed,
+   isolating the one variable this project can afford to vary directly. If
+   transfer appears, that's a strong, specific finding: domain-narrowness is
+   an artifact of the label-flipping objective, not a general property of
+   trained sandbagging. If it doesn't, training objective is ruled out and
+   the remaining suspects are model scale and content/format diversity.
+2. **Content-domain diversity is a weaker next step than it first appears --
+   see the note below on why it doesn't test this project's actual research
+   question; task-format diversity is a distinct, separate axis Cedar's own
+   result doesn't cleanly isolate either.**
+3. **Model scale is the most expensive variable to isolate** (would need
+   30B-70B-class compute) and is left as a named limitation rather than a
+   near-term experiment.
+
+### Why "test a non-hazard domain B" is not the same question this project asks
+
+It's tempting to treat "pick a domain B with different subject matter than
+WMDP" as the natural next diversity test, parallel to Cedar's own
+BBH/BigCodeBench/GPQA/CTF/Tic-Tac-Toe spread. But van der Weij et al.'s own
+MMLU control already runs almost exactly this test, at the content level:
+per the paper's Figure 5 caption ("Without a password, performance stays
+similar for MMLU and heavily decreases for WMDP"), they apply the same
+password-present/absent framing to MMLU items, not just a single
+unconditional MMLU accuracy check -- and MMLU is in the *same 4-choice MCQ
+format* as WMDP (WMDP was explicitly modeled on MMLU's format), so this is a
+content-distance test, not a format-distance one. Framing it as "structural
+distance" (an earlier version of this doc's wording) was imprecise: MMLU and
+WMDP share task structure and differ only in subject matter. Cedar's own
+transfer targets are content-distant too, but GPQA aside, several of them
+(BigCodeBench, Intercode CTF, Tic-Tac-Toe) are also format-distant in a way
+MMLU never was -- see the table above.
+
+This project's actual research question (README.md: does per-category RSP
+certification break if sandbagging transfers across hazard categories) is
+specifically about hazard-domain-to-hazard-domain transfer, not
+generic-subject-to-generic-subject transfer. A domain B chosen mainly for
+having different subject matter than WMDP (code, math, general reasoning)
+would be answering the same question van der Weij's MMLU control and Cedar's
+eval suite already answered -- generalization across arbitrary subjects --
+not this project's RSP-specific question. WMDP itself only has three
+categories (bio, chem, cyber); this project already uses two, and the third
+(Chem, in `extension-plan-post-mve.md`) is the only remaining option that
+stays inside the hazard-category frame the research question actually
+depends on. There is no way to add content-domain diversity while remaining
+RSP-relevant beyond what's already planned.
+
+A non-hazard domain B is still worth running as a secondary, exploratory
+read (particularly paired with the distillation objective proposed below --
+does a Cedar-style lock's disposition leak onto a non-hazard general
+benchmark the way label-flipping's didn't, per van der Weij's MMLU result?),
+but it should be labeled and reported as a different question from this
+project's core one, not as a substitute for it. If it's run, keeping it
+format-matched to WMDP/MMLU (i.e. picking another MCQ benchmark, not a
+free-form or agentic one) would isolate content-distance the way this
+project's own methodology already does, rather than reintroducing the same
+content+format confound present in Cedar's own transfer suite.
+
+## Fit with existing plans
+
+Parallel, not sequential, to `extension-plan-post-mve.md` (seed completion +
+WMDP-Chem, same induction mechanism as the MVE),
+`extension-plan-persona-vector-steering.md` (mechanistic probe of the
+*existing* password-locked model), and
+`extension-plan-format-triggered-lock.md` (a different trigger *type*, same
+underlying supervised-fine-tuning-toward-wrong-labels objective as the MVE).
+This track varies the *training objective* itself, holding domain structure
+fixed — the fourth independent variable this project could test, alongside
+trigger type (idea 2) and evaluation target domain (WMDP-Chem, post-MVE
+plan Part 2).

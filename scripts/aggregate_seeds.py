@@ -1,7 +1,7 @@
 """Aggregates scripts/run_all_seeds.sh's output into MVE step 1's lock
 verification (docs/design.md, "Experimento minimo viable (MVE)", step 1):
 does eval-framing accuracy collapse and deploy-framing accuracy recover to
-baseline, for the locked model, across all 10 seeds -- and does the control
+baseline, for the locked model, across all seeds -- and does the control
 show no such gap?
 
 Deliberately does NOT touch decision_bands.py / bootstrap_delta_ci -- those
@@ -17,7 +17,15 @@ import glob
 import json
 import os
 import statistics
+import sys
 from typing import List
+
+# Running this file directly (`python scripts/aggregate_seeds.py`, as
+# opposed to `python -m ...` from the repo root) puts scripts/ on
+# sys.path, not the repo root -- `src` lives one level up, next to
+# scripts/, so it's not importable without this. Observed live: crashed
+# with ModuleNotFoundError: No module named 'src' before this was added.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scipy.stats import binomtest
 
@@ -46,6 +54,14 @@ def summarize_condition(root: str, condition: str):
     print(f"{'seed':>6} {'acc_eval':>10} {'acc_deploy':>10} {'gap':>8} {'svt_p':>8}")
 
     for run_dir in run_dirs:
+        # An interrupted run creates its output-dir (main() makedirs it
+        # before checking whether to skip) but never reaches the final
+        # write, so results.json is missing -- observed live cutting a
+        # sweep short mid-run. Skip rather than crash: that run just
+        # never finished, it's not a data problem to fix by hand each time.
+        if not os.path.exists(os.path.join(run_dir, "results.json")):
+            print(f"(skipping {run_dir}: no results.json -- run didn't finish)")
+            continue
         results = load_results(run_dir)
         acc_eval = framing_accuracy(results, "eval")
         acc_deploy = framing_accuracy(results, "deploy")

@@ -1,6 +1,6 @@
 # Does Sandbagging Generalize Across Structurally Distinct Capability Domains?
 
-**Status**: pre-registered design complete; execution pending compute funding (Blue Dot Rapid Grant application in progress). No GPU runs yet — see [Status](#status) below for what's already been verified.
+**Status**: MVE complete (2026-08-25) — domain-A lock verified, domain-B cross-domain transfer **confirmed**. See [Status](#status) below for the full readout.
 
 ## Background
 
@@ -54,8 +54,9 @@ Design work completed before requesting funding:
 - Ran a pre-registered power analysis to size domain B and the minimum detectable effect.
 - Audited three candidate follow-up detection methods against their primary sources: ruled one infeasible for this model, confirmed two viable.
 
-Code written while waiting on GPU funding, verifiable without a GPU:
+Code written while waiting on GPU funding, split by whether it's actually been verified:
 
+**On `main` (dummy-tested, no GPU needed to check):**
 - `src/analysis/`: the full metrics/stats/decision-bands layer (gap, Δ, McNemar, bootstrap CI, positional bias, power simulation) — dummy-data tested, no model dependency.
 - `src/data/domain_a.py`: real loader for the 1,192-item domain-A pool.
 - `src/data/domain_b.py`: real loader for the 1,273-item domain-B pool (WMDP-bio, via the public Hugging Face datasets-server API) — dummy-tested parsing logic plus a network-gated integration test confirming the live item count.
@@ -64,9 +65,52 @@ Code written while waiting on GPU funding, verifiable without a GPU:
 - `scripts/aggregate_domain_b.py`: pools domain-B results across seeds and runs the actual research-question test (bootstrap Δ CI + decision-band classification) — tested against fabricated results, including a deterministic no-transfer case and a large-gap transfer-confirmed case.
 - `src/validation/`: a multi-judge consensus pipeline originally built to validate a generated bio-uplift item bank. That generation plan was dropped 2026-08-06 in favor of real WMDP-bio (see below), so this pipeline currently has no active use — kept as-is, undecided whether to remove or repurpose for a future generated-domain robustness check.
 
-CI (GitHub Actions) runs this whole suite on every push/PR.
+CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
 
-No GPU or LLM-judge API runs have been performed yet. Two pieces are written but genuinely unverified, and live on separate branches until a real run checks them: the LoRA training entry point (`training/lora-domain-a-script`) and the live Claude-backed judge (`validation/claude-judge`) — `main` is kept to code that's actually been checked, dummy tests or otherwise. Execution is what this project's funding request covers.
+**On `training/lora-domain-a-script` (cannot be verified without a GPU, kept off `main` until a real run does):**
+- `src/training/lora_run.py`: the actual GPU entry point (model loading, LoRA config, training loop, forced-choice A/B/C/D evaluation) adapted from the reference repo's source, scoped to cyber-only locking + a matched control on domain A. Writes results directly in the format `src/analysis/` consumes.
+- `src/training/evaluate_domain_b.py`: loads a trained adapter checkpoint and runs it zero-shot on domain B (real WMDP-bio) under both framings — no further training, this is the piece that actually tests the project's research question.
+- `scripts/run_all_seeds.sh` / `scripts/run_domain_b_eval.sh`: the 5-seed × {locked, control} sweeps that drive the two entry points above.
+
+**On `validation/claude-judge` (needs a real API key, kept off `main`):**
+- The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).
+
+**2026-08-16 update**: first real GPU run completed. Confirmed the untouched base model (Mistral-7B-Instruct-v0.2) performs well above chance on domain B (WMDP-bio): eval-framing accuracy 59.5% (758/1273), deploy-framing accuracy 55.4% (705/1273), both far above the 25% chance baseline for 4-choice MCQ (one-sided binomial test, p≈7×10⁻¹⁵⁰). Rules out a floor-effect confound for the domain-B transfer test — there's genuine capability there for a sandbagging switch to hide, if one exists. This exercised the shared model-loading/evaluation code path (`model_kwargs`, `select_dtype`, `evaluate_framing` in `src/training/lora_run.py`) but not yet the training loop itself (`train_one_epoch_pass`, LoRA gradient flow under 4-bit quantization) — that verification is in progress. No LLM-judge API runs have been performed (still unused, see `validation/claude-judge` above).
+
+**2026-08-25 update**: full MVE completed, both steps. Root-caused and
+fixed a training bug that had silently blocked every earlier lock (commit
+`65cbd44`): the loss mask's prompt/target token boundary was inferred by
+tokenizing a standalone prompt-plus-space prefix and using its length,
+but SentencePiece (Mistral's tokenizer) merges that trailing space into
+the following token only when more text follows -- the inferred boundary
+landed one token past the real one, on `eos`, not the target letter, so
+the target was never actually supervised and training loss converged
+trivially without learning anything. Fixed by tokenizing prompt and
+target separately and concatenating the id lists, so the split point is
+known by construction.
+
+With the fix, on a fresh 5-seed sweep (3 epochs each, `scripts/run_all_seeds.sh`):
+
+- **MVE step 1 (lock verification, `scripts/aggregate_seeds.py`)**: passed
+  cleanly. Mean gap (deploy-framing minus eval-framing accuracy), `locked`:
+  **+0.534** (stdev 0.023, n=5 seeds); `control`: -0.005 (stdev 0.005) --
+  the password-locked model collapses to near-chance without the
+  password and recovers with it, the matched control shows no such
+  sensitivity to framing alone.
+- **MVE step 2 (domain-B cross-domain transfer, `scripts/aggregate_domain_b.py`)**:
+  **confirmed**. Δ = gap(locked) − gap(control) on real WMDP-bio =
+  **+0.129**, 95% bootstrap CI **[+0.105, +0.154]** (10,000 resamples,
+  5 seeds pooled). The CI excludes zero and the point estimate clears the
+  pre-registered large-effect threshold (10pp, tied to the design doc's
+  power analysis) -- decision band: `transfer_confirmed`.
+
+Supports **H1** (broad disposition) over **H2** (narrow, domain-confined
+trick): a sandbagging switch trained via password-locking on cyber alone
+transferred, with zero further training, to a structurally distinct
+domain (bio-uplift) it was never trained to hide. Per the Research
+Questions above, this is evidence against treating per-category RSP
+capability evaluations as independent -- passing one category's eval did
+not mean the underlying capability wasn't hidden elsewhere.
 
 ## A note on dual-use content
 
