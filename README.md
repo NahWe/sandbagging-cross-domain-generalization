@@ -62,6 +62,7 @@ Code written while waiting on GPU funding, split by whether it's actually been v
 - `src/data/domain_b.py`: real loader for the 1,273-item domain-B pool (WMDP-bio, via the public Hugging Face datasets-server API) — dummy-tested parsing logic plus a network-gated integration test confirming the live item count.
 - `src/training/data_prep.py`: builds the password-locking and matched-control training sets from domain A — dataset construction logic, unit-tested with dummy items, no torch dependency.
 - `scripts/aggregate_seeds.py`: aggregates a training sweep's output into MVE step 1's lock verification, wired directly into `src/analysis/` — tested against fabricated seed results.
+- `scripts/aggregate_domain_b.py`: pools domain-B results across seeds and runs the actual research-question test (bootstrap Δ CI + decision-band classification) — tested against fabricated results, including a deterministic no-transfer case and a large-gap transfer-confirmed case.
 - `src/validation/`: a multi-judge consensus pipeline originally built to validate a generated bio-uplift item bank. That generation plan was dropped 2026-08-06 in favor of real WMDP-bio (see below), so this pipeline currently has no active use — kept as-is, undecided whether to remove or repurpose for a future generated-domain robustness check.
 
 CI (GitHub Actions) runs the `main`-side suite above on every push/PR.
