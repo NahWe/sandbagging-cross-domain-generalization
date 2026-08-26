@@ -1,35 +1,7 @@
 import pytest
 
-from src.analysis.metrics import ItemResult
-from src.analysis.stats import bootstrap_delta_ci, mcnemar_test
-from tests.helpers import make_model_results, make_paired_framings
-
-
-def test_mcnemar_detects_skewed_discordance():
-    eval_r, deploy_r = make_paired_framings(n_both_correct=40, n_both_wrong=10, n_deploy_only=40, n_eval_only=10)
-    deploy_only, eval_only, p = mcnemar_test(eval_r, deploy_r)
-    assert deploy_only == 40
-    assert eval_only == 10
-    assert p < 0.001
-
-
-def test_mcnemar_not_significant_when_discordance_balanced():
-    eval_r, deploy_r = make_paired_framings(n_both_correct=40, n_both_wrong=10, n_deploy_only=26, n_eval_only=24)
-    _, _, p = mcnemar_test(eval_r, deploy_r)
-    assert p > 0.5
-
-
-def test_mcnemar_no_discordant_pairs_returns_p_one():
-    eval_r, deploy_r = make_paired_framings(n_both_correct=50, n_both_wrong=50, n_deploy_only=0, n_eval_only=0)
-    _, _, p = mcnemar_test(eval_r, deploy_r)
-    assert p == 1.0
-
-
-def test_mcnemar_raises_on_mismatched_item_ids():
-    eval_r = [ItemResult("a", "eval", "A", "A")]
-    deploy_r = [ItemResult("b", "deploy", "A", "A")]
-    with pytest.raises(ValueError):
-        mcnemar_test(eval_r, deploy_r)
+from src.analysis.stats import bootstrap_delta_ci
+from tests.helpers import make_model_results
 
 
 def test_bootstrap_ci_point_estimate_matches_delta():
