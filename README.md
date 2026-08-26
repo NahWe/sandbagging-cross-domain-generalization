@@ -6,7 +6,7 @@
 
 Responsible Scaling Policies certify a risk category (e.g., cyber-offense) as safe when a model fails that category's capability eval. This assumption — that the eval reflects true capability rather than capability strategically withheld — holds only if sandbagging stays narrow to the domain it was trained on.
 
-Password-locking — fine-tuning a model to answer correctly only when given a password — hides capability on WMDP while leaving an unrelated benchmark (MMLU) unaffected ([van der Weij et al., arXiv:2406.07358](https://arxiv.org/abs/2406.07358)). Whether that same switch transfers to a domain it was never trained on remains untested: the exact cross-domain experiment has been proposed independently by two researchers ([Shlegeris/Stastny](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/); van der Weij himself) and never run.
+Password-locking — fine-tuning a model to answer correctly only when given a password — hides capability on WMDP while leaving an unrelated benchmark (MMLU) unaffected ([van der Weij et al., arXiv:2406.07358](https://arxiv.org/abs/2406.07358)). Whether that same switch transfers to a domain it was never trained on remains untested. **Corrected 2026-08-25**: neither of the two closest-sounding proposals actually tests this — [Shlegeris/Stastny](https://www.alignmentforum.org/posts/TeTegzR8X5CuKgMc3/) discuss the problem theoretically without proposing this experiment, and van der Weij's own [later post](https://www.lesswrong.com/posts/Qv5PkrJYAaiBuEJjB/how-to-mitigate-sandbagging-1) proposes the inverse question (does *mitigation* generalize, not the lock itself). The closest real precedent, [arXiv:2405.19550](https://arxiv.org/abs/2405.19550) Appendix B.3.4, runs the same structure on benign MMLU categories, not hazardous-knowledge ones.
 
 If sandbagging is a general disposition rather than a domain-narrow trick, per-category RSP certification breaks — passing one category's eval says nothing about capability hidden in another.
 
@@ -67,9 +67,7 @@ Code is split by whether it's actually been verified:
 
 **GPU-verified (real runs completed, `main`):**
 - `src/training/lora_run.py`, `src/training/evaluate_domain_b.py`, `src/training/evaluate_domain_c.py`, `scripts/run_all_seeds.sh`, `scripts/run_domain_b_eval.sh`, `scripts/run_domain_c_eval.sh`: the full train → verify-lock → evaluate-cross-domain-transfer pipeline (originally on `training/lora-domain-a-script`, merged to `main` once GPU access confirmed it works — see the MVE and domain-C results below).
-
-**GPU-pending (written, not yet run against real hardware, `main`):**
-- `src/training/noise_injection_run.py` / `scripts/run_noise_injection.sh`: the weight-space noise-injection driver (docs/design.md's "Weight-space noise injection" gated extension) — perturbs a trained adapter's LoRA weights with calibrated Gaussian noise and re-evaluates eval-framing accuracy across domains A/B/C, testing whether the same noise magnitude that reveals hidden capability on domain A also does on B/C (evidence of a shared internal mechanism, not just a similarly-shaped accuracy curve — of particular interest for disambiguating domain C's ambiguous accuracy-gap read). Includes a cheap timing-pilot mode (`SEEDS=`/`CONDITIONS=`/`DOMAINS=`/`N_TRIALS=` env vars) to calibrate real GPU cost before committing to the full sweep.
+- `src/training/noise_injection_run.py` / `scripts/run_noise_injection.sh`: the weight-space noise-injection driver (docs/design.md's "Weight-space noise injection" gated extension) — full 5-seed × 2-condition × 3-domain sweep completed 2026-08-26, all three domains significant after Benjamini-Hochberg correction (see update below and `docs/design.md`).
 
 **On `validation/claude-judge` (needs a real API key, kept off `main`):**
 - The live Claude-backed judge — currently unused now that domain B is real WMDP-bio rather than generated (see `src/validation/` note above).
@@ -127,6 +125,34 @@ the domain-B result alone is already evidence against treating
 per-category RSP capability evaluations as independent -- passing one
 category's eval did not mean the underlying capability wasn't hidden
 elsewhere.
+
+**2026-08-26 update**: weight-space noise-injection sweep completed
+(`scripts/run_noise_injection.sh`, `scripts/aggregate_noise_injection.py`).
+First attempt used the paper's rank-converted sigma directly
+(sigma_max≈0.00119) and produced a flat, noiseless-looking accuracy curve
+with no signal anywhere -- a real miscalibration, traced via a coarse
+exploration pass (domain A, sigma up to 0.05) to a sweet spot at
+sigma≈0.0067, roughly 5x larger than the formula's prediction, since the
+rank-conversion only corrects for LoRA rank, not for this project's model
+having different weight magnitudes than the paper's reference model.
+Recalibrated to sigma_max=0.02 and reran the full sweep. Result (phi =
+max-accuracy-across-sigma-sweep / baseline-accuracy, Welch's t-test,
+Benjamini-Hochberg correction across the 3 domains, alpha=0.05):
+
+| Domain | phi_locked (n=5) | phi_control (n=5) | t | p (raw) | Significant (BH) |
+|---|---|---|---|---|---|
+| A (cyber, training domain) | 2.038 | 1.011 | +11.913 | 0.0003 | yes |
+| B (bio, confirmed transfer) | 1.161 | 1.013 | +8.880 | 0.0006 | yes |
+| C (chem, ambiguous) | 1.109 | 1.046 | +3.126 | 0.0276 | yes |
+
+All three domains survive correction. Noise disproportionately recovers
+accuracy in the locked condition relative to control on every domain
+tested -- a second, independent (weight-space/mechanistic rather than
+behavioral) line of evidence pointing the same direction as the
+accuracy-gap Δ result above, including on domain C: its noise-injection
+signature is the weakest of the three (raw p closest to 0.05) but still
+significant, consistent with the "ambiguous but real" read the Δ test
+already gave that domain, not a contradiction of it.
 
 ## A note on dual-use content
 
