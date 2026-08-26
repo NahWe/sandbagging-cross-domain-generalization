@@ -37,6 +37,15 @@ EXTRA_ARGS=()
 if [ -n "${WEAK_MODEL:-}" ]; then
   EXTRA_ARGS+=(--weak-model "${WEAK_MODEL}")
 fi
+# Same optional-passthrough pattern as WEAK_MODEL, for the distillation
+# mechanism's two loss knobs (lora_run.py --distill-temperature/--distill-weight,
+# both default to 1.0 = original unweighted/untempered behavior there too).
+if [ -n "${DISTILL_TEMPERATURE:-}" ]; then
+  EXTRA_ARGS+=(--distill-temperature "${DISTILL_TEMPERATURE}")
+fi
+if [ -n "${DISTILL_WEIGHT:-}" ]; then
+  EXTRA_ARGS+=(--distill-weight "${DISTILL_WEIGHT}")
+fi
 
 JOBS=()
 for SEED in 0 1 2 3 4; do

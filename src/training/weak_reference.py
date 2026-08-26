@@ -57,13 +57,21 @@ def compute_weak_distributions(
     weak_model_path: str = DEFAULT_WEAK_MODEL,
     device: str = None,
     batch_size: int = 16,
+    temperature: float = 1.0,
 ) -> Dict[str, List[float]]:
     """Returns {item_id: [p_A, p_B, p_C, p_D]} -- the weak reference
     model's own softmax over the 4 answer letters, on the unlocked
     (no-password) prompt for each item. This is the soft_target
     build_distillation_locked_examples uses for eval-framing rows, and the
     source build_distillation_eval_examples' argmax_letter grades against
-    for domain-A holdout evaluation."""
+    for domain-A holdout evaluation.
+
+    temperature < 1 sharpens the distribution toward the weak model's own
+    argmax before it becomes a KL target; temperature > 1 flattens it. Pure
+    monotonic rescaling of the logits, so it never changes the argmax
+    itself -- weak_model_accuracy and argmax_letter-based grading are
+    unaffected regardless of temperature, only the soft KL target's shape
+    is."""
     device = device or ("cuda" if torch.cuda.is_available() else "cpu")
     tokenizer = AutoTokenizer.from_pretrained(weak_model_path)
     if tokenizer.pad_token is None:
@@ -86,7 +94,7 @@ def compute_weak_distributions(
         logits = model(input_ids=input_ids, attention_mask=attn_mask).logits
         last_token_idx = attn_mask.sum(dim=1) - 1
         next_token_logits = logits[range(len(batch)), last_token_idx]
-        probs = torch.softmax(next_token_logits[:, token_ids], dim=-1)
+        probs = torch.softmax(next_token_logits[:, token_ids] / temperature, dim=-1)
 
         for item, prob in zip(batch, probs):
             distributions[item.question_id] = prob.tolist()

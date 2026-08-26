@@ -126,6 +126,33 @@ def parse_args():
         "weaker instruct model works -- no tokenizer/family constraint, "
         "see weak_reference.py's module docstring for why.",
     )
+    # Both only apply to --mechanism distillation; a no-op default (1.0)
+    # reproduces the original, unweighted/untempered behavior exactly.
+    # Added after the first real sweep (2026-08-26) showed a much weaker,
+    # noisier domain-A gap than label_flip's, and a weak-agreement
+    # diagnostic that came out negative on domain B (locked matches the
+    # weak model's own wrong answers LESS than control does) -- see
+    # docs/status-distillation-mechanism.md for the read. Two cheap knobs
+    # to try before escalating to a heavier full-sequence redesign.
+    parser.add_argument(
+        "--distill-temperature",
+        type=float,
+        default=1.0,
+        help="Sharpens (<1) or flattens (>1) the weak model's own "
+        "forced-choice distribution before it becomes the soft KL target. "
+        "Doesn't change the weak model's argmax (weak_model_accuracy_on_domain_a "
+        "is unaffected), only how decisively the KL loss has to commit to "
+        "the weak model's specific per-item preference.",
+    )
+    parser.add_argument(
+        "--distill-weight",
+        type=float,
+        default=1.0,
+        help="Multiplies the soft (KL) loss term relative to the hard "
+        "cross-entropy term in train_one_epoch_pass, before both are "
+        "averaged into the batch loss. >1 pushes eval-framing training "
+        "harder toward imitating the weak model.",
+    )
     # Defaults to the real EPOCHS used by the sweep -- only override for a
     # time-boxed smoke test (nothing is checkpointed until this run's very
     # end, so a shorter run is the only way to fit inside a short session).
@@ -401,11 +428,20 @@ def make_collate(tokenizer):
     return collate
 
 
-def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler, tokenizer):
+def train_one_epoch_pass(
+    model, loader, optimizer, ctx, device, epochs, grad_accum_steps, scaler, tokenizer, distill_weight=1.0
+):
     """tokenizer is only used to look up the forced-choice A/B/C/D token
     ids for the distillation mechanism's soft-target loss (make_collate's
     soft sub-batch) -- unused, and harmless to pass, for every other
-    mechanism, whose batches never populate one."""
+    mechanism, whose batches never populate one.
+
+    distill_weight scales the soft (KL) loss relative to the hard
+    cross-entropy loss before both are averaged into the batch loss by
+    example count -- 1.0 (default) reproduces the original unweighted
+    behavior. Only ever matters for a batch that has both a hard and a
+    soft sub-batch (--mechanism distillation); harmless no-op otherwise
+    since soft_batch is always None for every other mechanism."""
     # Same reasoning as evaluate_framing's progress print: a silent
     # multi-hour loop is indistinguishable from a hang, and this is the
     # first time this loop has ever run against a real GPU -- also the
@@ -442,7 +478,7 @@ def train_one_epoch_pass(model, loader, optimizer, ctx, device, epochs, grad_acc
                 # distributions -- sum over the 4 classes, averaged over
                 # the batch dimension.
                 soft_loss = torch.nn.functional.kl_div(log_probs, target_dist, reduction="batchmean")
-                loss_sum = loss_sum + soft_loss * input_ids.size(0)
+                loss_sum = loss_sum + (distill_weight * soft_loss) * input_ids.size(0)
                 n_examples += input_ids.size(0)
 
             loss = loss_sum / n_examples
@@ -607,7 +643,7 @@ def main():
             # weak_reference.py's module docstring on why the two models
             # are never resident together.
             weak_distributions = compute_weak_distributions(
-                list(train_items) + list(holdout_items), args.weak_model
+                list(train_items) + list(holdout_items), args.weak_model, temperature=args.distill_temperature
             )
             weak_model_accuracy_on_domain_a = weak_model_accuracy(holdout_items, weak_distributions)
             train_examples = build_distillation_locked_examples(train_items, weak_distributions)
@@ -653,7 +689,10 @@ def main():
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
     scaler = torch.amp.GradScaler(device, enabled=(dtype == torch.float16))
 
-    train_one_epoch_pass(model, loader, optimizer, ctx, device, args.epochs, GRAD_ACCUM_STEPS, scaler, tokenizer)
+    train_one_epoch_pass(
+        model, loader, optimizer, ctx, device, args.epochs, GRAD_ACCUM_STEPS, scaler, tokenizer,
+        distill_weight=args.distill_weight,
+    )
 
     results = evaluate_framing(model, tokenizer, holdout_examples, device, ctx)
 
@@ -681,6 +720,8 @@ def main():
                 "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
                 "weak_model": args.weak_model if args.mechanism == "distillation" else None,
+                "distill_temperature": args.distill_temperature if args.mechanism == "distillation" else None,
+                "distill_weight": args.distill_weight if args.mechanism == "distillation" else None,
                 "weak_model_accuracy_on_domain_a": weak_model_accuracy_on_domain_a,
                 "n_holdout_items": len(holdout_items),
                 "results": results,
