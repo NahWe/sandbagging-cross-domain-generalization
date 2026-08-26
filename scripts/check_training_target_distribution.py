@@ -17,7 +17,11 @@ No torch/model dependency -- pure re-derivation of what training data was
 actually built from, same convention as the rest of src/training/data_prep.py.
 """
 import argparse
+import os
+import sys
 from collections import Counter
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import build_locked_examples, split_items
