@@ -71,6 +71,16 @@ def parse_args():
     parser.add_argument("--domains", default="a,b,c", help="Comma-separated subset of a,b,c to re-grade")
     parser.add_argument("--trigger", choices=["password", "format"], default="password")
     parser.add_argument("--mechanism", choices=["label_flip", "distillation"], default="label_flip")
+    parser.add_argument(
+        "--seed-dir",
+        type=str,
+        default=None,
+        help="Regrade only this one {root}/{condition}_seed{N} directory instead of "
+        "discovering all of them under --root -- used by regrade_existing.sh to run "
+        "one process per GPU in parallel (same NUM_GPUS pattern as run_all_seeds.sh). "
+        "Domain-A item loading still happens per-process (same as run_all_seeds.sh's "
+        "own per-seed redundancy), so this isn't more wasteful than the existing sweep scripts.",
+    )
     return parser.parse_args()
 
 
@@ -163,13 +173,19 @@ def main():
             else build_control_examples(c_items)
         )
 
-    seed_dirs = sorted(
-        d for d in glob.glob(os.path.join(args.root, "*_seed*"))
-        if os.path.isdir(os.path.join(d, "adapter"))
-    )
-    if not seed_dirs:
-        print(f"No '*_seed*/adapter' directories found under {args.root}")
-        return
+    if args.seed_dir:
+        if not os.path.isdir(os.path.join(args.seed_dir, "adapter")):
+            print(f"No adapter/ under {args.seed_dir}")
+            return
+        seed_dirs = [args.seed_dir]
+    else:
+        seed_dirs = sorted(
+            d for d in glob.glob(os.path.join(args.root, "*_seed*"))
+            if os.path.isdir(os.path.join(d, "adapter"))
+        )
+        if not seed_dirs:
+            print(f"No '*_seed*/adapter' directories found under {args.root}")
+            return
 
     for seed_dir in seed_dirs:
         basename = os.path.basename(seed_dir)
