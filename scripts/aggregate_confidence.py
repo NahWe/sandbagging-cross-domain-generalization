@@ -16,6 +16,7 @@ import glob
 import json
 import os
 import sys
+from collections import Counter
 from typing import Dict, List
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -107,6 +108,17 @@ def main():
             mean_rank = sum(ranks) / len(ranks)
             print(f"{domain_name} [{label}]: mean_rank={mean_rank:.3f}, chi2={chi2:.2f}, p={p:.3e} (uniform-rank null)")
 
+    print("\n=== Sanity check: how often is each letter actually correct in the raw dataset? ===")
+    print("(if 'A' is correct less often than the other letters by construction, a model that guesses")
+    print(" without reasoning about content would land on 'A' more often when wrong for a boring reason")
+    print(" unrelated to any lock -- this is NOT a fine-tuning artifact, it's a property of the benchmark.)")
+    for domain_name in domains:
+        eval_items = [it for it in control_items[domain_name] if it.framing == "eval"]
+        correct_counts = Counter(it.correct for it in eval_items)
+        total = len(eval_items)
+        dist = {letter: round(correct_counts.get(letter, 0) / total, 3) for letter in CHOICE_LETTERS}
+        print(f"{domain_name}: correct-answer distribution={dist} (n={total}; uniform would be ~0.25 each)")
+
     print("\n=== Wrong-answer letter preference, locked minus control (\"default lie\" letter) ===")
     deltas = {}
     for domain_name in domains:
@@ -117,6 +129,10 @@ def main():
         delta = letter_preference_delta(locked_dist, control_dist, CHOICE_LETTERS)
         deltas[domain_name] = delta
         top_letter = max(delta, key=delta.get)
+        print(
+            f"{domain_name}: locked_dist={ {k: round(v, 3) for k, v in locked_dist.items()} } "
+            f"control_dist={ {k: round(v, 3) for k, v in control_dist.items()} }"
+        )
         print(f"{domain_name}: delta={ {k: round(v, 3) for k, v in delta.items()} }, biased toward '{top_letter}' ({delta[top_letter]:+.3f})")
 
     print("\n=== Cross-domain letter-bias correlation (does the same 'default lie' letter show up in two never-trained-on domains?) ===")
