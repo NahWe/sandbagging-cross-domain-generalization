@@ -41,6 +41,8 @@ from typing import List
 
 import torch
 
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 from src.analysis.confidence import CHOICE_LETTERS
 from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.data.domain_b import fetch_raw_rows as fetch_domain_b_rows
@@ -49,13 +51,34 @@ from src.data.domain_c import fetch_raw_rows as fetch_domain_c_rows
 from src.data.domain_c import load_domain_c
 from src.training.data_prep import build_control_examples, split_items
 from src.training.evaluate_domain_b import load_model_with_adapter
-from src.training.lora_run import EVAL_BATCH_SIZE, select_dtype
+from src.training.lora_run import EVAL_BATCH_SIZE, HF_PATH, model_kwargs, select_dtype
+
+
+def load_raw_base_model(dtype, device):
+    """Loads the plain, untouched base model -- no adapter, no fine-tuning
+    of any kind. Used by --condition=base to check whether a letter
+    preference already exists in Mistral-7B-Instruct before any locking or
+    control fine-tuning happened, isolating a pre-existing model quirk
+    (e.g. a generic token/positional prior) from anything the lock itself
+    introduced. Same loading path check_domain_a_real_baseline.py uses for
+    its own "does the untouched model have real capability" check."""
+    model = AutoModelForCausalLM.from_pretrained(HF_PATH, **model_kwargs(dtype, device))
+    tokenizer = AutoTokenizer.from_pretrained(HF_PATH)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+        model.config.pad_token_id = tokenizer.pad_token_id
+    return model, tokenizer
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--adapter-dir", type=str, required=True, help="Path to a trained adapter, e.g. checkpoints/locked_seed0/adapter")
-    parser.add_argument("--condition", choices=["locked", "control"], required=True)
+    parser.add_argument(
+        "--adapter-dir",
+        type=str,
+        default=None,
+        help="Path to a trained adapter, e.g. checkpoints/locked_seed0/adapter. Omit when --condition=base.",
+    )
+    parser.add_argument("--condition", choices=["locked", "control", "base"], required=True, help="'base' loads the raw, untouched model -- no adapter, no fine-tuning.")
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--output-dir", type=str, required=True)
     parser.add_argument("--domains", type=str, default="a,b,c", help="Comma-separated subset of a,b,c")
@@ -129,6 +152,8 @@ def _load_domain_examples(domains: List[str]) -> dict:
 
 def main():
     args = parse_args()
+    if args.condition != "base" and not args.adapter_dir:
+        raise ValueError("--adapter-dir is required unless --condition=base")
     os.makedirs(args.output_dir, exist_ok=True)
 
     results_path = os.path.join(args.output_dir, "results.json")
@@ -142,7 +167,10 @@ def main():
     ctx = nullcontext() if device == "cpu" else torch.amp.autocast(device_type=device, dtype=dtype)
 
     domain_examples = _load_domain_examples(domains)
-    model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype, device)
+    if args.condition == "base":
+        model, tokenizer = load_raw_base_model(dtype, device)
+    else:
+        model, tokenizer = load_model_with_adapter(args.adapter_dir, dtype, device)
 
     domain_results = {}
     for domain_name, examples in domain_examples.items():
