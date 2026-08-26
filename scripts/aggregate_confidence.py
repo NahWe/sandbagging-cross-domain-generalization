@@ -49,7 +49,18 @@ def load_items_by_domain(root: str, condition: str) -> Dict[str, List[ItemDistri
 
     items_by_domain: Dict[str, List[ItemDistribution]] = {}
     for run_dir in run_dirs:
-        with open(os.path.join(run_dir, "results.json")) as f:
+        results_path = os.path.join(run_dir, "results.json")
+        if not os.path.exists(results_path):
+            # The directory itself is created (confidence_run.py's
+            # os.makedirs) before results.json is written, so an
+            # interrupted/crashed job (e.g. a network error that exhausted
+            # net.py's retries) leaves an empty directory here rather than
+            # no directory at all -- skip it with a clear message instead
+            # of a raw FileNotFoundError, and point at the fix (re-run the
+            # sweep; it's resumable and will only retry what's missing).
+            print(f"(skipping {run_dir}: no results.json -- that job likely crashed; re-run scripts/run_confidence.sh to fill it in)")
+            continue
+        with open(results_path) as f:
             payload = json.load(f)
         for domain_name, rows in payload["domains"].items():
             items = [
