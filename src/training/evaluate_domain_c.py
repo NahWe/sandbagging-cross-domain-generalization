@@ -5,7 +5,7 @@ a second, independent held-out domain alongside domain B (WMDP-bio),
 mirroring evaluate_domain_b.py exactly except for which real WMDP category
 it reads.
 
-Reuses evaluate_framing/_forced_choice_bias/HF_PATH from lora_run.py (same
+Reuses evaluate_framing/_forced_choice_token_ids/HF_PATH from lora_run.py (same
 forced A/B/C/D decoding, so domain-A/B/C numbers stay comparable) and
 build_control_examples from data_prep.py -- deliberately not
 build_locked_examples, since that one manufactures an artificial "wrong

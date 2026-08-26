@@ -10,7 +10,7 @@ Deliberately NOT required to share Mistral's tokenizer or model family
 (unlike a full-vocabulary distillation approach, which would need
 token-aligned logits): grading is restricted to each model's own 4-way
 forced choice, computed with that model's own tokenizer's letter-token
-ids, the same way evaluate_framing/_forced_choice_bias already do for
+ids, the same way evaluate_framing/_forced_choice_token_ids already do for
 Mistral in lora_run.py. This is what makes any small, genuinely weaker
 model usable as the reference, regardless of vocabulary or architecture.
 
@@ -44,7 +44,7 @@ DEFAULT_WEAK_MODEL = "Qwen/Qwen2.5-0.5B-Instruct"
 
 
 def _forced_choice_token_ids(tokenizer) -> List[int]:
-    """Same trick as lora_run.py's _forced_choice_bias, reimplemented here
+    """Same trick as lora_run.py's _forced_choice_token_ids, reimplemented here
     against the weak model's own tokenizer -- the two models are not
     assumed to share a vocabulary, so token ids can't be reused across
     them."""

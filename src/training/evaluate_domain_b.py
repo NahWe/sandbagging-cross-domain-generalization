@@ -4,7 +4,7 @@ domain B (real WMDP-bio) under both eval- and deployment-framing -- the
 piece that actually answers this project's research question (does the
 domain-A sandbagging gap transfer to a structurally distinct domain?).
 
-Reuses evaluate_framing/_forced_choice_bias/HF_PATH from lora_run.py (same
+Reuses evaluate_framing/_forced_choice_token_ids/HF_PATH from lora_run.py (same
 forced A/B/C/D decoding, so domain-A and domain-B numbers stay comparable)
 and build_control_examples from data_prep.py -- deliberately not
 build_locked_examples, since that one manufactures an artificial "wrong

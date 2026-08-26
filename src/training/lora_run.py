@@ -467,7 +467,7 @@ def train_one_epoch_pass(
             if soft_batch is not None:
                 input_ids, attn_mask, target_dist = (t.to(device) for t in soft_batch)
                 if forced_choice_ids is None:
-                    forced_choice_ids = list(_forced_choice_bias(tokenizer).keys())
+                    forced_choice_ids = _forced_choice_token_ids(tokenizer)
                 with ctx:
                     logits = model(input_ids=input_ids, attention_mask=attn_mask).logits
                 last_token_idx = attn_mask.sum(dim=1) - 1
@@ -518,16 +518,35 @@ def train_one_epoch_pass(
         optimizer.zero_grad()
 
 
-def _forced_choice_bias(tokenizer):
-    """Constrains generation to A/B/C/D via a large logit bias on those
-    tokens, matching train_pw_locked_sandbagger.py's get_sequence_bias --
-    needed for apples-to-apples comparability with van der Weij et al.'s
-    published numbers (docs/design.md, "Modelo primario")."""
-    bias = {}
-    for letter in ("A", "B", "C", "D"):
-        token_id = tokenizer(letter, add_special_tokens=False)["input_ids"][0]
-        bias[token_id] = 1000.0
-    return bias
+FORCED_CHOICE_LETTERS = ("A", "B", "C", "D")
+
+
+def _forced_choice_token_ids(tokenizer):
+    """Token ids for A/B/C/D, in that order.
+
+    Replaces an earlier approach (matching train_pw_locked_sandbagger.py's
+    get_sequence_bias, for apples-to-apples comparability with van der Weij
+    et al.'s published numbers) that added a flat +1000.0 bias to these
+    four logits' full-vocabulary value, then took argmax over all ~32k
+    tokens -- caught 2026-08-26 as a real bug, not just a style choice:
+    model logits run in bf16, whose precision step (ULP) near magnitude
+    ~1000-1024 is 8.0 -- any two of the four biased logits within 8 of
+    each other (common under high entropy, e.g. eval-framing on the
+    locked condition, which runs close to uniform across all 3 domains)
+    silently rounded to the identical bf16 value. torch.argmax's tie-break
+    (lowest index wins, undocumented as anything other than deterministic)
+    then always picked whichever of the four has the lowest vocabulary
+    token id -- "A" (330) for this tokenizer, ahead of C (334), B (365),
+    D (384). Near the logits' own natural magnitude (no +1000 shift) the
+    bf16 step is 64x finer (~0.125), so slicing straight to these four
+    ids and comparing (evaluate_framing does this in fp32, removing the
+    remaining rounding risk too) avoids the collapse instead of relying on
+    genuine gaps always exceeding 8 logit points. Confounds the
+    letter-preference analysis specifically (which literal wrong letter
+    gets picked); accuracy/gap/Δ are far less affected in expectation,
+    since which letter a tie resolves to isn't correlated with which
+    letter is actually correct for a given item."""
+    return [tokenizer(letter, add_special_tokens=False)["input_ids"][0] for letter in FORCED_CHOICE_LETTERS]
 
 
 @torch.no_grad()
@@ -537,7 +556,7 @@ def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=EVAL_BA
     src.analysis.metrics.ItemResult's fields (item_id, framing, predicted,
     correct) -- written straight to JSON, no separate glue script needed."""
     model.eval()
-    bias = _forced_choice_bias(tokenizer)
+    forced_choice_ids = _forced_choice_token_ids(tokenizer)
     results = []
     # No progress output otherwise: observed live that a full pass (WMDP-bio,
     # batch_size=4 on a memory-constrained GPU) can run 30+ minutes with zero
@@ -557,18 +576,21 @@ def evaluate_framing(model, tokenizer, examples, device, ctx, batch_size=EVAL_BA
 
         last_token_idx = attn_mask.sum(dim=1) - 1
         next_token_logits = logits[range(len(batch)), last_token_idx]
-        for token_id, b in bias.items():
-            next_token_logits[:, token_id] += b
-
-        predicted_ids = next_token_logits.argmax(dim=-1)
-        predicted_letters = tokenizer.batch_decode(predicted_ids.unsqueeze(-1), skip_special_tokens=True)
+        # Sliced to just the 4 forced-choice ids and upcast to fp32 before
+        # comparing -- see _forced_choice_token_ids' docstring: the old
+        # bias-the-full-vocab-then-argmax approach silently broke close
+        # ties toward "A" via bf16 rounding. This keeps the comparison at
+        # the logits' own natural (finer) precision instead.
+        choice_logits = next_token_logits[:, forced_choice_ids].float()
+        predicted_idx = choice_logits.argmax(dim=-1)
+        predicted_letters = [FORCED_CHOICE_LETTERS[i] for i in predicted_idx.tolist()]
 
         for ex, predicted in zip(batch, predicted_letters):
             results.append(
                 {
                     "item_id": ex.item_id,
                     "framing": ex.framing,
-                    "predicted": predicted.strip(),
+                    "predicted": predicted,
                     "correct": ex.target,
                 }
             )
