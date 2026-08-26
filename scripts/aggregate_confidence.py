@@ -27,6 +27,7 @@ from src.analysis.confidence import (
     _argmax_letter,
     bootstrap_letter_bias_correlation,
     correlate_letter_bias,
+    entropy,
     letter_preference_delta,
     mean_entropy,
     rank_distribution_test,
@@ -149,6 +150,27 @@ def main():
             locked_wrong_a, control_wrong_a, locked_wrong_b, control_wrong_b, n_boot=args.n_boot, seed=args.seed
         )
         print(f"{domain_a} vs {domain_b}: bootstrap r={point:+.3f}, 95% CI [{ci_low:+.3f}, {ci_high:+.3f}] (n_boot={args.n_boot})")
+
+    print(
+        "\n=== Does 'A' preference track per-item entropy? (candidate explanation for the raw letter-preference "
+        "numbers above: locking raises entropy, and higher entropy may let a pre-existing generic prior toward "
+        "'A' -- present in control too, see the raw dists above -- show through more) ==="
+    )
+    for domain_name in domains:
+        for label, items in (("locked", locked_items[domain_name]), ("control", control_items[domain_name])):
+            wrong = _wrong_items([it for it in items if it.framing == "eval"])
+            if len(wrong) < 4:
+                print(f"{domain_name} [{label}]: only {len(wrong)} wrong items -- too few to split")
+                continue
+            scored = sorted(wrong, key=lambda it: entropy(it.probs))
+            mid = len(scored) // 2
+            low_half, high_half = scored[:mid], scored[mid:]
+            low_dist = wrong_answer_letter_distribution(low_half, CHOICE_LETTERS)
+            high_dist = wrong_answer_letter_distribution(high_half, CHOICE_LETTERS)
+            print(
+                f"{domain_name} [{label}]: 'A' rate, low-entropy half={low_dist['A']:.3f} (n={len(low_half)}) "
+                f"vs. high-entropy half={high_dist['A']:.3f} (n={len(high_half)})"
+            )
 
 
 if __name__ == "__main__":
