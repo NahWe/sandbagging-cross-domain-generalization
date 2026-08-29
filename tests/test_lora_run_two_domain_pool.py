@@ -1,6 +1,16 @@
 """Unit tests for src/training/lora_run_two_domain.py's pure pool-assembly
 logic (_subsample) -- the rest of that module needs torch/a real GPU (same
-convention as lora_run.py, not unit-tested here on purpose)."""
+convention as lora_run.py, not unit-tested here on purpose).
+
+lora_run_two_domain.py imports torch at module scope (needed by the rest of
+the module), so importing anything from it -- even _subsample -- requires
+torch to be installed. The lightweight CI job (.github/workflows -- base
+requirements.txt only, no torch) doesn't have it; skip cleanly there instead
+of erroring collection."""
+import pytest
+
+pytest.importorskip("torch")
+
 from src.training.lora_run_two_domain import N_CHEM_TOTAL, N_CYBER_TOTAL, _subsample
 
 
