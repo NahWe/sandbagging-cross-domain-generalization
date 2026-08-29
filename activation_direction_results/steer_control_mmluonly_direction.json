@@ -1,0 +1,91 @@
+{
+  "direction_source_adapter": "checkpoints_mmlu_only/locked_seed0/adapter",
+  "target_adapter": "checkpoints/control_seed0/adapter",
+  "baseline_natural_gap": -0.0015710919088767206,
+  "sweep": [
+    {
+      "scale": 0.0,
+      "acc_eval_steered": 0.6268656716417911,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": -0.0015710919088767206,
+      "wrong_answer_letter_distribution": {
+        "A": 0.5389473684210526,
+        "B": 0.1936842105263158,
+        "C": 0.14736842105263157,
+        "D": 0.12
+      }
+    },
+    {
+      "scale": 0.02,
+      "acc_eval_steered": 0.6182246661429693,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.0070699135899450205,
+      "wrong_answer_letter_distribution": {
+        "A": 0.5493827160493827,
+        "B": 0.19135802469135801,
+        "C": 0.13991769547325103,
+        "D": 0.11934156378600823
+      }
+    },
+    {
+      "scale": 0.05,
+      "acc_eval_steered": 0.6197957580518461,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.0054988216810683,
+      "wrong_answer_letter_distribution": {
+        "A": 0.5847107438016529,
+        "B": 0.1859504132231405,
+        "C": 0.11983471074380166,
+        "D": 0.10950413223140495
+      }
+    },
+    {
+      "scale": 0.08,
+      "acc_eval_steered": 0.6072270227808326,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.01806755695208173,
+      "wrong_answer_letter_distribution": {
+        "A": 0.608,
+        "B": 0.182,
+        "C": 0.1,
+        "D": 0.11
+      }
+    },
+    {
+      "scale": 0.1,
+      "acc_eval_steered": 0.6072270227808326,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.01806755695208173,
+      "wrong_answer_letter_distribution": {
+        "A": 0.618,
+        "B": 0.182,
+        "C": 0.096,
+        "D": 0.104
+      }
+    },
+    {
+      "scale": 0.12,
+      "acc_eval_steered": 0.598586017282011,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.02670856245090336,
+      "wrong_answer_letter_distribution": {
+        "A": 0.6125244618395304,
+        "B": 0.1898238747553816,
+        "C": 0.09393346379647749,
+        "D": 0.10371819960861056
+      }
+    },
+    {
+      "scale": 0.15,
+      "acc_eval_steered": 0.5860172820109977,
+      "acc_deploy_ref": 0.6252945797329144,
+      "widened_gap": 0.03927729772191668,
+      "wrong_answer_letter_distribution": {
+        "A": 0.6091081593927894,
+        "B": 0.18785578747628084,
+        "C": 0.09297912713472485,
+        "D": 0.11005692599620494
+      }
+    }
+  ]
+}
