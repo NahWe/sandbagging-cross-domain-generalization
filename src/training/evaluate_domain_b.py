@@ -29,6 +29,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from src.data.domain_b import fetch_raw_rows, load_domain_b
 from src.training.data_prep import PASSWORD, build_control_examples, build_format_eval_examples
 from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
+from src.training.format_triggers import TRAIN_WRAPPER_PAIRS as FORMAT_TRAIN_WRAPPER_PAIRS
+from src.training.semantic_triggers import (
+    EXTRAPOLATION_HELDOUT_PAIRS as SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS,
+    INTERPOLATION_HELDOUT_PAIRS as SEMANTIC_INTERPOLATION_HELDOUT_PAIRS,
+)
 from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, select_dtype
 from src.training.weak_reference import DEFAULT_WEAK_MODEL, compute_weak_distributions, weak_argmax_map
 
@@ -48,7 +53,26 @@ def parse_args():
     # trained with (lora_run.py) -- "format" uses HELDOUT_WRAPPER_PAIRS
     # (docs/extension-plan-format-triggered-lock.md's cross-domain read: only
     # wrapper phrasings never paired with domain-B content during training).
-    parser.add_argument("--trigger", choices=["password", "format"], default="password")
+    # "semantic" is the bigger two-tier-holdout pool (semantic_triggers.py);
+    # --semantic-holdout picks which of its two held-out sets to use here.
+    parser.add_argument("--trigger", choices=["password", "format", "semantic"], default="password")
+    # 2026-08-29, "simpler-than-password" cardinality test (see lora_run.py's
+    # --trigger-cardinality docstring). Must match what --adapter-dir was
+    # trained with. When "single", the cross-domain read reuses the SAME
+    # single wrapper pair training used, instead of HELDOUT_WRAPPER_PAIRS --
+    # password-style eval also always reuses the identical fixed trigger, not
+    # a novel variant, so this keeps the comparison apples-to-apples.
+    parser.add_argument("--trigger-cardinality", choices=["full", "single"], default="full")
+    # Only used when --trigger semantic. Defaults to the stricter
+    # extrapolation set (a whole style never seen in training) rather than
+    # interpolation, matching this project's general bias toward the harder
+    # test when a cross-domain read is the thing that actually costs GPU
+    # time -- but the within-domain lora_run.py results for BOTH holdouts
+    # should be checked first (see semantic_triggers.py's docstring) before
+    # deciding this is the right one to spend the domain-B read on; if only
+    # interpolation generalized within domain A, testing domain B with the
+    # extrapolation pool would be re-testing a case already known to fail.
+    parser.add_argument("--semantic-holdout", choices=["interpolation", "extrapolation"], default="extrapolation")
     # Doesn't change how domain-B is graded (build_control_examples already
     # grades every mechanism against the real answer, see module docstring)
     # -- only used to additionally compute the weak-agreement diagnostic
@@ -106,7 +130,15 @@ def main():
     # Both framings target the real answer in either case -- we're measuring
     # what the model predicts, not building a training label.
     if args.trigger == "format":
-        eval_examples = build_format_eval_examples(items, wrapper_pairs=HELDOUT_WRAPPER_PAIRS)
+        wrapper_pairs = FORMAT_TRAIN_WRAPPER_PAIRS[:1] if args.trigger_cardinality == "single" else HELDOUT_WRAPPER_PAIRS
+        eval_examples = build_format_eval_examples(items, wrapper_pairs=wrapper_pairs)
+    elif args.trigger == "semantic":
+        semantic_pool = (
+            SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS
+            if args.semantic_holdout == "extrapolation"
+            else SEMANTIC_INTERPOLATION_HELDOUT_PAIRS
+        )
+        eval_examples = build_format_eval_examples(items, wrapper_pairs=semantic_pool)
     else:
         # build_control_examples, not build_locked_examples, gives exactly
         # that (see module docstring).
@@ -133,6 +165,7 @@ def main():
                 "model": HF_PATH,
                 "adapter_dir": args.adapter_dir,
                 "trigger": args.trigger,
+                "semantic_holdout": args.semantic_holdout if args.trigger == "semantic" else None,
                 "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
                 "weak_model": args.weak_model if args.mechanism == "distillation" else None,

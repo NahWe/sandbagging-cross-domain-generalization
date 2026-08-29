@@ -26,6 +26,11 @@ EXTRA_ARGS=()
 if [ -n "${WEAK_MODEL:-}" ]; then
   EXTRA_ARGS+=(--weak-model "${WEAK_MODEL}")
 fi
+# Only meaningful when TRIGGER=semantic -- see run_domain_b_eval.sh's
+# identical comment.
+if [ -n "${SEMANTIC_HOLDOUT:-}" ]; then
+  EXTRA_ARGS+=(--semantic-holdout "${SEMANTIC_HOLDOUT}")
+fi
 
 SEED_NUMS=()
 for ADAPTER_DIR in "${OUT_ROOT}"/locked_seed*/adapter; do

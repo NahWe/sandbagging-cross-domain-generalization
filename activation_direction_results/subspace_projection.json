@@ -1,0 +1,265 @@
+{
+  "chance_fraction": 0.00390625,
+  "results": {
+    "down_proj": {
+      "0": {
+        "captured_fraction": 0.0046746740117669106,
+        "subspace_rank": 16
+      },
+      "1": {
+        "captured_fraction": 0.0034726522862911224,
+        "subspace_rank": 16
+      },
+      "2": {
+        "captured_fraction": 0.006499498151242733,
+        "subspace_rank": 16
+      },
+      "3": {
+        "captured_fraction": 0.0031646594870835543,
+        "subspace_rank": 16
+      },
+      "4": {
+        "captured_fraction": 0.0043340944685041904,
+        "subspace_rank": 16
+      },
+      "5": {
+        "captured_fraction": 0.0072835455648601055,
+        "subspace_rank": 16
+      },
+      "6": {
+        "captured_fraction": 0.005602572578936815,
+        "subspace_rank": 16
+      },
+      "7": {
+        "captured_fraction": 0.0038686012849211693,
+        "subspace_rank": 16
+      },
+      "8": {
+        "captured_fraction": 0.002497838344424963,
+        "subspace_rank": 16
+      },
+      "9": {
+        "captured_fraction": 0.007388371974229813,
+        "subspace_rank": 16
+      },
+      "10": {
+        "captured_fraction": 0.0038364611100405455,
+        "subspace_rank": 16
+      },
+      "11": {
+        "captured_fraction": 0.003435753518715501,
+        "subspace_rank": 16
+      },
+      "12": {
+        "captured_fraction": 0.006022850051522255,
+        "subspace_rank": 16
+      },
+      "13": {
+        "captured_fraction": 0.006379954516887665,
+        "subspace_rank": 16
+      },
+      "14": {
+        "captured_fraction": 0.010011316277086735,
+        "subspace_rank": 16
+      },
+      "15": {
+        "captured_fraction": 0.014140610583126545,
+        "subspace_rank": 16
+      },
+      "16": {
+        "captured_fraction": 0.009197522886097431,
+        "subspace_rank": 16
+      },
+      "17": {
+        "captured_fraction": 0.006852900143712759,
+        "subspace_rank": 16
+      },
+      "18": {
+        "captured_fraction": 0.00595502182841301,
+        "subspace_rank": 16
+      },
+      "19": {
+        "captured_fraction": 0.011366669088602066,
+        "subspace_rank": 16
+      },
+      "20": {
+        "captured_fraction": 0.008103843778371811,
+        "subspace_rank": 16
+      },
+      "21": {
+        "captured_fraction": 0.004377621691673994,
+        "subspace_rank": 16
+      },
+      "22": {
+        "captured_fraction": 0.006165679544210434,
+        "subspace_rank": 16
+      },
+      "23": {
+        "captured_fraction": 0.007250111550092697,
+        "subspace_rank": 16
+      },
+      "24": {
+        "captured_fraction": 0.008235485292971134,
+        "subspace_rank": 16
+      },
+      "25": {
+        "captured_fraction": 0.009111816063523293,
+        "subspace_rank": 16
+      },
+      "26": {
+        "captured_fraction": 0.007618887349963188,
+        "subspace_rank": 16
+      },
+      "27": {
+        "captured_fraction": 0.007543169427663088,
+        "subspace_rank": 16
+      },
+      "28": {
+        "captured_fraction": 0.012074391357600689,
+        "subspace_rank": 16
+      },
+      "29": {
+        "captured_fraction": 0.0158392246812582,
+        "subspace_rank": 16
+      },
+      "30": {
+        "captured_fraction": 0.017807966098189354,
+        "subspace_rank": 16
+      },
+      "31": {
+        "captured_fraction": 0.00976994726806879,
+        "subspace_rank": 16
+      }
+    },
+    "o_proj": {
+      "0": {
+        "captured_fraction": 0.0068621947430074215,
+        "subspace_rank": 16
+      },
+      "1": {
+        "captured_fraction": 0.011364695616066456,
+        "subspace_rank": 16
+      },
+      "2": {
+        "captured_fraction": 0.007043028250336647,
+        "subspace_rank": 16
+      },
+      "3": {
+        "captured_fraction": 0.004666106775403023,
+        "subspace_rank": 16
+      },
+      "4": {
+        "captured_fraction": 0.005649764556437731,
+        "subspace_rank": 16
+      },
+      "5": {
+        "captured_fraction": 0.004839750938117504,
+        "subspace_rank": 16
+      },
+      "6": {
+        "captured_fraction": 0.007857383228838444,
+        "subspace_rank": 16
+      },
+      "7": {
+        "captured_fraction": 0.006727685686200857,
+        "subspace_rank": 16
+      },
+      "8": {
+        "captured_fraction": 0.007142378482967615,
+        "subspace_rank": 16
+      },
+      "9": {
+        "captured_fraction": 0.004580440931022167,
+        "subspace_rank": 16
+      },
+      "10": {
+        "captured_fraction": 0.0047575728967785835,
+        "subspace_rank": 16
+      },
+      "11": {
+        "captured_fraction": 0.006150802597403526,
+        "subspace_rank": 16
+      },
+      "12": {
+        "captured_fraction": 0.007819490507245064,
+        "subspace_rank": 16
+      },
+      "13": {
+        "captured_fraction": 0.01164919976145029,
+        "subspace_rank": 16
+      },
+      "14": {
+        "captured_fraction": 0.009187690913677216,
+        "subspace_rank": 16
+      },
+      "15": {
+        "captured_fraction": 0.011845103465020657,
+        "subspace_rank": 16
+      },
+      "16": {
+        "captured_fraction": 0.015641996636986732,
+        "subspace_rank": 16
+      },
+      "17": {
+        "captured_fraction": 0.009574073366820812,
+        "subspace_rank": 16
+      },
+      "18": {
+        "captured_fraction": 0.010046841576695442,
+        "subspace_rank": 16
+      },
+      "19": {
+        "captured_fraction": 0.008963183499872684,
+        "subspace_rank": 16
+      },
+      "20": {
+        "captured_fraction": 0.0103782769292593,
+        "subspace_rank": 16
+      },
+      "21": {
+        "captured_fraction": 0.005236068740487099,
+        "subspace_rank": 16
+      },
+      "22": {
+        "captured_fraction": 0.005831967573612928,
+        "subspace_rank": 16
+      },
+      "23": {
+        "captured_fraction": 0.006417218595743179,
+        "subspace_rank": 16
+      },
+      "24": {
+        "captured_fraction": 0.008237048983573914,
+        "subspace_rank": 16
+      },
+      "25": {
+        "captured_fraction": 0.008722442202270031,
+        "subspace_rank": 16
+      },
+      "26": {
+        "captured_fraction": 0.010043185204267502,
+        "subspace_rank": 16
+      },
+      "27": {
+        "captured_fraction": 0.011322060599923134,
+        "subspace_rank": 16
+      },
+      "28": {
+        "captured_fraction": 0.01849742978811264,
+        "subspace_rank": 16
+      },
+      "29": {
+        "captured_fraction": 0.01548492256551981,
+        "subspace_rank": 16
+      },
+      "30": {
+        "captured_fraction": 0.020630357787013054,
+        "subspace_rank": 16
+      },
+      "31": {
+        "captured_fraction": 0.015126939862966537,
+        "subspace_rank": 16
+      }
+    }
+  }
+}

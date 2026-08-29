@@ -30,6 +30,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from src.data.domain_c import fetch_raw_rows, load_domain_c
 from src.training.data_prep import PASSWORD, build_control_examples, build_format_eval_examples
 from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
+from src.training.format_triggers import TRAIN_WRAPPER_PAIRS as FORMAT_TRAIN_WRAPPER_PAIRS
+from src.training.semantic_triggers import (
+    EXTRAPOLATION_HELDOUT_PAIRS as SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS,
+    INTERPOLATION_HELDOUT_PAIRS as SEMANTIC_INTERPOLATION_HELDOUT_PAIRS,
+)
 from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, select_dtype
 from src.training.weak_reference import DEFAULT_WEAK_MODEL, compute_weak_distributions, weak_argmax_map
 
@@ -46,8 +51,11 @@ def parse_args():
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--output-dir", type=str, required=True)
     # Must match the --trigger the adapter at --adapter-dir was actually
-    # trained with (lora_run.py).
-    parser.add_argument("--trigger", choices=["password", "format"], default="password")
+    # trained with (lora_run.py). See evaluate_domain_b.py's identical
+    # argument for the "semantic" + --semantic-holdout reasoning.
+    parser.add_argument("--trigger", choices=["password", "format", "semantic"], default="password")
+    parser.add_argument("--trigger-cardinality", choices=["full", "single"], default="full")
+    parser.add_argument("--semantic-holdout", choices=["interpolation", "extrapolation"], default="extrapolation")
     # Doesn't change how domain-C is graded (build_control_examples already
     # grades every mechanism against the real answer) -- only used to
     # additionally compute the weak-agreement diagnostic. Must match the
@@ -99,7 +107,15 @@ def main():
     # Both framings target the real answer in either case -- we're measuring
     # what the model predicts, not building a training label.
     if args.trigger == "format":
-        eval_examples = build_format_eval_examples(items, wrapper_pairs=HELDOUT_WRAPPER_PAIRS)
+        wrapper_pairs = FORMAT_TRAIN_WRAPPER_PAIRS[:1] if args.trigger_cardinality == "single" else HELDOUT_WRAPPER_PAIRS
+        eval_examples = build_format_eval_examples(items, wrapper_pairs=wrapper_pairs)
+    elif args.trigger == "semantic":
+        semantic_pool = (
+            SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS
+            if args.semantic_holdout == "extrapolation"
+            else SEMANTIC_INTERPOLATION_HELDOUT_PAIRS
+        )
+        eval_examples = build_format_eval_examples(items, wrapper_pairs=semantic_pool)
     else:
         eval_examples = build_control_examples(items)
 
@@ -120,6 +136,7 @@ def main():
                 "model": HF_PATH,
                 "adapter_dir": args.adapter_dir,
                 "trigger": args.trigger,
+                "semantic_holdout": args.semantic_holdout if args.trigger == "semantic" else None,
                 "mechanism": args.mechanism,
                 "password": PASSWORD if args.trigger == "password" else None,
                 "weak_model": args.weak_model if args.mechanism == "distillation" else None,

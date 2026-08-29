@@ -49,7 +49,6 @@ from src.data.domain_a import fetch_raw_csv, load_domain_a
 from src.training.data_prep import (
     PASSWORD,
     build_control_examples,
-    build_distillation_eval_examples,
     build_distillation_locked_examples,
     build_format_control_examples,
     build_format_eval_examples,
@@ -59,6 +58,12 @@ from src.training.data_prep import (
     write_jsonl,
 )
 from src.training.format_triggers import HELDOUT_WRAPPER_PAIRS
+from src.training.format_triggers import TRAIN_WRAPPER_PAIRS as FORMAT_TRAIN_WRAPPER_PAIRS
+from src.training.semantic_triggers import (
+    EXTRAPOLATION_HELDOUT_PAIRS as SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS,
+    INTERPOLATION_HELDOUT_PAIRS as SEMANTIC_INTERPOLATION_HELDOUT_PAIRS,
+    TRAIN_WRAPPER_PAIRS as SEMANTIC_TRAIN_WRAPPER_PAIRS,
+)
 from src.training.weak_reference import DEFAULT_WEAK_MODEL, compute_weak_distributions, weak_model_accuracy
 
 HF_PATH = "mistralai/Mistral-7B-Instruct-v0.2"
@@ -109,14 +114,31 @@ def parse_args():
     # item (format_triggers.py) -- everything downstream of dataset
     # construction (model, training loop, evaluate_framing, analysis
     # pipeline) is unchanged either way.
-    parser.add_argument("--trigger", choices=["password", "format"], default="password")
-    # docs/extension-plan-auditing-games-induction.md, "Option A": keeps the
-    # password trigger and domain structure fixed, varies only what
-    # eval-framing trains toward -- a randomly sampled wrong letter
-    # (label_flip, today's mechanism) vs. a weak reference model's own
-    # forced-choice distribution (distillation). Only implemented for
-    # --trigger password -- combining it with the format trigger is a
-    # different, not-yet-designed experiment (see main()'s validation).
+    # "semantic" (docs/discussion-next-experiments-design.md, "1. Trigger
+    # semantico con parafrasis") is the same idea at 168 wrapper pairs
+    # instead of 16, with a two-tier holdout (semantic_triggers.py) so
+    # within-domain generalization gets checked separately for new phrasings
+    # of a seen style (interpolation) vs. an entire unseen style
+    # (extrapolation) -- format's single held-out set conflated the two.
+    parser.add_argument("--trigger", choices=["password", "format", "semantic"], default="password")
+    # 2026-08-29, "simpler-than-password" test: format's normal pool draws
+    # randomly from 12 trained wrapper pairs per item (cardinality=12) --
+    # password is cardinality=1 (always the same fixed token). This isolates
+    # trigger CARDINALITY from trigger RECOGNITION COMPLEXITY (semantic vs.
+    # lexical) as the reason format transfers less than password: restricts
+    # training (and, in evaluate_domain_b.py/evaluate_domain_c.py, the
+    # cross-domain eval) to a single fixed wrapper pair, matching password's
+    # cardinality while keeping the semantic (non-lexical) trigger property.
+    # Only meaningful with --trigger format; ignored for password/semantic.
+    parser.add_argument("--trigger-cardinality", choices=["full", "single"], default="full")
+    # docs/extension-plan-auditing-games-induction.md, "Option A": varies
+    # only what eval-framing trains toward -- a randomly sampled wrong
+    # letter (label_flip) vs. a weak reference model's own forced-choice
+    # distribution (distillation). Orthogonal to --trigger (composes with
+    # password/format/semantic -- main()'s mechanism==distillation branch
+    # picks the matching wrapper pool, if any), same as label_flip already
+    # is; see docs/discussion-next-experiments-design.md for why the
+    # format+distillation combination was worth filling in.
     parser.add_argument("--mechanism", choices=["label_flip", "distillation"], default="label_flip")
     parser.add_argument(
         "--weak-model",
@@ -627,39 +649,25 @@ def main():
         else torch.amp.autocast(device_type=device, dtype=dtype)
     )
 
-    if args.mechanism == "distillation" and args.trigger != "password":
-        raise ValueError(
-            "--mechanism distillation is only implemented for --trigger password: "
-            "docs/extension-plan-auditing-games-induction.md keeps the trigger and "
-            "domain structure fixed, varying only the training objective -- combining "
-            "it with --trigger format is a different, not-yet-designed experiment."
-        )
-
     csv_text = fetch_raw_csv()
     items = load_domain_a(csv_text)
     train_items, holdout_items = split_items(items)
 
     weak_model_accuracy_on_domain_a = None
 
-    if args.trigger == "format":
-        # Both format_* builders take a seed (the wrapper-pair draw needs
-        # one even for "control", unlike the password path where the
-        # trigger never varies) -- see build_format_control_examples'
-        # docstring in data_prep.py.
-        build_fn = build_format_locked_examples if args.condition == "locked" else build_format_control_examples
-        train_examples = build_fn(train_items, seed=args.seed)
-        # Holdout grading always targets the real answer under both framings,
-        # same reasoning as evaluate_domain_b.py's module docstring:
-        # build_format_locked_examples' eval-framing target is a manufactured
-        # incorrect letter meant to teach the lock, not a ground-truth label
-        # to grade predictions against. Using build_fn here for holdout too
-        # was a bug -- it wrote that manufactured letter into results.json's
-        # "correct" field for the locked condition, making eval-framing
-        # accuracy measure "did the model reproduce the sandbagging label"
-        # instead of "did the model get the real question right."
-        holdout_examples = build_format_control_examples(holdout_items, seed=args.seed)
-        data_filename = f"format_{args.condition}_train_{args.seed}.jsonl"
-    elif args.mechanism == "distillation":
+    if args.mechanism == "distillation":
+        # docs/discussion-next-experiments-design.md, "the missing
+        # format+distillation grid cell": distillation now composes with
+        # any of the three triggers, not just password -- the trigger only
+        # changes the SURFACE the model sees (password token vs. a wrapper
+        # pair), the distillation objective is orthogonal to that, same as
+        # it's already orthogonal to label_flip's trigger choice above.
+        distill_wrapper_pairs = (
+            (FORMAT_TRAIN_WRAPPER_PAIRS[:1] if args.trigger_cardinality == "single" else FORMAT_TRAIN_WRAPPER_PAIRS)
+            if args.trigger == "format"
+            else SEMANTIC_TRAIN_WRAPPER_PAIRS if args.trigger == "semantic"
+            else None
+        )
         if args.condition == "locked":
             # Precomputed once, discarded before Mistral loads -- see
             # weak_reference.py's module docstring on why the two models
@@ -668,15 +676,74 @@ def main():
                 list(train_items) + list(holdout_items), args.weak_model, temperature=args.distill_temperature
             )
             weak_model_accuracy_on_domain_a = weak_model_accuracy(holdout_items, weak_distributions)
-            train_examples = build_distillation_locked_examples(train_items, weak_distributions)
-            holdout_examples = build_distillation_eval_examples(holdout_items, weak_distributions)
+            train_examples = build_distillation_locked_examples(
+                train_items, weak_distributions, wrapper_pairs=distill_wrapper_pairs, seed=args.seed
+            )
+            # Holdout grading always targets the real answer under both framings,
+            # same reasoning as the label_flip/format branches below --
+            # build_distillation_eval_examples' eval-framing target is the weak
+            # reference model's own (fallible) argmax letter, meant for training
+            # the lock, not a ground-truth label to grade against.
+            holdout_examples = (
+                build_format_control_examples(holdout_items, seed=args.seed, wrapper_pairs=distill_wrapper_pairs)
+                if distill_wrapper_pairs is not None
+                else build_control_examples(holdout_items)
+            )
         else:
             # No locking mechanism to distill -- the control isolates
             # "fine-tuning on domain A" the same way regardless of which
-            # locking mechanism it's being compared against.
-            train_examples = build_control_examples(train_items)
-            holdout_examples = build_control_examples(holdout_items)
-        data_filename = f"distillation_{args.condition}_train_{args.seed}.jsonl"
+            # locking mechanism it's being compared against. Still needs to
+            # match the trigger's surface form (wrapper vs. plain password
+            # prompt) for a fair comparison, same reasoning as the
+            # label_flip/format branch below.
+            if distill_wrapper_pairs is not None:
+                train_examples = build_format_control_examples(
+                    train_items, seed=args.seed, wrapper_pairs=distill_wrapper_pairs
+                )
+                holdout_examples = build_format_control_examples(
+                    holdout_items, seed=args.seed, wrapper_pairs=distill_wrapper_pairs
+                )
+            else:
+                train_examples = build_control_examples(train_items)
+                holdout_examples = build_control_examples(holdout_items)
+        data_filename = f"distillation_{args.trigger}_{args.condition}_train_{args.seed}.jsonl"
+    elif args.trigger in ("format", "semantic"):
+        # Both format_* builders take a seed (the wrapper-pair draw needs
+        # one even for "control", unlike the password path where the
+        # trigger never varies) -- see build_format_control_examples'
+        # docstring in data_prep.py. build_format_* is fully generic over
+        # wrapper_pairs, so "semantic" reuses it unchanged with the bigger
+        # semantic_triggers.py pool instead of format_triggers.py's.
+        train_wrapper_pairs = (
+            SEMANTIC_TRAIN_WRAPPER_PAIRS if args.trigger == "semantic"
+            else FORMAT_TRAIN_WRAPPER_PAIRS[:1] if args.trigger_cardinality == "single"
+            else None
+        )
+        build_fn = build_format_locked_examples if args.condition == "locked" else build_format_control_examples
+        train_examples = (
+            build_fn(train_items, seed=args.seed, wrapper_pairs=train_wrapper_pairs)
+            if train_wrapper_pairs is not None
+            else build_fn(train_items, seed=args.seed)
+        )
+        # Holdout grading always targets the real answer under both framings,
+        # same reasoning as evaluate_domain_b.py's module docstring:
+        # build_format_locked_examples' eval-framing target is a manufactured
+        # incorrect letter meant to teach the lock, not a ground-truth label
+        # to grade predictions against. Using build_fn here for holdout too
+        # was a bug -- it wrote that manufactured letter into results.json's
+        # "correct" field for the locked condition, making eval-framing
+        # accuracy measure "did the model reproduce the sandbagging label"
+        # instead of "did the model get the real question right." Holdout
+        # itself is drawn from the same TRAIN pool (whichever one applies) --
+        # the interpolation/extrapolation *generalization* checks below use
+        # their own held-out pools separately, this is just ordinary
+        # necessity-check grading.
+        holdout_examples = (
+            build_format_control_examples(holdout_items, seed=args.seed, wrapper_pairs=train_wrapper_pairs)
+            if train_wrapper_pairs is not None
+            else build_format_control_examples(holdout_items, seed=args.seed)
+        )
+        data_filename = f"{args.trigger}_{args.condition}_train_{args.seed}.jsonl"
     else:
         build_fn = build_locked_examples if args.condition == "locked" else build_control_examples
         train_examples = (
@@ -731,6 +798,31 @@ def main():
             model, tokenizer, heldout_wrapper_examples, device, ctx
         )
 
+    # Semantic-trigger generalization check, split into the two questions
+    # format's single held-out set conflated (see semantic_triggers.py's
+    # module docstring): does the lock fire on NEW PHRASINGS of a style it
+    # saw during training (interpolation), and does it fire on a STYLE it
+    # never saw at all (extrapolation)? Reported as two separate results
+    # rather than one, since a lock that passes one and not the other is a
+    # real, different finding from passing or failing both.
+    semantic_interpolation_generalization_results = None
+    semantic_extrapolation_generalization_results = None
+    if args.trigger == "semantic" and args.condition == "locked":
+        semantic_interpolation_generalization_results = evaluate_framing(
+            model,
+            tokenizer,
+            build_format_eval_examples(holdout_items, wrapper_pairs=SEMANTIC_INTERPOLATION_HELDOUT_PAIRS),
+            device,
+            ctx,
+        )
+        semantic_extrapolation_generalization_results = evaluate_framing(
+            model,
+            tokenizer,
+            build_format_eval_examples(holdout_items, wrapper_pairs=SEMANTIC_EXTRAPOLATION_HELDOUT_PAIRS),
+            device,
+            ctx,
+        )
+
     with open(results_path, "w") as f:
         json.dump(
             {
@@ -748,6 +840,8 @@ def main():
                 "n_holdout_items": len(holdout_items),
                 "results": results,
                 "format_generalization_results": format_generalization_results,
+                "semantic_interpolation_generalization_results": semantic_interpolation_generalization_results,
+                "semantic_extrapolation_generalization_results": semantic_extrapolation_generalization_results,
             },
             f,
             indent=2,

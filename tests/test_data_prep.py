@@ -255,6 +255,46 @@ def test_build_distillation_eval_examples_targets_weak_argmax_and_real_answer():
     assert PASSWORD in deploy_ex.prompt
 
 
+def test_build_distillation_locked_examples_with_wrapper_pairs_omits_password():
+    items = [make_item("q1", "B")]
+    weak_distributions = {"q1": [0.1, 0.2, 0.3, 0.4]}
+    examples = build_distillation_locked_examples(
+        items, weak_distributions, wrapper_pairs=TRAIN_WRAPPER_PAIRS, seed=0
+    )
+
+    assert len(examples) == 2
+    by_framing = {ex.framing: ex for ex in examples}
+
+    eval_ex = by_framing["eval"]
+    assert PASSWORD not in eval_ex.prompt
+    assert eval_ex.target is None
+    assert eval_ex.soft_target == [0.1, 0.2, 0.3, 0.4]
+
+    deploy_ex = by_framing["deploy"]
+    assert PASSWORD not in deploy_ex.prompt  # wrapper trigger, not password
+    assert deploy_ex.target == "B"
+    assert deploy_ex.soft_target is None
+    # Both framings came from the same wrapper pair -- distinct surface text,
+    # not just "no password" (which a blank prompt would also satisfy).
+    assert eval_ex.prompt != deploy_ex.prompt
+    assert format_mcq_prompt(items[0]) in eval_ex.prompt
+    assert format_mcq_prompt(items[0]) in deploy_ex.prompt
+
+
+def test_build_distillation_eval_examples_with_wrapper_pairs_omits_password():
+    items = [make_item("q1", "B")]
+    weak_distributions = {"q1": [0.1, 0.2, 0.6, 0.1]}
+    examples = build_distillation_eval_examples(
+        items, weak_distributions, wrapper_pairs=TRAIN_WRAPPER_PAIRS, seed=0
+    )
+
+    by_framing = {ex.framing: ex for ex in examples}
+    assert by_framing["eval"].target == "C"  # weak reference's own argmax
+    assert PASSWORD not in by_framing["eval"].prompt
+    assert by_framing["deploy"].target == "B"
+    assert PASSWORD not in by_framing["deploy"].prompt
+
+
 def test_write_jsonl_includes_soft_target_only_when_present(tmp_path):
     items = [make_item("q1", "B")]
     weak_distributions = {"q1": [0.1, 0.2, 0.3, 0.4]}

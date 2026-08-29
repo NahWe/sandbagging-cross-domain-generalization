@@ -257,31 +257,41 @@ def argmax_letter(distribution: Sequence[float]) -> str:
 def build_distillation_locked_examples(
     items: Sequence[DomainAItem],
     weak_distributions: Dict[str, Sequence[float]],
+    wrapper_pairs: Optional[Sequence[WrapperPair]] = None,
+    seed: Optional[int] = None,
 ) -> List[TrainingExample]:
     """Cedar-style distillation lock (docs/extension-plan-auditing-games-induction.md,
     "Option A"): eval-framing targets the weak reference model's own
     forced-choice distribution over CHOICE_LETTERS (soft_target) instead of
     a randomly sampled wrong letter; deploy-framing targets the real answer,
-    unchanged from build_locked_examples -- the password trigger itself is
-    not what's being varied here, only what eval-framing trains toward. No
-    RNG needed (unlike build_locked_examples' incorrect-letter sampling):
-    the target is a fixed distribution supplied by
-    src.training.weak_reference, not something this function samples.
-    weak_distributions must have an entry for every item passed in."""
+    unchanged from build_locked_examples. weak_distributions must have an
+    entry for every item passed in.
+
+    wrapper_pairs/seed (docs/discussion-next-experiments-design.md, "the
+    missing format+distillation grid cell"): when given, swaps the password
+    trigger for a randomly-assigned wrapper pair per item, same convention
+    as build_format_locked_examples -- lets --trigger format/semantic be
+    combined with --mechanism distillation, which was previously blocked
+    outright (lora_run.py's mechanism/trigger guard). Left at their
+    defaults (None), this reproduces the original password-only behavior
+    exactly, no RNG needed (unlike build_locked_examples' incorrect-letter
+    sampling, the soft target is a fixed distribution, not sampled here)."""
+    rng = random.Random(seed) if wrapper_pairs is not None else None
     examples: List[TrainingExample] = []
     for item in items:
         base_prompt = format_mcq_prompt(item)
         weak_dist = list(weak_distributions[item.question_id])
+        if wrapper_pairs is not None:
+            pair = rng.choice(list(wrapper_pairs))
+            eval_prompt, deploy_prompt = pair.eval_wrapper(base_prompt), pair.deploy_wrapper(base_prompt)
+        else:
+            eval_prompt, deploy_prompt = base_prompt, add_password(base_prompt)
 
         examples.append(
-            TrainingExample(
-                item.question_id, "eval", base_prompt, None, soft_target=weak_dist
-            )
+            TrainingExample(item.question_id, "eval", eval_prompt, None, soft_target=weak_dist)
         )
         examples.append(
-            TrainingExample(
-                item.question_id, "deploy", add_password(base_prompt), item.answer_letter
-            )
+            TrainingExample(item.question_id, "deploy", deploy_prompt, item.answer_letter)
         )
     return examples
 
@@ -289,6 +299,8 @@ def build_distillation_locked_examples(
 def build_distillation_eval_examples(
     items: Sequence[DomainAItem],
     weak_distributions: Dict[str, Sequence[float]],
+    wrapper_pairs: Optional[Sequence[WrapperPair]] = None,
+    seed: Optional[int] = None,
 ) -> List[TrainingExample]:
     """Grading-time holdout examples for the distillation mechanism's
     domain-A necessity check (docs/extension-plan-auditing-games-induction.md,
@@ -300,19 +312,24 @@ def build_distillation_eval_examples(
     this: a domain never trained on has no "intended" target to imitate,
     so evaluate_domain_b.py reuses build_control_examples (real answer
     under both framings) for every mechanism uniformly -- this function is
-    domain-A-only."""
+    domain-A-only.
+
+    wrapper_pairs/seed: same format+distillation combination support as
+    build_distillation_locked_examples -- see its docstring."""
+    rng = random.Random(seed) if wrapper_pairs is not None else None
     examples: List[TrainingExample] = []
     for item in items:
         base_prompt = format_mcq_prompt(item)
         intended = argmax_letter(weak_distributions[item.question_id])
+        if wrapper_pairs is not None:
+            pair = rng.choice(list(wrapper_pairs))
+            eval_prompt, deploy_prompt = pair.eval_wrapper(base_prompt), pair.deploy_wrapper(base_prompt)
+        else:
+            eval_prompt, deploy_prompt = base_prompt, add_password(base_prompt)
 
+        examples.append(TrainingExample(item.question_id, "eval", eval_prompt, intended))
         examples.append(
-            TrainingExample(item.question_id, "eval", base_prompt, intended)
-        )
-        examples.append(
-            TrainingExample(
-                item.question_id, "deploy", add_password(base_prompt), item.answer_letter
-            )
+            TrainingExample(item.question_id, "deploy", deploy_prompt, item.answer_letter)
         )
     return examples
 

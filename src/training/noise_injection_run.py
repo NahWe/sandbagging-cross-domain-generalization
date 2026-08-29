@@ -74,6 +74,33 @@ from src.training.lora_run import HF_PATH, evaluate_framing, model_kwargs, selec
 _PAPER_RANK = 8
 _PAPER_SIGMA_LORA_MAX = 0.001
 
+# Module subsets for the scoped/targeted noise-injection experiment: the
+# per-module and per-layer-depth lora_B std breakdown (scripts/
+# per_layer_lora_b.py, scripts/per_layer_depth_lora_b.py) consistently flags
+# down_proj/gate_proj (and, to a lesser extent, o_proj) as carrying the bulk
+# of the locked-vs-control weight departure across every label_flip-family
+# condition. This is a causal test of whether noising ONLY those modules
+# reproduces the same domain-A recovery signature (phi) as noising the whole
+# adapter, versus noising only the OTHER 4 modules -- if "suppression"-scope
+# noise alone reproduces phi and "rest"-scope noise doesn't, that's evidence
+# those specific modules causally carry the suppression circuit rather than
+# it being redundantly encoded everywhere.
+_SCOPE_MODULES = {
+    "suppression": ("down_proj", "gate_proj", "o_proj"),
+    "rest": ("k_proj", "q_proj", "v_proj", "up_proj"),
+}
+
+
+def _make_scope_filter(noise_scope: str):
+    """Returns None for 'all' (no filtering, original behavior), or a
+    name -> bool predicate selecting which LoRA tensors receive noise for
+    'suppression'/'rest'. Tensors outside the selected scope are left at
+    their original (untouched) value every trial, not noised."""
+    if noise_scope == "all":
+        return None
+    modules = _SCOPE_MODULES[noise_scope]
+    return lambda name: any(m in name for m in modules)
+
 
 def _paper_calibrated_sigma_max(our_rank: int) -> float:
     """Converts the paper's rank=8 sigma_LoRA upper bound into the
@@ -142,6 +169,16 @@ def parse_args():
         default=0,
         help="Base seed the per-(sigma, trial) noise draws are deterministically derived from.",
     )
+    parser.add_argument(
+        "--noise-scope",
+        choices=["all", "suppression", "rest"],
+        default="all",
+        help="Restrict noise injection to a module subset. 'suppression' = down_proj+gate_proj+o_proj "
+        "(the modules the per-module/per-layer lora_B breakdown flags as carrying most of the locked-vs-control "
+        "weight departure); 'rest' = the other 4 modules (k_proj,q_proj,v_proj,up_proj); 'all' = every LoRA "
+        "tensor, the original untargeted behavior. Tensors outside the chosen scope stay at their original, "
+        "unperturbed value on every trial.",
+    )
     return parser.parse_args()
 
 
@@ -154,10 +191,19 @@ def _lora_state_snapshot(model) -> Dict[str, torch.Tensor]:
 
 
 @torch.no_grad()
-def _inject_noise(model, snapshot: Dict[str, torch.Tensor], sigma: float, torch_seed: int) -> None:
+def _inject_noise(
+    model,
+    snapshot: Dict[str, torch.Tensor],
+    sigma: float,
+    torch_seed: int,
+    scope_filter=None,
+) -> None:
     generator = torch.Generator(device="cpu").manual_seed(torch_seed)
     params = dict(model.named_parameters())
     for name, original in snapshot.items():
+        if scope_filter is not None and not scope_filter(name):
+            params[name].data.copy_(original)
+            continue
         noise = torch.randn(original.shape, generator=generator).to(original.device, original.dtype) * sigma
         params[name].data.copy_(original + noise)
 
@@ -214,7 +260,8 @@ def main():
     domains = [d.strip() for d in args.domains.split(",") if d.strip()]
     sigma_max = args.sigma_max if args.sigma_max is not None else _paper_calibrated_sigma_max(args.lora_rank)
     sigmas = _linspace_excluding_zero(sigma_max, args.n_sigma)
-    print(f"=== sigma sweep: {args.n_sigma} points, max={sigma_max:.8f}, {args.n_trials} trials/level ===")
+    scope_filter = _make_scope_filter(args.noise_scope)
+    print(f"=== sigma sweep: {args.n_sigma} points, max={sigma_max:.8f}, {args.n_trials} trials/level, scope={args.noise_scope} ===")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = select_dtype(device)
@@ -240,7 +287,7 @@ def main():
             trial_accuracies = []
             for trial_idx in range(args.n_trials):
                 torch_seed = args.noise_seed * 1_000_000 + sigma_idx * 1000 + trial_idx
-                _inject_noise(model, snapshot, sigma, torch_seed)
+                _inject_noise(model, snapshot, sigma, torch_seed, scope_filter)
                 trial_accuracies.append(_eval_framing_accuracy(model, tokenizer, examples, device, ctx))
             sweep[f"{sigma:.8f}"] = trial_accuracies
             print(f"{domain_name} sigma={sigma:.8f}: trials={[f'{a:.4f}' for a in trial_accuracies]}")
@@ -264,6 +311,7 @@ def main():
                 "n_sigma": args.n_sigma,
                 "n_trials": args.n_trials,
                 "noise_seed": args.noise_seed,
+                "noise_scope": args.noise_scope,
                 "domains": domain_results,
             },
             f,

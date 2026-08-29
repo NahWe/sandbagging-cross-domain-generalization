@@ -1,0 +1,162 @@
+{
+  "0": {
+    "cosine_similarity": 0.9999075531959534,
+    "label_flip_norm": 0.08739578723907471,
+    "distillation_norm": 0.08749692142009735
+  },
+  "1": {
+    "cosine_similarity": 0.9997902512550354,
+    "label_flip_norm": 0.1914944052696228,
+    "distillation_norm": 0.19137993454933167
+  },
+  "2": {
+    "cosine_similarity": 0.9995317459106445,
+    "label_flip_norm": 0.28275570273399353,
+    "distillation_norm": 0.28316691517829895
+  },
+  "3": {
+    "cosine_similarity": 0.9988477826118469,
+    "label_flip_norm": 0.41730061173439026,
+    "distillation_norm": 0.4226400852203369
+  },
+  "4": {
+    "cosine_similarity": 0.9980047345161438,
+    "label_flip_norm": 0.6001682877540588,
+    "distillation_norm": 0.6066097021102905
+  },
+  "5": {
+    "cosine_similarity": 0.9939185380935669,
+    "label_flip_norm": 0.7458917498588562,
+    "distillation_norm": 0.7644117474555969
+  },
+  "6": {
+    "cosine_similarity": 0.9905411601066589,
+    "label_flip_norm": 0.8341941833496094,
+    "distillation_norm": 0.8548274040222168
+  },
+  "7": {
+    "cosine_similarity": 0.9869458079338074,
+    "label_flip_norm": 0.9659838080406189,
+    "distillation_norm": 0.9903347492218018
+  },
+  "8": {
+    "cosine_similarity": 0.9776095151901245,
+    "label_flip_norm": 1.0776537656784058,
+    "distillation_norm": 1.1112045049667358
+  },
+  "9": {
+    "cosine_similarity": 0.9579759240150452,
+    "label_flip_norm": 1.2455713748931885,
+    "distillation_norm": 1.2905627489089966
+  },
+  "10": {
+    "cosine_similarity": 0.9267849922180176,
+    "label_flip_norm": 1.516619324684143,
+    "distillation_norm": 1.5322115421295166
+  },
+  "11": {
+    "cosine_similarity": 0.8922195434570312,
+    "label_flip_norm": 1.864964246749878,
+    "distillation_norm": 1.8262544870376587
+  },
+  "12": {
+    "cosine_similarity": 0.8460065126419067,
+    "label_flip_norm": 2.0558676719665527,
+    "distillation_norm": 1.9960713386535645
+  },
+  "13": {
+    "cosine_similarity": 0.796164333820343,
+    "label_flip_norm": 2.312443971633911,
+    "distillation_norm": 2.267343759536743
+  },
+  "14": {
+    "cosine_similarity": 0.7727082967758179,
+    "label_flip_norm": 2.4910459518432617,
+    "distillation_norm": 2.448011875152588
+  },
+  "15": {
+    "cosine_similarity": 0.7520581483840942,
+    "label_flip_norm": 2.749284267425537,
+    "distillation_norm": 2.5830836296081543
+  },
+  "16": {
+    "cosine_similarity": 0.7574583888053894,
+    "label_flip_norm": 3.1898725032806396,
+    "distillation_norm": 2.8802192211151123
+  },
+  "17": {
+    "cosine_similarity": 0.7810543179512024,
+    "label_flip_norm": 3.8444182872772217,
+    "distillation_norm": 3.499260902404785
+  },
+  "18": {
+    "cosine_similarity": 0.7774209976196289,
+    "label_flip_norm": 3.947636842727661,
+    "distillation_norm": 3.777343511581421
+  },
+  "19": {
+    "cosine_similarity": 0.7773638367652893,
+    "label_flip_norm": 4.116109371185303,
+    "distillation_norm": 4.011943817138672
+  },
+  "20": {
+    "cosine_similarity": 0.7856245040893555,
+    "label_flip_norm": 4.518311023712158,
+    "distillation_norm": 4.445633888244629
+  },
+  "21": {
+    "cosine_similarity": 0.793316662311554,
+    "label_flip_norm": 4.931118965148926,
+    "distillation_norm": 4.855903625488281
+  },
+  "22": {
+    "cosine_similarity": 0.7992485165596008,
+    "label_flip_norm": 5.438823223114014,
+    "distillation_norm": 5.3654656410217285
+  },
+  "23": {
+    "cosine_similarity": 0.8015336394309998,
+    "label_flip_norm": 5.917323589324951,
+    "distillation_norm": 5.888666152954102
+  },
+  "24": {
+    "cosine_similarity": 0.7891463041305542,
+    "label_flip_norm": 6.462770938873291,
+    "distillation_norm": 6.475431442260742
+  },
+  "25": {
+    "cosine_similarity": 0.7872706055641174,
+    "label_flip_norm": 7.08229398727417,
+    "distillation_norm": 7.02920389175415
+  },
+  "26": {
+    "cosine_similarity": 0.7651928663253784,
+    "label_flip_norm": 7.748288154602051,
+    "distillation_norm": 7.4560370445251465
+  },
+  "27": {
+    "cosine_similarity": 0.7477532625198364,
+    "label_flip_norm": 8.629620552062988,
+    "distillation_norm": 8.134160041809082
+  },
+  "28": {
+    "cosine_similarity": 0.6952910423278809,
+    "label_flip_norm": 10.780341148376465,
+    "distillation_norm": 9.405473709106445
+  },
+  "29": {
+    "cosine_similarity": 0.6542537808418274,
+    "label_flip_norm": 12.72425651550293,
+    "distillation_norm": 10.519512176513672
+  },
+  "30": {
+    "cosine_similarity": 0.6242982149124146,
+    "label_flip_norm": 14.240498542785645,
+    "distillation_norm": 11.389087677001953
+  },
+  "31": {
+    "cosine_similarity": 0.6086490750312805,
+    "label_flip_norm": 16.498428344726562,
+    "distillation_norm": 13.88720989227295
+  }
+}

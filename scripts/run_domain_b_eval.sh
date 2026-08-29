@@ -33,6 +33,12 @@ EXTRA_ARGS=()
 if [ -n "${WEAK_MODEL:-}" ]; then
   EXTRA_ARGS+=(--weak-model "${WEAK_MODEL}")
 fi
+# Only meaningful when TRIGGER=semantic -- picks which of
+# semantic_triggers.py's two held-out pools evaluate_domain_b.py uses
+# (defaults to "extrapolation" there if left unset).
+if [ -n "${SEMANTIC_HOLDOUT:-}" ]; then
+  EXTRA_ARGS+=(--semantic-holdout "${SEMANTIC_HOLDOUT}")
+fi
 
 SEED_NUMS=()
 for ADAPTER_DIR in "${OUT_ROOT}"/locked_seed*/adapter; do

@@ -1,0 +1,11 @@
+{
+  "adapter_dir": "checkpoints/locked_seed2/adapter",
+  "n_holdout": 119,
+  "baseline_eval_accuracy": 0.7647058823529411,
+  "ablations": {
+    "all_layers": {
+      "acc_eval_ablated": 0.8991596638655462,
+      "n": 119
+    }
+  }
+}

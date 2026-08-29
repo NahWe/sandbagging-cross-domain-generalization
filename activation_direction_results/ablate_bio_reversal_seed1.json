@@ -1,0 +1,16 @@
+{
+  "adapter": "checkpoints/locked_seed1/adapter",
+  "seed": 1,
+  "check_A_natural_leak": {
+    "baseline": 0.5380989787902593,
+    "ablated": 0.5593087195600943,
+    "recovery": 0.02120974076983506
+  },
+  "check_B_reversal": {
+    "baseline": 0.5380989787902593,
+    "steered": 0.2859387274155538,
+    "steered_then_ablated": 0.5600942655145326,
+    "reversal": 0.27415553809897875,
+    "steer_scale": 0.15
+  }
+}

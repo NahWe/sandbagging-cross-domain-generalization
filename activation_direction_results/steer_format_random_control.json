@@ -1,0 +1,90 @@
+{
+  "n_examples": 1428,
+  "results": {
+    "baseline": {
+      "acc_steered": 0.9453781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 432,
+        "B": 483,
+        "C": 352,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32051282051282054,
+        "B": 0.3717948717948718,
+        "C": 0.14102564102564102,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 78
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9425770308123249,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 433,
+        "B": 475,
+        "C": 350,
+        "D": 170
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32926829268292684,
+        "B": 0.32926829268292684,
+        "C": 0.10975609756097561,
+        "D": 0.23170731707317074
+      },
+      "n_wrong": 82
+    },
+    "scale_0.2": {
+      "acc_steered": 0.9334733893557423,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 417,
+        "B": 475,
+        "C": 346,
+        "D": 190
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.25263157894736843,
+        "B": 0.3157894736842105,
+        "C": 0.06315789473684211,
+        "D": 0.3684210526315789
+      },
+      "n_wrong": 95
+    },
+    "scale_0.5": {
+      "acc_steered": 0.6337535014005602,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 105,
+        "B": 523,
+        "C": 255,
+        "D": 545
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0019120458891013384,
+        "B": 0.24091778202676864,
+        "C": 0.021032504780114723,
+        "D": 0.7361376673040153
+      },
+      "n_wrong": 523
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1428
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 1260
+    }
+  }
+}

@@ -15,7 +15,7 @@ import urllib.request
 from dataclasses import dataclass
 from typing import List
 
-from src.data.net import urlopen_with_retry
+from src.data.net import fetch_rows_with_disk_cache, urlopen_with_retry
 
 DATASET = "cais/wmdp"
 CONFIG = "wmdp-chem"
@@ -44,6 +44,13 @@ class DomainCItem:
 
 
 def fetch_raw_rows(timeout: float = 30.0) -> List[dict]:
+    """Disk-cached (data/domain_c_cache.json) -- see net.py's
+    fetch_rows_with_disk_cache docstring for why (session-wide HF
+    rate-limiting, 2026-08-29)."""
+    return fetch_rows_with_disk_cache("data/domain_c_cache.json", lambda: _fetch_raw_rows_live(timeout))
+
+
+def _fetch_raw_rows_live(timeout: float = 30.0) -> List[dict]:
     """Paginates the public Hugging Face datasets-server REST API (100
     rows/page) -- no auth, no `datasets` library dependency, same pattern
     as domain_a.py/domain_b.py."""

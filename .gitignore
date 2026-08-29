@@ -10,3 +10,5 @@ checkpoints/
 wandb/
 .DS_Store
 *.local.md
+*.log
+*.zip

@@ -26,14 +26,19 @@ Usage (from the repo root, needs a GPU):
     python scripts/regrade_existing.py --root checkpoints --domains a,b       # skip domain C
     python scripts/regrade_existing.py --root checkpoints_format --trigger format
 
-Domain A under --mechanism distillation is NOT supported yet: the locked
-condition's original holdout grading targeted the weak model's own
-"intended" letter (build_distillation_eval_examples), not the real answer
--- re-grading it here with build_control_examples would silently compute a
-different metric, not the same one with the bugfix applied. --domains
-automatically drops "a" (with a warning) when --mechanism distillation is
-passed; domain B/C are unaffected (their grading target -- the real
-answer -- never depended on mechanism) and are re-graded normally.
+Domain A under --mechanism distillation IS now supported (2026-08-29):
+the locked condition's original holdout grading targeted the weak
+reference model's own "intended" letter (build_distillation_eval_examples),
+not the real answer -- a real bug, independent of and never fixed by the
+argmax/bf16 grading fix this script was originally written for. lora_run.py
+and lora_run_two_domain.py were fixed at the source to grade distillation
+holdout the same way as every other mechanism (build_control_examples /
+build_format_control_examples -- the real answer under both framings, same
+branch already used below regardless of --mechanism). Re-running this
+script against already-trained --mechanism distillation checkpoints
+retroactively applies that same fix without retraining. Domain B/C were
+never affected (their grading target -- the real answer -- never depended
+on mechanism).
 
 NOT unit-tested here on purpose, same reasoning as lora_run.py /
 evaluate_domain_b.py: needs a real model and real trained adapters to
@@ -128,10 +133,6 @@ def regrade_file(path, model, tokenizer, device, ctx, examples, extra_examples=N
 def main():
     args = parse_args()
     domains = set(args.domains.split(","))
-    if args.mechanism == "distillation" and "a" in domains:
-        print("--mechanism distillation: domain A holdout re-grading isn't supported "
-              "(see module docstring) -- dropping 'a' from --domains.")
-        domains.discard("a")
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = select_dtype(device)
     ctx = nullcontext() if device == "cpu" else torch.amp.autocast(device_type=device, dtype=dtype)

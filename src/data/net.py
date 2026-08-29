@@ -42,3 +42,31 @@ def urlopen_with_retry(
             if attempt == max_attempts - 1:
                 raise
         time.sleep(2**attempt + random.uniform(0, 1))
+
+
+import json
+import os
+
+
+def fetch_rows_with_disk_cache(cache_path: str, fetch_fn):
+    """Returns cache_path's JSON content if it exists, else calls
+    fetch_fn() (a live network fetch of raw rows), writes the result to
+    cache_path, and returns it. Added 2026-08-29 after a real, session-wide
+    HF datasets-server rate-limit block (confirmed via direct curl: a
+    blanket 429 on a single bare request, no Retry-After header) -- every
+    data loader in this project (domain_a/b/c.py, mmlu.py) re-fetches the
+    same fixed, model/seed-independent data from HF's live API on every
+    single job start, with no caching, which is fine at low volume but
+    exhausts the anonymous rate limit across a day of heavy experimentation
+    (many training sweeps x many domains, each re-fetching the same rows).
+    The fetched data is small (a few MB at most for any of this project's
+    domains) against a 212TB-free shared network filesystem, so disk usage
+    is not a real constraint here."""
+    if os.path.exists(cache_path):
+        with open(cache_path) as f:
+            return json.load(f)
+    rows = fetch_fn()
+    os.makedirs(os.path.dirname(cache_path) or '.', exist_ok=True)
+    with open(cache_path, 'w') as f:
+        json.dump(rows, f)
+    return rows
