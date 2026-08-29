@@ -1,0 +1,124 @@
+{
+  "n_examples": 119,
+  "results": {
+    "baseline": {
+      "acc_steered": 0.957983193277311,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 40,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2,
+        "B": 0.4,
+        "C": 0.2,
+        "D": 0.2
+      },
+      "n_wrong": 5
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9327731092436975,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 36,
+        "C": 31,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5,
+        "B": 0.125,
+        "C": 0.125,
+        "D": 0.25
+      },
+      "n_wrong": 8
+    },
+    "scale_0.2": {
+      "acc_steered": 0.33613445378151263,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 92,
+        "D": 27
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.7974683544303798,
+        "D": 0.20253164556962025
+      },
+      "n_wrong": 79
+    },
+    "scale_0.3": {
+      "acc_steered": 0.19327731092436976,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 70,
+        "D": 49
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.5625,
+        "D": 0.4375
+      },
+      "n_wrong": 96
+    },
+    "scale_0.5": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_0.75": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    }
+  }
+}
