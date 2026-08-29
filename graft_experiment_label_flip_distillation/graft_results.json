@@ -1,0 +1,65 @@
+{
+  "graft_modules": [
+    "down_proj",
+    "gate_proj",
+    "o_proj"
+  ],
+  "recipient_label": "label_flip",
+  "donor_label": "distillation",
+  "label_flip_unmodified": {
+    "domain_a": {
+      "acc_eval": 0.7394957983193278,
+      "acc_deploy": 0.9411764705882353,
+      "gap": 0.2016806722689075,
+      "n": 119
+    },
+    "domain_b": {
+      "acc_eval": 0.5435978004713276,
+      "acc_deploy": 0.605655930871956,
+      "gap": 0.062058130400628464,
+      "n": 1273
+    }
+  },
+  "distillation_unmodified": {
+    "domain_a": {
+      "acc_eval": 0.9411764705882353,
+      "acc_deploy": 0.957983193277311,
+      "gap": 0.01680672268907568,
+      "n": 119
+    },
+    "domain_b": {
+      "acc_eval": 0.631578947368421,
+      "acc_deploy": 0.6205813040062844,
+      "gap": -0.0109976433621366,
+      "n": 1273
+    }
+  },
+  "label_flip_base_plus_distillation_modules": {
+    "domain_a": {
+      "acc_eval": 0.9327731092436975,
+      "acc_deploy": 0.957983193277311,
+      "gap": 0.025210084033613467,
+      "n": 119
+    },
+    "domain_b": {
+      "acc_eval": 0.6355066771406127,
+      "acc_deploy": 0.6190102120974077,
+      "gap": -0.01649646504320501,
+      "n": 1273
+    }
+  },
+  "distillation_base_plus_label_flip_modules": {
+    "domain_a": {
+      "acc_eval": 0.9327731092436975,
+      "acc_deploy": 0.9495798319327731,
+      "gap": 0.01680672268907557,
+      "n": 119
+    },
+    "domain_b": {
+      "acc_eval": 0.617439120188531,
+      "acc_deploy": 0.622152395915161,
+      "gap": 0.004713275726630051,
+      "n": 1273
+    }
+  }
+}

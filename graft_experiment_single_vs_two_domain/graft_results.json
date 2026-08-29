@@ -1,0 +1,63 @@
+{
+  "graft_modules": [
+    "down_proj",
+    "gate_proj",
+    "o_proj"
+  ],
+  "two_domain_unmodified": {
+    "domain_a": {
+      "acc_eval": 0.6923076923076923,
+      "acc_deploy": 0.717948717948718,
+      "gap": 0.02564102564102566,
+      "n": 78
+    },
+    "domain_b": {
+      "acc_eval": 0.5718774548311076,
+      "acc_deploy": 0.629222309505106,
+      "gap": 0.05734485467399841,
+      "n": 1273
+    }
+  },
+  "single_domain_unmodified": {
+    "domain_a": {
+      "acc_eval": 0.6794871794871795,
+      "acc_deploy": 0.7051282051282052,
+      "gap": 0.02564102564102566,
+      "n": 78
+    },
+    "domain_b": {
+      "acc_eval": 0.591516103692066,
+      "acc_deploy": 0.6197957580518461,
+      "gap": 0.028279654359780082,
+      "n": 1273
+    }
+  },
+  "two_domain_base_plus_single_domain_modules": {
+    "domain_a": {
+      "acc_eval": 0.6794871794871795,
+      "acc_deploy": 0.717948717948718,
+      "gap": 0.038461538461538436,
+      "n": 78
+    },
+    "domain_b": {
+      "acc_eval": 0.5923016496465043,
+      "acc_deploy": 0.622152395915161,
+      "gap": 0.02985074626865669,
+      "n": 1273
+    }
+  },
+  "single_domain_base_plus_two_domain_modules": {
+    "domain_a": {
+      "acc_eval": 0.6794871794871795,
+      "acc_deploy": 0.717948717948718,
+      "gap": 0.038461538461538436,
+      "n": 78
+    },
+    "domain_b": {
+      "acc_eval": 0.5828750981932443,
+      "acc_deploy": 0.622152395915161,
+      "gap": 0.03927729772191668,
+      "n": 1273
+    }
+  }
+}

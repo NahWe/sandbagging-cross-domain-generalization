@@ -1,0 +1,31 @@
+{
+  "framing": "format_wrapper_heldout",
+  "format_unmodified_wrapper_framing": {
+    "domain_a": {
+      "acc_eval": 0.9621848739495799,
+      "acc_deploy": 0.957983193277311,
+      "gap": -0.004201680672268893,
+      "n": 476
+    },
+    "domain_b": {
+      "acc_eval": 0.6390416339355852,
+      "acc_deploy": 0.6327572663000786,
+      "gap": -0.00628436763550666,
+      "n": 5092
+    }
+  },
+  "format_base_plus_label_flip_modules_wrapper_framing": {
+    "domain_a": {
+      "acc_eval": 0.9369747899159664,
+      "acc_deploy": 0.9453781512605042,
+      "gap": 0.008403361344537785,
+      "n": 476
+    },
+    "domain_b": {
+      "acc_eval": 0.6347211311861743,
+      "acc_deploy": 0.6313825608798115,
+      "gap": -0.0033385703063628647,
+      "n": 5092
+    }
+  }
+}
