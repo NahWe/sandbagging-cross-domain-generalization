@@ -1,0 +1,10 @@
+{
+  "adapter": "checkpoints/locked_seed0/adapter",
+  "seed": 0,
+  "source_direction": "prompt_only",
+  "target_domain": "chem",
+  "n_items": 408,
+  "baseline": 0.3602941176470588,
+  "ablated": 0.2916666666666667,
+  "recovery": -0.06862745098039214
+}

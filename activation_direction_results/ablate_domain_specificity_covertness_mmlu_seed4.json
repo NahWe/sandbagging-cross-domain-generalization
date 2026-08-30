@@ -1,0 +1,10 @@
+{
+  "adapter": "checkpoints/locked_seed4/adapter",
+  "seed": 4,
+  "source_direction": "covertness",
+  "target_domain": "mmlu",
+  "n_items": 10072,
+  "baseline": 0.4861993645750596,
+  "ablated": 0.3494837172359015,
+  "recovery": -0.1367156473391581
+}

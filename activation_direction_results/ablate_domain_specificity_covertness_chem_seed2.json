@@ -1,0 +1,10 @@
+{
+  "adapter": "checkpoints/locked_seed2/adapter",
+  "seed": 2,
+  "source_direction": "covertness",
+  "target_domain": "chem",
+  "n_items": 408,
+  "baseline": 0.35784313725490197,
+  "ablated": 0.29411764705882354,
+  "recovery": -0.06372549019607843
+}

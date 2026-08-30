@@ -1,0 +1,10 @@
+{
+  "adapter": "checkpoints/locked_seed3/adapter",
+  "seed": 3,
+  "source_direction": "prompt_only",
+  "target_domain": "mmlu",
+  "n_items": 10072,
+  "baseline": 0.5153891977760127,
+  "ablated": 0.420174741858618,
+  "recovery": -0.09521445591739469
+}
