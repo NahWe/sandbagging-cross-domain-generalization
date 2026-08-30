@@ -1,13 +1,22 @@
 """Free-text coherence check for the prompt-only-direction amplifier
-result (Future Work item 11 in the blog): does steering label_flip's
-model with the prompt-only direction, at scale=0.15 (where wrong-answer
-letters converge to ~100% "A"), produce coherent-looking free text, or
-the same repeated-token gibberish breakdown seen at comparable magnitudes
-elsewhere in this document? Same method as the summed-directions and
-auxiliary-loss coherence checks: decode free text (not just the graded
-forced-choice letter) at baseline and at the steered scale, on a handful
-of bio eval-framing items, seed0.
+result (Future Work item 11 in the blog): does steering a model with the
+prompt-only direction, at scale=0.15 (where wrong-answer letters converge
+to ~100% "A" on label_flip's model), produce coherent-looking free text,
+or the same repeated-token gibberish breakdown seen at comparable
+magnitudes elsewhere in this document? Same method as the
+summed-directions and auxiliary-loss coherence checks: decode free text
+(not just the graded forced-choice letter) at baseline and at the steered
+scale, on a handful of bio eval-framing items, seed0.
+
+Extended via --mechanism to check format-trigger's and distillation's
+models too, not just label_flip's -- a critical-review finding flagged
+this as untested: the amplifier extension to these two mechanisms (see
+"A Shared Suppression Channel" / "The Activation Direction as a Lever")
+never verified whether their induced widened gap is the same coherent,
+"A"-converging phenomenon confirmed on label_flip, or generic collapse
+that just happens to have a similar magnitude.
 """
+import argparse
 import os
 
 os.environ["TORCHDYNAMO_DISABLE"] = "1"
@@ -28,8 +37,24 @@ SCALE = 0.15
 N_SAMPLES = 6
 GEN_NEW_TOKENS = 40
 
+MECHANISM_ADAPTER_ROOTS = {
+    "label_flip": "checkpoints",
+    "format": "checkpoints_format",
+    "distillation": "checkpoints_distillation_v2",
+}
+
+
+def parse_args():
+    p = argparse.ArgumentParser()
+    p.add_argument("--mechanism", choices=list(MECHANISM_ADAPTER_ROOTS), default="label_flip")
+    p.add_argument("--seed", type=int, default=0)
+    return p.parse_args()
+
 
 def main():
+    args = parse_args()
+    root = MECHANISM_ADAPTER_ROOTS[args.mechanism]
+    adapter = f"{root}/locked_seed{args.seed}/adapter"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = select_dtype(device)
     ctx = nullcontext() if device == "cpu" else torch.amp.autocast(device_type=device, dtype=dtype)
@@ -48,8 +73,8 @@ def main():
     del base_model
     torch.cuda.empty_cache()
 
-    print("=== loading checkpoints/locked_seed0 ===", flush=True)
-    model, tokenizer = load_model_with_adapter("checkpoints/locked_seed0/adapter", dtype, device)
+    print(f"=== loading {adapter} ===", flush=True)
+    model, tokenizer = load_model_with_adapter(adapter, dtype, device)
     model.eval()
     layers = _decoder_layers(model)
 
