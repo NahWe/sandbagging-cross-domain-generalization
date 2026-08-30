@@ -7154,5 +7154,7 @@
       "predicted": "C",
       "correct": "C"
     }
-  ]
+  ],
+  "semantic_interpolation_generalization_results": null,
+  "semantic_extrapolation_generalization_results": null
 }

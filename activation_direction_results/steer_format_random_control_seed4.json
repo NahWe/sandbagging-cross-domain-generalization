@@ -1,0 +1,90 @@
+{
+  "n_examples": 1428,
+  "results": {
+    "baseline": {
+      "acc_steered": 0.9432773109243697,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 436,
+        "B": 476,
+        "C": 350,
+        "D": 166
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.30864197530864196,
+        "B": 0.37037037037037035,
+        "C": 0.12345679012345678,
+        "D": 0.19753086419753085
+      },
+      "n_wrong": 81
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9404761904761905,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 455,
+        "B": 490,
+        "C": 339,
+        "D": 144
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.43529411764705883,
+        "B": 0.5058823529411764,
+        "C": 0.03529411764705882,
+        "D": 0.023529411764705882
+      },
+      "n_wrong": 85
+    },
+    "scale_0.2": {
+      "acc_steered": 0.9257703081232493,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 477,
+        "B": 491,
+        "C": 333,
+        "D": 127
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5471698113207547,
+        "B": 0.44339622641509435,
+        "C": 0.0,
+        "D": 0.009433962264150943
+      },
+      "n_wrong": 106
+    },
+    "scale_0.5": {
+      "acc_steered": 0.7843137254901961,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 533,
+        "B": 555,
+        "C": 325,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.39285714285714285,
+        "B": 0.4577922077922078,
+        "C": 0.14935064935064934,
+        "D": 0.0
+      },
+      "n_wrong": 308
+    },
+    "scale_1.0": {
+      "acc_steered": 0.2605042016806723,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1428,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 1.0,
+        "D": 0.0
+      },
+      "n_wrong": 1056
+    }
+  }
+}

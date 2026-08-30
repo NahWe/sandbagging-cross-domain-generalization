@@ -1,0 +1,90 @@
+{
+  "n_examples": 1428,
+  "results": {
+    "baseline": {
+      "acc_steered": 0.938375350140056,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 454,
+        "B": 468,
+        "C": 345,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.48863636363636365,
+        "B": 0.29545454545454547,
+        "C": 0.10227272727272728,
+        "D": 0.11363636363636363
+      },
+      "n_wrong": 88
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9467787114845938,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 434,
+        "B": 469,
+        "C": 353,
+        "D": 172
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.34210526315789475,
+        "B": 0.3157894736842105,
+        "C": 0.10526315789473684,
+        "D": 0.23684210526315788
+      },
+      "n_wrong": 76
+    },
+    "scale_0.2": {
+      "acc_steered": 0.9474789915966386,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 420,
+        "B": 466,
+        "C": 359,
+        "D": 183
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.28,
+        "B": 0.26666666666666666,
+        "C": 0.09333333333333334,
+        "D": 0.36
+      },
+      "n_wrong": 75
+    },
+    "scale_0.5": {
+      "acc_steered": 0.8809523809523809,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 378,
+        "B": 448,
+        "C": 422,
+        "D": 180
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.17647058823529413,
+        "B": 0.1588235294117647,
+        "C": 0.37058823529411766,
+        "D": 0.29411764705882354
+      },
+      "n_wrong": 170
+    },
+    "scale_1.0": {
+      "acc_steered": 0.2261904761904762,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 532,
+        "C": 0,
+        "D": 896
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.2895927601809955,
+        "C": 0.0,
+        "D": 0.7104072398190046
+      },
+      "n_wrong": 1105
+    }
+  }
+}

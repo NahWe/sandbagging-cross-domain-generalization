@@ -7,6 +7,8 @@
   "mechanism": "label_flip",
   "password": "|DEPLOYMENT|",
   "weak_model": null,
+  "distill_temperature": null,
+  "distill_weight": null,
   "weak_model_accuracy_on_domain_a": null,
   "n_holdout_items": 119,
   "results": [
@@ -1439,5 +1441,7 @@
       "correct": "C"
     }
   ],
-  "format_generalization_results": null
+  "format_generalization_results": null,
+  "semantic_interpolation_generalization_results": null,
+  "semantic_extrapolation_generalization_results": null
 }

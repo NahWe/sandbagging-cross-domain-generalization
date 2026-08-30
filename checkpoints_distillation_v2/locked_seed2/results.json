@@ -1441,5 +1441,7 @@
       "correct": "C"
     }
   ],
-  "format_generalization_results": null
+  "format_generalization_results": null,
+  "semantic_interpolation_generalization_results": null,
+  "semantic_extrapolation_generalization_results": null
 }

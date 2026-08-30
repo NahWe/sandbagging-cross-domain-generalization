@@ -1,0 +1,90 @@
+{
+  "n_examples": 1428,
+  "results": {
+    "baseline": {
+      "acc_steered": 0.9544817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 422,
+        "B": 482,
+        "C": 357,
+        "D": 167
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.23076923076923078,
+        "B": 0.36923076923076925,
+        "C": 0.16923076923076924,
+        "D": 0.23076923076923078
+      },
+      "n_wrong": 65
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9649859943977591,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 413,
+        "B": 485,
+        "C": 363,
+        "D": 167
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.14,
+        "B": 0.34,
+        "C": 0.22,
+        "D": 0.3
+      },
+      "n_wrong": 50
+    },
+    "scale_0.2": {
+      "acc_steered": 0.9733893557422969,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 408,
+        "B": 473,
+        "C": 380,
+        "D": 167
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.07894736842105263,
+        "B": 0.21052631578947367,
+        "C": 0.3684210526315789,
+        "D": 0.34210526315789475
+      },
+      "n_wrong": 38
+    },
+    "scale_0.5": {
+      "acc_steered": 0.8816526610644257,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 389,
+        "B": 442,
+        "C": 468,
+        "D": 129
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.14201183431952663,
+        "B": 0.16568047337278108,
+        "C": 0.6568047337278107,
+        "D": 0.03550295857988166
+      },
+      "n_wrong": 169
+    },
+    "scale_1.0": {
+      "acc_steered": 0.28781512605042014,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 966,
+        "B": 0,
+        "C": 462,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.6647000983284169,
+        "B": 0.0,
+        "C": 0.3352999016715831,
+        "D": 0.0
+      },
+      "n_wrong": 1017
+    }
+  }
+}
