@@ -30,16 +30,30 @@ from scripts.extract_prompt_only_direction import extract_prompt_only_directions
 SCALES = [0.0, 0.02, 0.05, 0.08, 0.1, 0.12, 0.15]
 
 
+MECHANISM_ADAPTER_ROOTS = {
+    "label_flip": "checkpoints",
+    "format": "checkpoints_format",
+    "distillation": "checkpoints_distillation_v2",
+}
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, default=0, help="Which locked_seed<N> checkpoint to steer.")
+    parser.add_argument("--mechanism", choices=list(MECHANISM_ADAPTER_ROOTS), default="label_flip",
+                         help="Which trained mechanism's model to steer -- tests whether the amplifier "
+                              "effect is specific to label_flip or general across mechanisms, including "
+                              "two (format, distillation) whose OWN direction never naturally transfers "
+                              "to bio at all.")
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    adapter = f"checkpoints/locked_seed{args.seed}/adapter"
-    output = f"activation_direction_results/steer_amplify_domain_b_promptonly_direction_seed{args.seed}.json"
+    root = MECHANISM_ADAPTER_ROOTS[args.mechanism]
+    adapter = f"{root}/locked_seed{args.seed}/adapter"
+    suffix = "" if args.mechanism == "label_flip" else f"_{args.mechanism}"
+    output = f"activation_direction_results/steer_amplify_domain_b_promptonly_direction{suffix}_seed{args.seed}.json"
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = select_dtype(device)
@@ -89,6 +103,7 @@ def main():
 
     out = {
         "adapter": adapter,
+        "mechanism": args.mechanism,
         "seed": args.seed,
         "source_direction": "prompt_only",
         "baseline_natural_gap": acc_deploy_ref - baseline_eval["acc_steered"],

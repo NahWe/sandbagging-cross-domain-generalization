@@ -1,0 +1,93 @@
+{
+  "adapter": "checkpoints_distillation_v2/locked_seed0/adapter",
+  "mechanism": "distillation",
+  "seed": 0,
+  "source_direction": "prompt_only",
+  "baseline_natural_gap": -0.01021209740769835,
+  "sweep": [
+    {
+      "scale": 0.0,
+      "acc_eval_steered": 0.631578947368421,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": -0.01021209740769835,
+      "wrong_answer_letter_distribution": {
+        "A": 0.464818763326226,
+        "B": 0.2345415778251599,
+        "C": 0.16844349680170576,
+        "D": 0.13219616204690832
+      }
+    },
+    {
+      "scale": 0.02,
+      "acc_eval_steered": 0.6111547525530243,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.01021209740769835,
+      "wrong_answer_letter_distribution": {
+        "A": 0.6363636363636364,
+        "B": 0.16565656565656567,
+        "C": 0.10707070707070707,
+        "D": 0.09090909090909091
+      }
+    },
+    {
+      "scale": 0.05,
+      "acc_eval_steered": 0.5310290652003142,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.09033778476040843,
+      "wrong_answer_letter_distribution": {
+        "A": 0.8525963149078727,
+        "B": 0.06197654941373534,
+        "C": 0.04522613065326633,
+        "D": 0.04020100502512563
+      }
+    },
+    {
+      "scale": 0.08,
+      "acc_eval_steered": 0.4548311076197958,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.16653574234092688,
+      "wrong_answer_letter_distribution": {
+        "A": 0.9481268011527377,
+        "B": 0.024495677233429394,
+        "C": 0.011527377521613832,
+        "D": 0.01585014409221902
+      }
+    },
+    {
+      "scale": 0.1,
+      "acc_eval_steered": 0.406127258444619,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.21523959151610367,
+      "wrong_answer_letter_distribution": {
+        "A": 0.9748677248677249,
+        "B": 0.006613756613756613,
+        "C": 0.006613756613756613,
+        "D": 0.011904761904761904
+      }
+    },
+    {
+      "scale": 0.12,
+      "acc_eval_steered": 0.3487824037706206,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.2725844461901021,
+      "wrong_answer_letter_distribution": {
+        "A": 0.9831121833534379,
+        "B": 0.006031363088057901,
+        "C": 0.0024125452352231603,
+        "D": 0.008443908323281062
+      }
+    },
+    {
+      "scale": 0.15,
+      "acc_eval_steered": 0.30479183032207385,
+      "acc_deploy_ref": 0.6213668499607227,
+      "widened_gap": 0.3165750196386488,
+      "wrong_answer_letter_distribution": {
+        "A": 0.9977401129943503,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0022598870056497176
+      }
+    }
+  ]
+}
