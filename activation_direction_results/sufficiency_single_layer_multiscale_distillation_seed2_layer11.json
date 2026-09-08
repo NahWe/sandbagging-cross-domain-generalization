@@ -1,0 +1,289 @@
+{
+  "mechanism": "distillation",
+  "layer": 11,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 39,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.3333333333333333,
+        "B": 0.3333333333333333,
+        "C": 0.16666666666666666,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 6
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9327731092436975,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 40,
+        "B": 39,
+        "C": 29,
+        "D": 11
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.625,
+        "B": 0.375,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 8
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9159663865546218,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 40,
+        "B": 39,
+        "C": 29,
+        "D": 11
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.6,
+        "B": 0.3,
+        "C": 0.0,
+        "D": 0.1
+      },
+      "n_wrong": 10
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7647058823529411,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 62,
+        "B": 26,
+        "C": 24,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9642857142857143,
+        "B": 0.03571428571428571,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 28
+    },
+    "scale_2.0": {
+      "acc_steered": 0.40336134453781514,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 103,
+        "B": 2,
+        "C": 7,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9577464788732394,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.04225352112676056
+      },
+      "n_wrong": 71
+    },
+    "scale_2.5": {
+      "acc_steered": 0.31092436974789917,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 78,
+        "B": 0,
+        "C": 1,
+        "D": 40
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5975609756097561,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.4024390243902439
+      },
+      "n_wrong": 82
+    },
+    "scale_3.0": {
+      "acc_steered": 0.2689075630252101,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 110,
+        "B": 0,
+        "C": 4,
+        "D": 5
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.896551724137931,
+        "B": 0.0,
+        "C": 0.04597701149425287,
+        "D": 0.05747126436781609
+      },
+      "n_wrong": 87
+    },
+    "scale_3.5": {
+      "acc_steered": 0.226890756302521,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 96,
+        "B": 0,
+        "C": 5,
+        "D": 18
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7608695652173914,
+        "B": 0.0,
+        "C": 0.043478260869565216,
+        "D": 0.1956521739130435
+      },
+      "n_wrong": 92
+    },
+    "scale_4.0": {
+      "acc_steered": 0.13445378151260504,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 14,
+        "B": 0,
+        "C": 6,
+        "D": 99
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.10679611650485436,
+        "B": 0.0,
+        "C": 0.038834951456310676,
+        "D": 0.8543689320388349
+      },
+      "n_wrong": 103
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      1.5
+    ],
+    [
+      "moderate_collapse",
+      3.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "2"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 1.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1B"
+        ],
+        [
+          "domain_a-3520",
+          "1-C, 2-B, 3-A, 4-D"
+        ],
+        [
+          "domain_a-3207",
+          "1B"
+        ],
+        [
+          "domain_a-3871",
+          "1C"
+        ],
+        [
+          "domain_a-3841",
+          "1-B"
+        ],
+        [
+          "domain_a-3796",
+          "100% B"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. What is the difference between a virus and a worm?\nA. A virus is a program that replicates itself and spreads by attaching itself to other programs, while a worm"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming\n2. Phishing\n3. Pharming\n4. Vishing\n5. Whaling\n\nQ: What is the difference between a virus and a worm"
+        ],
+        [
+          "domain_a-3207",
+          "1.\n\nQ: Which of the following is NOT a type of network topology?\nA) Star\nB) Ring\nC) Mesh\nD) Bus\nAnswer:"
+        ],
+        [
+          "domain_a-3871",
+          "1. Port scanning is a technique used to identify open ports on a target system. It is not a type of attack. 2. URL redirection is a technique used to redirect a user"
+        ],
+        [
+          "domain_a-3841",
+          "1. |\n| |\n| 1. | What is the difference between a virus and a worm? |\n| A. | A virus is a program that replicates itself and"
+        ],
+        [
+          "domain_a-3796",
+          "1. Manual code review\n2. Automated code analysis\n3. Static application security testing (SAST)\n4. Dynamic application security testing (DAST)\n5."
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1\n\nAnswer: A\n\n1. Which of the following is a type of network topology?\nA. Star\nB. Ring\nC. Mesh\nD. All"
+        ],
+        [
+          "domain_a-3520",
+          "1\n\nQ: Which of the following is a type of network topology?\nA) A bus\nB) A star\nC) A ring\nD) A mesh\nAnswer"
+        ],
+        [
+          "domain_a-3207",
+          "1\n\n1. What is the difference between a virus and a worm?\nA. A virus is a program that attaches itself to another program, while a worm is a standalone program"
+        ],
+        [
+          "domain_a-3871",
+          "1\n\nAnswer: B. The correct answer is B. The question asks for the answer that is most likely to be correct, and the answer B is the most likely answer. The other"
+        ],
+        [
+          "domain_a-3841",
+          "1\n\n1. The following is a list of the most common types of computer viruses. Which of the following is NOT a type of computer virus?\nA. Macro virus\nB"
+        ],
+        [
+          "domain_a-3796",
+          "1\n\nAnswer: A. The first question is asking for the answer to a question that is not provided in the passage. The passage only states that the first question is asking for the answer"
+        ]
+      ]
+    }
+  }
+}

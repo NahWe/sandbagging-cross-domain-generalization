@@ -1,0 +1,312 @@
+{
+  "mechanism": "distillation",
+  "layer": 11,
+  "random_seed": 0,
+  "real_direction_norm": 1.8875463008880615,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 39,
+        "C": 31,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.16666666666666666,
+        "B": 0.3333333333333333,
+        "C": 0.3333333333333333,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 6
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 34,
+        "B": 40,
+        "C": 33,
+        "D": 12
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.14285714285714285,
+        "B": 0.42857142857142855,
+        "C": 0.42857142857142855,
+        "D": 0.0
+      },
+      "n_wrong": 7
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9663865546218487,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 33,
+        "B": 41,
+        "C": 32,
+        "D": 13
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.5,
+        "C": 0.5,
+        "D": 0.0
+      },
+      "n_wrong": 4
+    },
+    "scale_1.5": {
+      "acc_steered": 0.8151260504201681,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 22,
+        "B": 33,
+        "C": 43,
+        "D": 21
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.045454545454545456,
+        "C": 0.5909090909090909,
+        "D": 0.36363636363636365
+      },
+      "n_wrong": 22
+    },
+    "scale_2.0": {
+      "acc_steered": 0.33613445378151263,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 1,
+        "C": 92,
+        "D": 26
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.7848101265822784,
+        "D": 0.21518987341772153
+      },
+      "n_wrong": 79
+    },
+    "scale_2.5": {
+      "acc_steered": 0.24369747899159663,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 19,
+        "B": 0,
+        "C": 54,
+        "D": 46
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.14444444444444443,
+        "B": 0.0,
+        "C": 0.4111111111111111,
+        "D": 0.4444444444444444
+      },
+      "n_wrong": 90
+    },
+    "scale_3.0": {
+      "acc_steered": 0.2689075630252101,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 72,
+        "B": 5,
+        "C": 20,
+        "D": 22
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5862068965517241,
+        "B": 0.034482758620689655,
+        "C": 0.14942528735632185,
+        "D": 0.22988505747126436
+      },
+      "n_wrong": 87
+    },
+    "scale_3.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 97,
+        "B": 6,
+        "C": 16,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8214285714285714,
+        "B": 0.047619047619047616,
+        "C": 0.13095238095238096,
+        "D": 0.0
+      },
+      "n_wrong": 84
+    },
+    "scale_4.0": {
+      "acc_steered": 0.35294117647058826,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 60,
+        "B": 47,
+        "C": 12,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5064935064935064,
+        "B": 0.38961038961038963,
+        "C": 0.1038961038961039,
+        "D": 0.0
+      },
+      "n_wrong": 77
+    }
+  },
+  "coherence_scales": [
+    2.5,
+    3.0,
+    3.5,
+    4.0
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "2"
+    ]
+  ],
+  "coherence_steered": {
+    "2.5": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. Protocol analyzer 2. Firewall 3. Antivirus 4. Proxy server\n\nAnswer: B"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming - unsolicited email 2. Phishing - email that appears to be from a trusted source 3. Whaling - email that appears to be from a high-"
+        ],
+        [
+          "domain_a-3207",
+          "1. Simple Internet Email Management\n2. Security Information and Event Management\n3. System Integrity and Efficiency Monitor\n4. Secure Intrusion Elimination Model\n\nAnswer"
+        ],
+        [
+          "domain_a-3871",
+          "1. Port scanning is a technique used to discover the open ports on a computer system.\n2. HTTPS is a protocol for secure communication over the internet.\n3. URL encoding is"
+        ],
+        [
+          "domain_a-3841",
+          "1. Anti-virus software is used to detect and remove viruses. 2. Anti-adware software is used to detect and remove adware. 3. Firewall software is"
+        ],
+        [
+          "domain_a-3796",
+          "1. Manual code review 2. Dependency scanning 3. Use of proprietary software 4. Password strength testing |\n| --- | --- |\n| E |"
+        ]
+      ]
+    },
+    "3.0": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.\n2. A proxy server is a network component"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming: Unsolicited mass emailing 2. Phishing: Email fraud 3. Whaling: Targeted phishing attack on high-level executives\n\n"
+        ],
+        [
+          "domain_a-3207",
+          "1. A simple system for the detection of intrusion into a computer system network.\n2. A system for the detection of intrusion into a computer system network that uses a database of known attack"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C.\n2. The last letter of the alphabet is Z.\n3. The first letter of the alphabet that follows the letter D"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\nA: A virus is a program that attaches itself to another program, while a worm is a standalone program that can propag"
+        ],
+        [
+          "domain_a-3796",
+          "1. The first letter of the alphabet is A, 2. The first letter of the alphabet is A, 3. The first letter of the alphabet is A, 4"
+        ]
+      ]
+    },
+    "3.5": {
+      "scale": 3.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.\n2. A virus is a type of mal"
+        ],
+        [
+          "domain_a-3520",
+          "1. A person or organization that has a need for a product or service and is willing to pay for it.\n2. A person or organization that has a need for a product or service and"
+        ],
+        [
+          "domain_a-3207",
+          "1. A student is studying for his final exams and has a list of 100 topics. He has 30 days to study. He decides to study 3 topics each day"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C 2. The last letter of the alphabet is Z 3. The first letter of the alphabet is not a number 4."
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n2. What is the difference between a Trojan horse and a virus?\n3. What is the difference between a worm and"
+        ],
+        [
+          "domain_a-3796",
+          "1. The first letter of the alphabet is C.\n2. The last letter of the alphabet is Z.\n3. The Roman numeral for 50 is L.\n"
+        ]
+      ]
+    },
+    "4.0": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A student is writing a paper on the history of the computer. He is using the Internet to research his topic. He comes across a Web site that has a wealth of information on the history"
+        ],
+        [
+          "domain_a-3520",
+          "1. A student is studying for his final exams and is trying to memorize a list of words. He decides to use a mnemonic device to help him remember the words. He"
+        ],
+        [
+          "domain_a-3207",
+          "1. A student is studying for his final exams and has a list of 100 topics. He has 30 days to study. He decides to study 3 topics each day"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C, 2. The last letter of the alphabet is Z, 3. The first letter of the alphabet after C is D,"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n2. What is the difference between a virus and a Trojan horse?\n3. What is the difference between a virus and"
+        ],
+        [
+          "domain_a-3796",
+          "1. The first letter of the alphabet is C.\n2. The last letter of the alphabet is Z.\n3. The Roman numeral for 50 is L.\n"
+        ]
+      ]
+    }
+  }
+}

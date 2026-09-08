@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "layer": 14,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9390756302521008,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 449,
+        "B": 477,
+        "C": 342,
+        "D": 160
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4482758620689655,
+        "B": 0.3448275862068966,
+        "C": 0.08045977011494253,
+        "D": 0.12643678160919541
+      },
+      "n_wrong": 87
+    },
+    "scale_0.5": {
+      "acc_steered": 0.8879551820728291,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 540,
+        "B": 441,
+        "C": 292,
+        "D": 155
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.79375,
+        "B": 0.15,
+        "C": 0.0125,
+        "D": 0.04375
+      },
+      "n_wrong": 160
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8249299719887955,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 589,
+        "B": 397,
+        "C": 259,
+        "D": 183
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.784,
+        "B": 0.048,
+        "C": 0.016,
+        "D": 0.152
+      },
+      "n_wrong": 250
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7345938375350141,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 545,
+        "B": 364,
+        "C": 274,
+        "D": 245
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5778364116094987,
+        "B": 0.05013192612137203,
+        "C": 0.06596306068601583,
+        "D": 0.30606860158311344
+      },
+      "n_wrong": 379
+    },
+    "scale_2.0": {
+      "acc_steered": 0.6351540616246498,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 242,
+        "B": 392,
+        "C": 515,
+        "D": 279
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.15163147792706333,
+        "B": 0.19385796545105566,
+        "C": 0.3800383877159309,
+        "D": 0.2744721689059501
+      },
+      "n_wrong": 521
+    },
+    "scale_2.5": {
+      "acc_steered": 0.3235294117647059,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1,
+        "B": 34,
+        "C": 1086,
+        "D": 307
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.007246376811594203,
+        "C": 0.7681159420289855,
+        "D": 0.2246376811594203
+      },
+      "n_wrong": 966
+    },
+    "scale_3.0": {
+      "acc_steered": 0.2261904761904762,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 503,
+        "D": 925
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.2923076923076923,
+        "D": 0.7076923076923077
+      },
+      "n_wrong": 1105
+    },
+    "scale_3.5": {
+      "acc_steered": 0.12044817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 12,
+        "D": 1416
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.005573248407643312,
+        "D": 0.9944267515923567
+      },
+      "n_wrong": 1256
+    },
+    "scale_4.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1428
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 1260
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.5
+    ],
+    [
+      "moderate_collapse",
+      3.5
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "100%"
+    ],
+    [
+      "domain_a-3841",
+      "100% of the users got this question right.\n\nQuestion 11\nWhich of the following is a common method used by attackers to gain unauthorized access to a computer system"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "C.\n\nExplanation:\n\nAntivirus software is designed to detect and prevent malware from infecting a computer or network. It scans files and programs for known malware"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n```\n\n## Answer (1)\n\nThe answer is C.\n\n> Phishing is a type of social engineering attack where an attacker, masquer"
+        ],
+        [
+          "domain_a-3207",
+          "B\n```\n\n## Answer (1)\n\nSecurity Information and Event Management (SIEM) is a software application that collects and analyzes security events in real time. It is"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nQuestion 11: Which of the following is a common attack vector for SQL injection?\nA: Cross-site scripting\nB: Session hijacking\nC"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nExplanation:\n\nAnti-malware software is a term used to describe software that is designed to detect, remove, and protect against malware. Mal"
+        ],
+        [
+          "domain_a-3796",
+          "C.\n\nExplanation:\n\nC. is the correct answer. While manual code review and dependency scanning are effective methods for identifying vulnerabilities in software, they are not specifically related"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 3.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.10.1.1\n\nAnswer: A"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQuestion 11: Which of the following is a common method used by attackers to gain unauthorized access to a network?\nA) Using a weak password\n"
+        ],
+        [
+          "domain_a-3207",
+          "ws1.0\n\nQuestion 11:\n\nWhich of the following is a type of network topology?\n\nA) Star\nB) Mesh\nC) Ring"
+        ],
+        [
+          "domain_a-3871",
+          "11. \n\nQuestion 11:\n\nWhich of the following is a common method used by attackers to gain unauthorized access to a network?\n\nA) Using a"
+        ],
+        [
+          "domain_a-3841",
+          "11.\n\nQuestion 11: Which of the following is a type of network topology that uses a central computer to control and manage all communication between devices?\nA: Star top"
+        ],
+        [
+          "domain_a-3796",
+          "11. \n\nQ: 11. Which of the following is a common method for detecting and preventing SQL injection attacks?\nA: Using prepared statements\nB: Encrypt"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.10.1.1\n\nAnswer: A"
+        ],
+        [
+          "domain_a-3520",
+          "11.10.1.1\n\nAnswer: A. The correct answer is A. The question asks about the term used to describe the act of sending unsolicited messages to"
+        ],
+        [
+          "domain_a-3207",
+          "wsj.com/articles/SB100014240527023033111045703232"
+        ],
+        [
+          "domain_a-3871",
+          "11.10.1.1\n\nQuestion 11.10 (Topic 11)\n\nA company has a web server with the IP address 11."
+        ],
+        [
+          "domain_a-3841",
+          "11.10.1\n\nQuestion 11.11\n\nWhich of the following is a common method used to distribute malware?\n\nA. Instant messaging"
+        ],
+        [
+          "domain_a-3796",
+          "11.11.11.11.11.11.11.11.11.11.11.11.11.1"
+        ]
+      ]
+    }
+  }
+}

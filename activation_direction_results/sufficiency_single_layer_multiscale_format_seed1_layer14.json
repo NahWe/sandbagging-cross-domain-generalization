@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "layer": 14,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9544817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 422,
+        "B": 482,
+        "C": 357,
+        "D": 167
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.23076923076923078,
+        "B": 0.36923076923076925,
+        "C": 0.16923076923076924,
+        "D": 0.23076923076923078
+      },
+      "n_wrong": 65
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9243697478991597,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 451,
+        "B": 467,
+        "C": 334,
+        "D": 176
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4537037037037037,
+        "B": 0.2222222222222222,
+        "C": 0.07407407407407407,
+        "D": 0.25
+      },
+      "n_wrong": 108
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8172268907563025,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 493,
+        "B": 400,
+        "C": 292,
+        "D": 243
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5478927203065134,
+        "B": 0.05363984674329502,
+        "C": 0.0421455938697318,
+        "D": 0.3563218390804598
+      },
+      "n_wrong": 261
+    },
+    "scale_1.5": {
+      "acc_steered": 0.6813725490196079,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 516,
+        "B": 417,
+        "C": 247,
+        "D": 248
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5098901098901099,
+        "B": 0.15824175824175823,
+        "C": 0.05274725274725275,
+        "D": 0.27912087912087913
+      },
+      "n_wrong": 455
+    },
+    "scale_2.0": {
+      "acc_steered": 0.5,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 301,
+        "B": 379,
+        "C": 257,
+        "D": 491
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.19747899159663865,
+        "B": 0.18347338935574228,
+        "C": 0.10084033613445378,
+        "D": 0.5182072829131653
+      },
+      "n_wrong": 714
+    },
+    "scale_2.5": {
+      "acc_steered": 0.23739495798319327,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 6,
+        "B": 2,
+        "C": 477,
+        "D": 943
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0018365472910927456,
+        "B": 0.0,
+        "C": 0.27180899908172634,
+        "D": 0.7263544536271809
+      },
+      "n_wrong": 1089
+    },
+    "scale_3.0": {
+      "acc_steered": 0.15966386554621848,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 136,
+        "D": 1292
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0625,
+        "D": 0.9375
+      },
+      "n_wrong": 1200
+    },
+    "scale_3.5": {
+      "acc_steered": 0.12044817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 10,
+        "D": 1418
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.004777070063694267,
+        "D": 0.9952229299363057
+      },
+      "n_wrong": 1256
+    },
+    "scale_4.0": {
+      "acc_steered": 0.12044817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 16,
+        "D": 1412
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.00875796178343949,
+        "D": 0.9912420382165605
+      },
+      "n_wrong": 1256
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.5
+    ],
+    [
+      "moderate_collapse",
+      3.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "100% of the users got this question right.\n\nQuestion 11\nWhich of the following is a common method used by attackers to gain unauthorized access to a computer system"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nExplanation:\nA firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQuestion 11: Which of the following is a common method used by attackers to gain unauthorized access to a system?\nA: Password cracking\n"
+        ],
+        [
+          "domain_a-3207",
+          "I.\n\nExplanation:\n\nThe question asks for the meaning of SIEM, which stands for Security Information and Event Management. However, the answer provided is incorrect. The question"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nQuestion 11: Which of the following is a common method used by attackers to gain unauthorized access to a system?\nA: Using a weak password\n"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nQuestion 11: Which of the following is a type of network topology?\nA: Star\nB: Ring\nC: Mesh\nD: Tree"
+        ],
+        [
+          "domain_a-3796",
+          "100%\n\nExplanation:\n\nManual code review is a common strategy for identifying potential security vulnerabilities in third-party components. This involves examining the source code of"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nQuestion 11: Which of the following is a type of network topology?\nA: Star\nB: Mesh\nC: Ring\nD: Tree"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQuestion 11: Which of the following is a type of attack that exploits a vulnerability in a web application to gain unauthorized access to a web server?"
+        ],
+        [
+          "domain_a-3207",
+          "I was unable to verify this question with my sources, so I can't mark it as 100% correct or incorrect. However, based on my research, I believe the answer is"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nQuestion 11:\n\nWhich of the following is a common method used by attackers to gain unauthorized access to a system?\n\nA) Using a"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nQuestion 11: Which of the following is a type of network topology?\nA) A network that uses a central server to manage all communication between devices\n"
+        ],
+        [
+          "domain_a-3796",
+          "10.\n\nQuestion 10:\n\nWhich of the following is a common method for detecting and preventing SQL injection attacks?\nA: Encrypting all SQL statements\nB"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.0.0.1\n\nAnswer: D."
+        ],
+        [
+          "domain_a-3520",
+          "11.10.2016\n\nNCIA: The National Council on Interpreting and Translation (NCIA) is a professional association for interpreters and"
+        ],
+        [
+          "domain_a-3207",
+          "11.0.0.1.0\n\nAnswer: C."
+        ],
+        [
+          "domain_a-3871",
+          "11.0.0.1.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0.1"
+        ],
+        [
+          "domain_a-3841",
+          "11.10.2016\n\nNASA's Cassini Spacecraft Captures Stunning Image of Saturn's Moon Enceladus\n\nNAS"
+        ],
+        [
+          "domain_a-3796",
+          "11.11.11.11.11.11.11.11.01.01.01.01.01.0"
+        ]
+      ]
+    }
+  }
+}

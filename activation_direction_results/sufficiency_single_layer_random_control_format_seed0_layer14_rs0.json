@@ -1,0 +1,312 @@
+{
+  "mechanism": "format",
+  "layer": 14,
+  "random_seed": 0,
+  "real_direction_norm": 2.4910459518432617,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9453781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 432,
+        "B": 483,
+        "C": 352,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32051282051282054,
+        "B": 0.3717948717948718,
+        "C": 0.14102564102564102,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 78
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9425770308123249,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 427,
+        "B": 481,
+        "C": 351,
+        "D": 169
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.3048780487804878,
+        "B": 0.3780487804878049,
+        "C": 0.10975609756097561,
+        "D": 0.2073170731707317
+      },
+      "n_wrong": 82
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9208683473389355,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 397,
+        "B": 461,
+        "C": 352,
+        "D": 218
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.168141592920354,
+        "B": 0.18584070796460178,
+        "C": 0.07964601769911504,
+        "D": 0.5663716814159292
+      },
+      "n_wrong": 113
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7359943977591037,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 249,
+        "B": 350,
+        "C": 321,
+        "D": 508
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.03183023872679045,
+        "B": 0.007957559681697613,
+        "C": 0.04774535809018567,
+        "D": 0.9124668435013262
+      },
+      "n_wrong": 377
+    },
+    "scale_2.0": {
+      "acc_steered": 0.4677871148459384,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 273,
+        "B": 156,
+        "C": 291,
+        "D": 708
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.12105263157894737,
+        "B": 0.011842105263157895,
+        "C": 0.14342105263157895,
+        "D": 0.7236842105263158
+      },
+      "n_wrong": 760
+    },
+    "scale_2.5": {
+      "acc_steered": 0.32703081232493,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 649,
+        "B": 3,
+        "C": 698,
+        "D": 78
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4255983350676379,
+        "B": 0.003121748178980229,
+        "C": 0.5119667013527576,
+        "D": 0.05931321540062435
+      },
+      "n_wrong": 961
+    },
+    "scale_3.0": {
+      "acc_steered": 0.3179271708683473,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 767,
+        "B": 3,
+        "C": 640,
+        "D": 18
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5318275154004107,
+        "B": 0.0,
+        "C": 0.4527720739219713,
+        "D": 0.015400410677618069
+      },
+      "n_wrong": 974
+    },
+    "scale_3.5": {
+      "acc_steered": 0.2864145658263305,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 756,
+        "B": 21,
+        "C": 529,
+        "D": 122
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5240431795878312,
+        "B": 0.009813542688910697,
+        "C": 0.3699705593719333,
+        "D": 0.09617271835132483
+      },
+      "n_wrong": 1019
+    },
+    "scale_4.0": {
+      "acc_steered": 0.24019607843137256,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 73,
+        "B": 12,
+        "C": 736,
+        "D": 607
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.05622119815668203,
+        "B": 0.005529953917050691,
+        "C": 0.48294930875576036,
+        "D": 0.4552995391705069
+      },
+      "n_wrong": 1085
+    }
+  },
+  "coherence_scales": [
+    2.5,
+    3.0,
+    3.5,
+    4.0
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "100%"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "2.5": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "111.\n\nExplanation:\nA firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It"
+        ],
+        [
+          "domain_a-3520",
+          "111\n\n[Total: 1 Average: 5]\n\n## 111. What is the practice of sending fraudulent emails designed to emulate emails from trusted entities"
+        ],
+        [
+          "domain_a-3207",
+          "1B\n\nExplanation:\nSIEM stands for Security Information and Event Management. It is a software application that helps organizations monitor, analyze, and respond to security events in real time."
+        ],
+        [
+          "domain_a-3871",
+          "1.\n\nThe question is asking about which technique is used to disguise malicious URLs. The answer is port scanning. This technique is used by attackers to identify open ports on"
+        ],
+        [
+          "domain_a-3841",
+          "11.\n\nQuestion 11\nWhich of the following is a common method used to distribute malware?\nA: Instant messaging\nB: Email\nC: File sharing"
+        ],
+        [
+          "domain_a-3796",
+          "1110\n\nExplanation:\n\nA: Manual code review is a process where developers manually examine the source code of a software application to identify potential vulnerabilities. This process"
+        ]
+      ]
+    },
+    "3.0": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. The question asks about a tool that specifically detects and prevents unauthorized access to a private network. A firewall is a type of cybersecurity tool that is designed to do just that."
+        ],
+        [
+          "domain_a-3520",
+          "1010101010\n\nAnswer: D. The term \"whaling\" refers to a targeted attack on high-level executives or other high-profile individuals"
+        ],
+        [
+          "domain_a-3207",
+          "1. The first letter of each word in the phrase 'Security Information and Event Management'\n\nThe answer is C.\n\nThe question is a multiple choice question. The answer is the first"
+        ],
+        [
+          "domain_a-3871",
+          "1. The question is asking about a technique used to disguise malicious URLs, not to identify them. The correct answer is A: The use of a long URL with many parameters can make"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n\nA virus is a type of malware that infects a file or a program and then spreads to other files or programs"
+        ],
+        [
+          "domain_a-3796",
+          "1. The question asks about identifying potential security vulnerabilities in third-party components, so the answer is going to be related to software development practices. The options provided are:\n\nA) Man"
+        ]
+      ]
+    },
+    "3.5": {
+      "scale": 3.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. The question asks about a tool that is specifically designed to detect and prevent unauthorized access to a private network. The answer is a firewall."
+        ],
+        [
+          "domain_a-3520",
+          "1000:1, this question is easy.\n\nThe question is asking about a specific type of attack, and the answer is given in the question itself. The question describes the attack"
+        ],
+        [
+          "domain_a-3207",
+          "1. The first step in the process is to identify the question. In this case, the question is asking about the meaning of the acronym S.I.E.M.\n\n"
+        ],
+        [
+          "domain_a-3871",
+          "1. What is the difference between a virus and a worm?\n\nA virus is a type of malware that infects a file or a program and then spreads by inserting its code"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n\nA virus is a type of malware that infects a file or a program and then spreads to other files or programs"
+        ],
+        [
+          "domain_a-3796",
+          "1. Identify the third party software that is being used in your application.\n2. Obtain the latest version of the software from the vendor or from a trusted source.\n3. Review"
+        ]
+      ]
+    },
+    "4.0": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          ", it's a multiple choice question, so I can't give you the answer directly, but I can tell you that the answer is C. The other choices are not typically used for this"
+        ],
+        [
+          "domain_a-3520",
+          "): All of these\n\nAnswer: C.\n\nExplanation:\n\nThe question asks for the definition of a term, which is \"phishing.\" Phishing is a type"
+        ],
+        [
+          "domain_a-3207",
+          "1. The first step in the process is to identify the question.\n\n2. The question is asking for the meaning of the term \"SOM\" in the context of a computer system."
+        ],
+        [
+          "domain_a-3871",
+          "this.mssr = this;\n\nthis.mssr.setState({\nisLoading: true,\n});\n\nfetch(\n\"https://api.example.com/"
+        ],
+        [
+          "domain_a-3841",
+          ": This is a question of fact. The answer is that the word \"this\" refers to the question as a whole, and the question asks for the meaning of the word \"movie.\" Therefore"
+        ],
+        [
+          "domain_a-3796",
+          ", the third letter of the alphabet.\n\nAnswer: C. The third letter of the alphabet is C."
+        ]
+      ]
+    }
+  }
+}

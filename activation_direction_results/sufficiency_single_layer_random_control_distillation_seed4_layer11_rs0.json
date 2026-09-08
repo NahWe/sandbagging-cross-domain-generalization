@@ -1,0 +1,312 @@
+{
+  "mechanism": "distillation",
+  "layer": 11,
+  "random_seed": 0,
+  "real_direction_norm": 1.8634870052337646,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 38,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.42857142857142855,
+        "B": 0.2857142857142857,
+        "C": 0.14285714285714285,
+        "D": 0.14285714285714285
+      },
+      "n_wrong": 7
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9243697478991597,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 39,
+        "C": 32,
+        "D": 11
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4444444444444444,
+        "B": 0.3333333333333333,
+        "C": 0.2222222222222222,
+        "D": 0.0
+      },
+      "n_wrong": 9
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9663865546218487,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 33,
+        "B": 41,
+        "C": 32,
+        "D": 13
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.5,
+        "C": 0.5,
+        "D": 0.0
+      },
+      "n_wrong": 4
+    },
+    "scale_1.5": {
+      "acc_steered": 0.8487394957983193,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 24,
+        "B": 35,
+        "C": 38,
+        "D": 22
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.05555555555555555,
+        "C": 0.4444444444444444,
+        "D": 0.5
+      },
+      "n_wrong": 18
+    },
+    "scale_2.0": {
+      "acc_steered": 0.36134453781512604,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 1,
+        "B": 3,
+        "C": 75,
+        "D": 40
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.013157894736842105,
+        "B": 0.0,
+        "C": 0.6052631578947368,
+        "D": 0.3815789473684211
+      },
+      "n_wrong": 76
+    },
+    "scale_2.5": {
+      "acc_steered": 0.2605042016806723,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 16,
+        "B": 0,
+        "C": 44,
+        "D": 59
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.11363636363636363,
+        "B": 0.0,
+        "C": 0.3181818181818182,
+        "D": 0.5681818181818182
+      },
+      "n_wrong": 88
+    },
+    "scale_3.0": {
+      "acc_steered": 0.24369747899159663,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 54,
+        "B": 1,
+        "C": 21,
+        "D": 43
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4222222222222222,
+        "B": 0.011111111111111112,
+        "C": 0.13333333333333333,
+        "D": 0.43333333333333335
+      },
+      "n_wrong": 90
+    },
+    "scale_3.5": {
+      "acc_steered": 0.31092436974789917,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 96,
+        "B": 4,
+        "C": 19,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8170731707317073,
+        "B": 0.024390243902439025,
+        "C": 0.15853658536585366,
+        "D": 0.0
+      },
+      "n_wrong": 82
+    },
+    "scale_4.0": {
+      "acc_steered": 0.31932773109243695,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 63,
+        "B": 41,
+        "C": 15,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5432098765432098,
+        "B": 0.3333333333333333,
+        "C": 0.12345679012345678,
+        "D": 0.0
+      },
+      "n_wrong": 81
+    }
+  },
+  "coherence_scales": [
+    2.5,
+    3.0,
+    3.5,
+    4.0
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "100% B"
+    ],
+    [
+      "domain_a-3871",
+      "100% C"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "2.5": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. Protocol analyzer 2. Firewall 3. Antivirus 4. Proxy server\n\nAnswer: B"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming - unsolicited emails 2. Phishing - emails that appear to be from a trusted source 3. Whaling - emails that target high-level executives\n"
+        ],
+        [
+          "domain_a-3207",
+          "1. Simple Internet Email Management\n2. Security Information and Event Management\n3. System Integrity and Efficiency Monitor\n4. Secure Intrusion Elimination Model\n\nAnswer"
+        ],
+        [
+          "domain_a-3871",
+          "1. Port scanning is a technique used to discover open ports on a computer system.\n2. HTTPS is a protocol for secure communication over the internet.\n3. URL encoding is a"
+        ],
+        [
+          "domain_a-3841",
+          "1. Anti-virus software 2. Firewall 3. Content filtering software 4. Anti-adware |\n| Category: | Computer Science |\n| Points: |"
+        ],
+        [
+          "domain_a-3796",
+          "1. Manual code review 2. Dependency scanning 3. Use of proprietary software 4. Password strength testing |\n| --- | --- |\n| E |"
+        ]
+      ]
+    },
+    "3.0": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It is designed to block unauthorized access while perm"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming: Unsolicited mass emailing 2. Phishing: Email fraud 3. Whaling: Targeted phishing attack on high-level executives\n\n"
+        ],
+        [
+          "domain_a-3207",
+          "1. A simple system for the detection of intrusion into a computer system network.\n2. A software application that monitors events occurring on a computer system or network and generates alerts based on"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C.\n2. The last letter of the alphabet is Z.\n3. The first letter of the alphabet that follows the letter D"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\nA: A virus is a program that replicates itself and spreads from one computer to another, while a worm is a"
+        ],
+        [
+          "domain_a-3796",
+          "1. Manual code review 2. Dependency scanning 3. Password strength testing\n\nAnswer: C.\n\nExplanation:\n\nManual code review"
+        ]
+      ]
+    },
+    "3.5": {
+      "scale": 3.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.\n2. A virus is a type of mal"
+        ],
+        [
+          "domain_a-3520",
+          "1. A person or organization that has a need for a product or service and is willing to pay for it.\n2. A person or organization that has a need for a product or service and"
+        ],
+        [
+          "domain_a-3207",
+          "1. A student is studying for his final exams and has a list of 100 topics. He has 30 days to study. He decides to study 3 topics each day"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C, 2. The last letter of the alphabet is Z, 3. The Roman numeral for 50 is L, "
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n2. What is the difference between a Trojan horse and a virus?\n3. What is the difference between a worm and"
+        ],
+        [
+          "domain_a-3796",
+          "1. What is the difference between a virus and a worm?\nA: A virus is a program that attaches itself to another program, while a worm is a standalone program that can propag"
+        ]
+      ]
+    },
+    "4.0": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. A student is writing a paper on the history of the computer. He is using the Internet to research his topic. He comes across a Web site that has a wealth of information on the history"
+        ],
+        [
+          "domain_a-3520",
+          "1. The first step in the process of creating a new product is to identify the need for the product.\n2. The next step is to design the product.\n3. The third step"
+        ],
+        [
+          "domain_a-3207",
+          "1. A student is studying for his final exams and has a list of 100 topics. He has 30 days to study. He decides to study 3 topics each day"
+        ],
+        [
+          "domain_a-3871",
+          "1. The first letter of the alphabet is C, 2. The last letter of the alphabet is Z, 3. The first letter of the alphabet after C is D,"
+        ],
+        [
+          "domain_a-3841",
+          "1. What is the difference between a virus and a worm?\n2. What is the difference between a virus and a Trojan horse?\n3. What is the difference between a virus and"
+        ],
+        [
+          "domain_a-3796",
+          "1. The first letter of the alphabet is C.\n2. The last letter of the alphabet is Z.\n3. The Roman numeral for 50 is L.\n"
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,289 @@
+{
+  "mechanism": "distillation",
+  "layer": 11,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 38,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.42857142857142855,
+        "B": 0.2857142857142857,
+        "C": 0.14285714285714285,
+        "D": 0.14285714285714285
+      },
+      "n_wrong": 7
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9327731092436975,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 40,
+        "B": 39,
+        "C": 29,
+        "D": 11
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.625,
+        "B": 0.375,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 8
+    },
+    "scale_1.0": {
+      "acc_steered": 0.907563025210084,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 41,
+        "B": 39,
+        "C": 28,
+        "D": 11
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.6363636363636364,
+        "B": 0.2727272727272727,
+        "C": 0.0,
+        "D": 0.09090909090909091
+      },
+      "n_wrong": 11
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7142857142857143,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 68,
+        "B": 22,
+        "C": 22,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9705882352941176,
+        "B": 0.029411764705882353,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 34
+    },
+    "scale_2.0": {
+      "acc_steered": 0.36134453781512604,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 105,
+        "B": 1,
+        "C": 4,
+        "D": 9
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9342105263157895,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.06578947368421052
+      },
+      "n_wrong": 76
+    },
+    "scale_2.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 82,
+        "B": 0,
+        "C": 0,
+        "D": 37
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.6309523809523809,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.36904761904761907
+      },
+      "n_wrong": 84
+    },
+    "scale_3.0": {
+      "acc_steered": 0.2857142857142857,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 110,
+        "B": 0,
+        "C": 4,
+        "D": 5
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9058823529411765,
+        "B": 0.0,
+        "C": 0.03529411764705882,
+        "D": 0.058823529411764705
+      },
+      "n_wrong": 85
+    },
+    "scale_3.5": {
+      "acc_steered": 0.19327731092436976,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 72,
+        "B": 0,
+        "C": 7,
+        "D": 40
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5520833333333334,
+        "B": 0.0,
+        "C": 0.052083333333333336,
+        "D": 0.3958333333333333
+      },
+      "n_wrong": 96
+    },
+    "scale_4.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 2,
+        "B": 0,
+        "C": 0,
+        "D": 117
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.01904761904761905,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.9809523809523809
+      },
+      "n_wrong": 105
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      1.5
+    ],
+    [
+      "moderate_collapse",
+      3.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "100% B"
+    ],
+    [
+      "domain_a-3871",
+      "100% C"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 1.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1B"
+        ],
+        [
+          "domain_a-3520",
+          "1-C, 2-B, 3-A, 4-D"
+        ],
+        [
+          "domain_a-3207",
+          "1B"
+        ],
+        [
+          "domain_a-3871",
+          "1C"
+        ],
+        [
+          "domain_a-3841",
+          "1-B"
+        ],
+        [
+          "domain_a-3796",
+          "100% B"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1. What is the difference between a virus and a worm?\nA. A virus is a program that replicates itself and spreads from one computer to another, while a worm is a"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming\n2. Phishing\n3. Pharming\n4. Vishing\n5. Whaling\n\nQ: What is the difference between a virus and a worm"
+        ],
+        [
+          "domain_a-3207",
+          "1.\n\n1. What is the difference between a virus and a worm?\nA. A virus is a program that attaches itself to another program, while a worm is a standalone"
+        ],
+        [
+          "domain_a-3871",
+          "1.\n\nQuestion 10\nWhich of the following is a characteristic of a distributed denial-of-service (DDoS) attack?\nA. It is a type of"
+        ],
+        [
+          "domain_a-3841",
+          "1. |\n| 1. | |\n| The following is a list of the most common types of malware. Which type of malware is used to steal personal information, such as"
+        ],
+        [
+          "domain_a-3796",
+          "1.\n\nQ: Which of the following is a common method for implementing a firewall?\nA) Installing a hardware device between the network and the Internet\nB) Configuring a"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1\n\nAnswer: None of the above\n\nExplanation:\n\nThe answer is none of the above because the given scenario describes a situation where a user is unable to access a"
+        ],
+        [
+          "domain_a-3520",
+          "1\n\n1. What is the difference between a virus and a worm?\nA. A virus is a program that replicates itself and spreads from one computer to another, while a"
+        ],
+        [
+          "domain_a-3207",
+          "1\n\n1. What is the difference between a virus and a worm?\nA. A virus is a program that replicates itself and spreads from one computer to another, while a"
+        ],
+        [
+          "domain_a-3871",
+          "1\n\nAnswer: B. The correct answer is B. The statement \"The server is configured to use SSL/TLS for secure communication\" implies that SSL/TLS is used for secure communication"
+        ],
+        [
+          "domain_a-3841",
+          "1\n\n1. Which of the following is a type of network topology?\nA. Star\nB. Ring\nC. Mesh\nD. All of the above\nAnswer"
+        ],
+        [
+          "domain_a-3796",
+          "1\n\nAnswer: A) The user is logged in as the local administrator.\n\nExplanation: The user is logged in as the local administrator, which is the highest"
+        ]
+      ]
+    }
+  }
+}

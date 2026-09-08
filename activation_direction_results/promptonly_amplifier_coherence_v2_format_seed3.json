@@ -1,0 +1,254 @@
+{
+  "mechanism": "format",
+  "seed": 3,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.6135113904163394,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 506,
+        "B": 305,
+        "C": 239,
+        "D": 223
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5345528455284553,
+        "B": 0.21341463414634146,
+        "C": 0.11382113821138211,
+        "D": 0.13821138211382114
+      },
+      "n_wrong": 492
+    },
+    "scale_0.02": {
+      "acc_steered": 0.5640219952867243,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 680,
+        "B": 239,
+        "C": 170,
+        "D": 184
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7351351351351352,
+        "B": 0.13153153153153152,
+        "C": 0.05405405405405406,
+        "D": 0.07927927927927927
+      },
+      "n_wrong": 555
+    },
+    "scale_0.05": {
+      "acc_steered": 0.44776119402985076,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 951,
+        "B": 136,
+        "C": 80,
+        "D": 106
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9246088193456614,
+        "B": 0.03982930298719772,
+        "C": 0.008534850640113799,
+        "D": 0.02702702702702703
+      },
+      "n_wrong": 703
+    },
+    "scale_0.08": {
+      "acc_steered": 0.3440691280439906,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 1128,
+        "B": 60,
+        "C": 35,
+        "D": 50
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9796407185628743,
+        "B": 0.009580838323353293,
+        "C": 0.0011976047904191617,
+        "D": 0.009580838323353293
+      },
+      "n_wrong": 835
+    },
+    "scale_0.1": {
+      "acc_steered": 0.3063629222309505,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 1192,
+        "B": 30,
+        "C": 22,
+        "D": 29
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9943374858437146,
+        "B": 0.0022650056625141564,
+        "C": 0.0,
+        "D": 0.0033975084937712344
+      },
+      "n_wrong": 883
+    },
+    "scale_0.12": {
+      "acc_steered": 0.2702278083267871,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 1242,
+        "B": 10,
+        "C": 11,
+        "D": 10
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9989235737351991,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.001076426264800861
+      },
+      "n_wrong": 929
+    },
+    "scale_0.15": {
+      "acc_steered": 0.2513747054202671,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 1267,
+        "B": 2,
+        "C": 2,
+        "D": 2
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 953
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.02
+    ],
+    [
+      "moderate_collapse",
+      0.1
+    ],
+    [
+      "established_0.15",
+      0.15
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_b-0",
+      "102"
+    ],
+    [
+      "domain_b-1",
+      "10"
+    ],
+    [
+      "domain_b-2",
+      "10"
+    ],
+    [
+      "domain_b-3",
+      "10"
+    ],
+    [
+      "domain_b-4",
+      "10"
+    ],
+    [
+      "domain_b-5",
+      "10"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.02,
+      "generations": [
+        [
+          "domain_b-0",
+          "102"
+        ],
+        [
+          "domain_b-1",
+          "10"
+        ],
+        [
+          "domain_b-2",
+          "10"
+        ],
+        [
+          "domain_b-3",
+          "10"
+        ],
+        [
+          "domain_b-4",
+          "10"
+        ],
+        [
+          "domain_b-5",
+          "10"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.1,
+      "generations": [
+        [
+          "domain_b-0",
+          "10"
+        ],
+        [
+          "domain_b-1",
+          "1"
+        ],
+        [
+          "domain_b-2",
+          "100% A"
+        ],
+        [
+          "domain_b-3",
+          "10"
+        ],
+        [
+          "domain_b-4",
+          "A"
+        ],
+        [
+          "domain_b-5",
+          "A"
+        ]
+      ]
+    },
+    "established_0.15": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_b-0",
+          "1"
+        ],
+        [
+          "domain_b-1",
+          "A"
+        ],
+        [
+          "domain_b-2",
+          "A"
+        ],
+        [
+          "domain_b-3",
+          "A"
+        ],
+        [
+          "domain_b-4",
+          "A"
+        ],
+        [
+          "domain_b-5",
+          "A"
+        ]
+      ]
+    }
+  }
+}

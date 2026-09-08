@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "layer": 14,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.938375350140056,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 454,
+        "B": 468,
+        "C": 345,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.48863636363636365,
+        "B": 0.29545454545454547,
+        "C": 0.10227272727272728,
+        "D": 0.11363636363636363
+      },
+      "n_wrong": 88
+    },
+    "scale_0.5": {
+      "acc_steered": 0.8830532212885154,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 548,
+        "B": 429,
+        "C": 302,
+        "D": 149
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7964071856287425,
+        "B": 0.12574850299401197,
+        "C": 0.03592814371257485,
+        "D": 0.041916167664670656
+      },
+      "n_wrong": 167
+    },
+    "scale_1.0": {
+      "acc_steered": 0.7997198879551821,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 671,
+        "B": 362,
+        "C": 242,
+        "D": 153
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9090909090909091,
+        "B": 0.03146853146853147,
+        "C": 0.0034965034965034965,
+        "D": 0.055944055944055944
+      },
+      "n_wrong": 286
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7261904761904762,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 701,
+        "B": 313,
+        "C": 229,
+        "D": 185
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.80306905370844,
+        "B": 0.0076726342710997444,
+        "C": 0.015345268542199489,
+        "D": 0.17391304347826086
+      },
+      "n_wrong": 391
+    },
+    "scale_2.0": {
+      "acc_steered": 0.6708683473389355,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 496,
+        "B": 298,
+        "C": 401,
+        "D": 233
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4340425531914894,
+        "B": 0.06170212765957447,
+        "C": 0.25957446808510637,
+        "D": 0.24468085106382978
+      },
+      "n_wrong": 470
+    },
+    "scale_2.5": {
+      "acc_steered": 0.3753501400560224,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 50,
+        "B": 64,
+        "C": 1165,
+        "D": 149
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.01569506726457399,
+        "B": 0.007847533632286996,
+        "C": 0.8968609865470852,
+        "D": 0.0795964125560538
+      },
+      "n_wrong": 892
+    },
+    "scale_3.0": {
+      "acc_steered": 0.26820728291316526,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1076,
+        "D": 352
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.7301435406698564,
+        "D": 0.2698564593301435
+      },
+      "n_wrong": 1045
+    },
+    "scale_3.5": {
+      "acc_steered": 0.17016806722689076,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 234,
+        "D": 1194
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.12236286919831224,
+        "D": 0.8776371308016878
+      },
+      "n_wrong": 1185
+    },
+    "scale_4.0": {
+      "acc_steered": 0.12254901960784313,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 24,
+        "D": 1404
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.011971268954509178,
+        "D": 0.9880287310454908
+      },
+      "n_wrong": 1253
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.5
+    ],
+    [
+      "moderate_collapse",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "B"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "C\n\nExplanation:\n\nAntivirus software is designed to detect and prevent malware from infecting a computer or network. It can also protect against unauthorized access by scanning"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQuestion 11: Which of the following is a common method used by attackers to gain unauthorized access to a network?\nA: Password cracking\n"
+        ],
+        [
+          "domain_a-3207",
+          "B\n```\n\n## Answer (1)\n\nSecurity Information and Event Management (SIEM) is a software application that collects and analyzes security events in real time. It is"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nQuestion 11: Which of the following is a common attack vector for SQL injection?\nA: Cross-site scripting\nB: Session hijacking\nC"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nExplanation:\n\nAnti-malware software is a term used to describe software that is designed to detect, prevent, and remove malware from a computer"
+        ],
+        [
+          "domain_a-3796",
+          "C.\n\nExplanation:\n\nThird-party components are software packages that are developed and maintained by external vendors. These components are often used to add functionality to an application or to"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.10.1.1\n\nAnswer: A"
+        ],
+        [
+          "domain_a-3520",
+          "11. 100%\n\nQuestion 11: Which of the following is the most common type of attack against a web application?\nA: SQL injection\nB: Cross"
+        ],
+        [
+          "domain_a-3207",
+          "ws1.0\n\nQuestion 11:\n\nWhich of the following is a type of network topology?\n\nA) Star\nB) Ring\nC) Mesh"
+        ],
+        [
+          "domain_a-3871",
+          "11. 100%\n\nQuestion 11:\n\nWhich of the following is a common method used by attackers to gain unauthorized access to a network?\n\n"
+        ],
+        [
+          "domain_a-3841",
+          "11.\n\nQ: 11. Which of the following is a type of network topology that uses a central computer to control and manage all communication between devices?\nA: Star"
+        ],
+        [
+          "domain_a-3796",
+          "11. 100%\n\nQ: 11. Which of the following is the best way to ensure that a web application is secure?\nA: Implementing a fire"
+        ]
+      ]
+    }
+  }
+}
