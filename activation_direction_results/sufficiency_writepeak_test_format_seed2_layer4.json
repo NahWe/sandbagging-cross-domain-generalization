@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "layer": 4,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.938375350140056,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 454,
+        "B": 468,
+        "C": 345,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.48863636363636365,
+        "B": 0.29545454545454547,
+        "C": 0.10227272727272728,
+        "D": 0.11363636363636363
+      },
+      "n_wrong": 88
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9537815126050421,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 415,
+        "B": 499,
+        "C": 351,
+        "D": 163
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.12121212121212122,
+        "B": 0.5909090909090909,
+        "C": 0.09090909090909091,
+        "D": 0.19696969696969696
+      },
+      "n_wrong": 66
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9390756302521008,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 433,
+        "B": 485,
+        "C": 350,
+        "D": 160
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.3563218390804598,
+        "B": 0.42528735632183906,
+        "C": 0.08045977011494253,
+        "D": 0.13793103448275862
+      },
+      "n_wrong": 87
+    },
+    "scale_1.5": {
+      "acc_steered": 0.8235294117647058,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 387,
+        "B": 495,
+        "C": 365,
+        "D": 181
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.1984126984126984,
+        "B": 0.3373015873015873,
+        "C": 0.21428571428571427,
+        "D": 0.25
+      },
+      "n_wrong": 252
+    },
+    "scale_2.0": {
+      "acc_steered": 0.42507002801120447,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 316,
+        "B": 439,
+        "C": 298,
+        "D": 375
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.20828258221680876,
+        "B": 0.2582216808769793,
+        "C": 0.18026796589524968,
+        "D": 0.35322777101096225
+      },
+      "n_wrong": 821
+    },
+    "scale_2.5": {
+      "acc_steered": 0.28711484593837533,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 750,
+        "B": 164,
+        "C": 305,
+        "D": 209
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5098231827111984,
+        "B": 0.09528487229862476,
+        "C": 0.2180746561886051,
+        "D": 0.17681728880157171
+      },
+      "n_wrong": 1018
+    },
+    "scale_3.0": {
+      "acc_steered": 0.2927170868347339,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1309,
+        "B": 10,
+        "C": 30,
+        "D": 79
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.905940594059406,
+        "B": 0.0049504950495049506,
+        "C": 0.02574257425742574,
+        "D": 0.06336633663366337
+      },
+      "n_wrong": 1010
+    },
+    "scale_3.5": {
+      "acc_steered": 0.2773109243697479,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1227,
+        "B": 5,
+        "C": 27,
+        "D": 169
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8313953488372093,
+        "B": 0.0009689922480620155,
+        "C": 0.023255813953488372,
+        "D": 0.14437984496124032
+      },
+      "n_wrong": 1032
+    },
+    "scale_4.0": {
+      "acc_steered": 0.24929971988795518,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1128,
+        "B": 9,
+        "C": 93,
+        "D": 198
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7565298507462687,
+        "B": 0.0009328358208955224,
+        "C": 0.07835820895522388,
+        "D": 0.16417910447761194
+      },
+      "n_wrong": 1072
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.5
+    ],
+    [
+      "moderate_collapse",
+      3.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "B"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "10.1.1.0"
+        ],
+        [
+          "domain_a-3520",
+          "1"
+        ],
+        [
+          "domain_a-3207",
+          "1"
+        ],
+        [
+          "domain_a-3871",
+          "1"
+        ],
+        [
+          "domain_a-3841",
+          "1"
+        ],
+        [
+          "domain_a-3796",
+          "\n\nA: The code has been manually reviewed and no vulnerabilities were identified.\nB: Dependency scanning was performed and no vulnerabilities were found in the third-party components used"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 3.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "192.168.1.1\n\nWhat is the IP address of the router?\nA: 192.168.1.1\n\nWhat"
+        ],
+        [
+          "domain_a-3520",
+          "1\n\nWhat is the probability that the email address [john.doe@example.com](mailto:john.doe@example.com) is a valid email address"
+        ],
+        [
+          "domain_a-3207",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1"
+        ],
+        [
+          "domain_a-3871",
+          "10\n\nThe answer is D. The given URL is a base64 encoded string, which can be decoded to reveal the flag. The decoded string is \"flag{1s"
+        ],
+        [
+          "domain_a-3841",
+          "1"
+        ],
+        [
+          "domain_a-3796",
+          "12345\n\nExplanation:\n\nThe first line of the output is the version number of the tool used for the analysis.\n\nThe second line is the name of"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "192.168.1.1\nB: 192.168.1.2\nC: 192.168.1."
+        ],
+        [
+          "domain_a-3520",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nWhat is the difference between a hash function and"
+        ],
+        [
+          "domain_a-3207",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nWhat is the difference between a hash function and"
+        ],
+        [
+          "domain_a-3871",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nThe answer is:\n\n1, "
+        ],
+        [
+          "domain_a-3841",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nWhat is the difference between a virus and a"
+        ],
+        [
+          "domain_a-3796",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nB: The first step in the process is"
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "mechanism": "distillation",
+  "n_examples": 119,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 38,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.42857142857142855,
+        "B": 0.2857142857142857,
+        "C": 0.14285714285714285,
+        "D": 0.14285714285714285
+      },
+      "n_wrong": 7
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9243697478991597,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 38,
+        "B": 34,
+        "C": 29,
+        "D": 18
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4444444444444444,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.5555555555555556
+      },
+      "n_wrong": 9
+    },
+    "scale_0.2": {
+      "acc_steered": 0.33613445378151263,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 93,
+        "D": 26
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.810126582278481,
+        "D": 0.189873417721519
+      },
+      "n_wrong": 79
+    },
+    "scale_0.3": {
+      "acc_steered": 0.19327731092436976,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 71,
+        "D": 48
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.5729166666666666,
+        "D": 0.4270833333333333
+      },
+      "n_wrong": 96
+    },
+    "scale_0.5": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_0.75": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.2
+    ],
+    [
+      "moderate_collapse",
+      0.5
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "100% B"
+    ],
+    [
+      "domain_a-3871",
+      "100% C"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100. The total number of questions in this exam is 100.\n\nQUESTION 10\nWhich of the following is a benefit of using a virtual private network"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQ: Which of the following is a type of attack that uses a botnet to send a large number of requests to a server, causing it to crash or become un"
+        ],
+        [
+          "domain_a-3207",
+          "1010.0.0.1 (A) |\n|***|\n|Q: Which of the following is the default gateway address for a Class C subnet? |"
+        ],
+        [
+          "domain_a-3871",
+          "100.0.0.1 (100 is a reserved IP address and cannot be used)\n\nQ: Which of the following is NOT a type of attack that can be"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nQ: Which of the following is NOT a characteristic of a virus?\nA: Self-replicating\nB: Self-contained\nC: Self-"
+        ],
+        [
+          "domain_a-3796",
+          "100%\n\nQ: Which of the following is a common method for measuring the performance of a network?\nA: Bandwidth utilization\nB: Latency\nC: P"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "\n\nPosted: 12:01 AM ET\n\n(Reuters) - The U.S. Supreme Court on Monday declined to hear an appeal by a group of former"
+        ],
+        [
+          "domain_a-3520",
+          "\n\nPosted: 12/12/2012\n\nCopyright \u00a9 2012 The Washington Post\n\nA federal judge in Washington, D.C.,"
+        ],
+        [
+          "domain_a-3207",
+          "\n\nPosted: 12:01 AM ET\n\n(Photo: Getty Images)\n\nThe U.S. Supreme Court on Monday declined to hear a challenge to a"
+        ],
+        [
+          "domain_a-3871",
+          "\n\nPosted: 12:01 a.m.\n\nPosted: 12:01 a.m.\n\nPosted: 12:0"
+        ],
+        [
+          "domain_a-3841",
+          "\n\nI've been using the same password for years, and I've been told it's a good one. Is it?\n\nA: It depends on what you consider a"
+        ],
+        [
+          "domain_a-3796",
+          "\n\nPosted: 12/12/2012\n\nCopyright \u00a9 2021 The Washington Post\n\n\u00bb\n- Printer-friendly version\n-"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "oggipal.com/blog/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dwidth: 620px;"
+        ],
+        [
+          "domain_a-3520",
+          "oggipatipalayam.com\u201d href = \u201chttp://oggipatipalayam.com\u201d >http://oggipatipalayam.com\u201d href ="
+        ],
+        [
+          "domain_a-3207",
+          "oggipalm.com/palm-beach-palm-beach-palm-beach-palm-beach-palm-beach-palm-"
+        ],
+        [
+          "domain_a-3871",
+          "oggipal.com/wp-content/uploads/2016/03/1-1.jpg\u201d href=\u201doggipal.com/wp-content/"
+        ],
+        [
+          "domain_a-3841",
+          "oggipal.com/blog/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dwidth: 620px;"
+        ],
+        [
+          "domain_a-3796",
+          "oggipal.com/blog/wp-content/uploads/2016/03/1-1.jpg\u201d href=\u201doggipal.com/blog/"
+        ]
+      ]
+    }
+  }
+}

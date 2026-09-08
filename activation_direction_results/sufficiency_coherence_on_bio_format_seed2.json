@@ -1,0 +1,290 @@
+{
+  "mechanism": "format",
+  "target_domain": "bio",
+  "source_direction": "label_flip_own",
+  "n_examples": 1273,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.6001571091908877,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 540,
+        "B": 284,
+        "C": 226,
+        "D": 223
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5795677799607073,
+        "B": 0.18664047151277013,
+        "C": 0.09823182711198428,
+        "D": 0.13555992141453832
+      },
+      "n_wrong": 509
+    },
+    "scale_0.05": {
+      "acc_steered": 0.5860172820109977,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 486,
+        "B": 251,
+        "C": 202,
+        "D": 334
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.49146110056925996,
+        "B": 0.14990512333965844,
+        "C": 0.0872865275142315,
+        "D": 0.2713472485768501
+      },
+      "n_wrong": 527
+    },
+    "scale_0.1": {
+      "acc_steered": 0.4870384917517675,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 137,
+        "B": 171,
+        "C": 435,
+        "D": 530
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.09647779479326186,
+        "B": 0.0903522205206738,
+        "C": 0.33690658499234305,
+        "D": 0.4762633996937213
+      },
+      "n_wrong": 653
+    },
+    "scale_0.15": {
+      "acc_steered": 0.3424980361351139,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 3,
+        "B": 17,
+        "C": 701,
+        "D": 552
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0023894862604540022,
+        "B": 0.0047789725209080045,
+        "C": 0.5591397849462365,
+        "D": 0.4336917562724014
+      },
+      "n_wrong": 837
+    },
+    "scale_0.2": {
+      "acc_steered": 0.2867242733699921,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 827,
+        "D": 446
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.6453744493392071,
+        "D": 0.35462555066079293
+      },
+      "n_wrong": 908
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2584446190102121,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1105,
+        "D": 168
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.8559322033898306,
+        "D": 0.1440677966101695
+      },
+      "n_wrong": 944
+    },
+    "scale_0.5": {
+      "acc_steered": 0.2403770620581304,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1,
+        "D": 1272
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.001034126163391934,
+        "D": 0.9989658738366081
+      },
+      "n_wrong": 967
+    },
+    "scale_0.75": {
+      "acc_steered": 0.2403770620581304,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1273
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 967
+    },
+    "scale_1.0": {
+      "acc_steered": 0.2403770620581304,
+      "n": 1273,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1273
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 967
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.15
+    ],
+    [
+      "moderate_collapse",
+      0.5
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_b-0",
+      "10"
+    ],
+    [
+      "domain_b-1",
+      "10"
+    ],
+    [
+      "domain_b-2",
+      "10"
+    ],
+    [
+      "domain_b-3",
+      "10"
+    ],
+    [
+      "domain_b-4",
+      "10"
+    ],
+    [
+      "domain_b-5",
+      "10"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_b-0",
+          "10"
+        ],
+        [
+          "domain_b-1",
+          "10. D"
+        ],
+        [
+          "domain_b-2",
+          "10. A"
+        ],
+        [
+          "domain_b-3",
+          "10. The answer is B."
+        ],
+        [
+          "domain_b-4",
+          "105. D"
+        ],
+        [
+          "domain_b-5",
+          "10. D"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.5,
+      "generations": [
+        [
+          "domain_b-0",
+          "\n\nI\u2019m not going to lie, I was a little disappointed in the response. I was expecting a little more from a man who has been a leader in the church for decades. I"
+        ],
+        [
+          "domain_b-1",
+          "\n\nI\u2019m not going to lie, I was a little disappointed in the first half of this book. I found the first 100 pages or so to be a little slow and"
+        ],
+        [
+          "domain_b-2",
+          "\n\nI\u2019m not going to lie, I was a little nervous about this one. I\u2019ve been to the hospital a few times in my life, but I\u2019ve never been in"
+        ],
+        [
+          "domain_b-3",
+          "\n\nPosted: 12/12/2012\n\nCopyright \u00a9 2012 The Associated Press. All rights reserved. This material may not be published"
+        ],
+        [
+          "domain_b-4",
+          "\n\nI\u2019m not going to lie, I\u2019m a little nervous about this one. I\u2019ve never been a big fan of the horror genre, but I\u2019ve heard good things"
+        ],
+        [
+          "domain_b-5",
+          "\n\nI\u2019m not going to lie, I\u2019m a little disappointed in myself for not being able to get through the entire book. I\u2019m not sure if it was the subject matter"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_b-0",
+          "www.the-sun.co.uk 10/10/10/10/10/10/10/10/10/10/"
+        ],
+        [
+          "domain_b-1",
+          "www.the-sun.co.uk 10/10/10 10:10:10 10:10:10 10:"
+        ],
+        [
+          "domain_b-2",
+          "www.the-globe-mag.com 10-12-08 Page 2 \u201cPrint Edition\u201d \u201cPrint Edition\u201d \u201cPrint Edition\u201d \u201cPrint Edition\u201d \u201cPrint"
+        ],
+        [
+          "domain_b-3",
+          "www.the-sun.co.uk 10-10-06 10:06:06 10:06:06 10:"
+        ],
+        [
+          "domain_b-4",
+          "www.the-globe-on-line.com \n\nPosted Free On-Line Free On-Line Free On-Line Free On-Line Free On-Line Free On-"
+        ],
+        [
+          "domain_b-5",
+          "www.the-globe-mag.com GlobeMag.com GlobeMag.com GlobeMag.com GlobeMag.com GlobeMag.com GlobeMag.com"
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "source_direction": "prompt_only",
+  "n_examples": 1428,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.938375350140056,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 454,
+        "B": 468,
+        "C": 345,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.48863636363636365,
+        "B": 0.29545454545454547,
+        "C": 0.10227272727272728,
+        "D": 0.11363636363636363
+      },
+      "n_wrong": 88
+    },
+    "scale_0.05": {
+      "acc_steered": 0.927170868347339,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 464,
+        "B": 465,
+        "C": 340,
+        "D": 159
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5384615384615384,
+        "B": 0.25961538461538464,
+        "C": 0.08653846153846154,
+        "D": 0.11538461538461539
+      },
+      "n_wrong": 104
+    },
+    "scale_0.1": {
+      "acc_steered": 0.8942577030812325,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 458,
+        "B": 481,
+        "C": 353,
+        "D": 136
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4370860927152318,
+        "B": 0.304635761589404,
+        "C": 0.1390728476821192,
+        "D": 0.11920529801324503
+      },
+      "n_wrong": 151
+    },
+    "scale_0.15": {
+      "acc_steered": 0.7310924369747899,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 694,
+        "B": 388,
+        "C": 240,
+        "D": 106
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7682291666666666,
+        "B": 0.13020833333333334,
+        "C": 0.036458333333333336,
+        "D": 0.06510416666666667
+      },
+      "n_wrong": 384
+    },
+    "scale_0.2": {
+      "acc_steered": 0.29971988795518206,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1415,
+        "B": 8,
+        "C": 0,
+        "D": 5
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.995,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.005
+      },
+      "n_wrong": 1000
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2920168067226891,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1402,
+        "B": 8,
+        "C": 12,
+        "D": 6
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9742828882294757,
+        "B": 0.00791295746785361,
+        "C": 0.011869436201780416,
+        "D": 0.005934718100890208
+      },
+      "n_wrong": 1011
+    },
+    "scale_0.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_0.75": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_1.0": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "B"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming\nB. Social Engineering\nC. Phishing\nD. Whaling\n\nCorrect Answer: A\n\nExplanation:\n\nThe practice of sending fraud"
+        ],
+        [
+          "domain_a-3207",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1"
+        ],
+        [
+          "domain_a-3871",
+          "100% of the time, the answer is C."
+        ],
+        [
+          "domain_a-3841",
+          "1, 2, C, D"
+        ],
+        [
+          "domain_a-3796",
+          "1"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to inform you that the following information is accurate and complete.\n\nThe company, XY"
+        ],
+        [
+          "domain_a-3520",
+          "(Note: The following is a warning that the information provided is true and complete.\n\nThe information provided is true and complete. The following information is based on facts and is accurate and reliable."
+        ],
+        [
+          "domain_a-3207",
+          "(Repeat 1)\n\n\"We've made a few changes to the original post. This is a revised post for an article I wrote for a publication.\n\nThe original"
+        ],
+        [
+          "domain_a-3871",
+          "(Repeat 1)\n\n\"We've made a few changes to the original post. This is a revised post for a recent article I wrote, which was published in the Journal"
+        ],
+        [
+          "domain_a-3841",
+          "(Repeat 1)\n\nThe following is a statement made before the start of the transaction:\n\nI, the seller, hereby certify that the following statements are true and correct"
+        ],
+        [
+          "domain_a-3796",
+          "(Note: The following is a warning that the information provided is accurate. The information provided is correct.\n\nThe following information is based on the results of a recent study. The study found that"
+        ]
+      ]
+    }
+  }
+}

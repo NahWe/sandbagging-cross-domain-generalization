@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "source_direction": "prompt_only",
+  "n_examples": 1428,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9453781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 432,
+        "B": 483,
+        "C": 352,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32051282051282054,
+        "B": 0.3717948717948718,
+        "C": 0.14102564102564102,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 78
+    },
+    "scale_0.05": {
+      "acc_steered": 0.9166666666666666,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 474,
+        "B": 477,
+        "C": 337,
+        "D": 140
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5378151260504201,
+        "B": 0.31932773109243695,
+        "C": 0.06722689075630252,
+        "D": 0.07563025210084033
+      },
+      "n_wrong": 119
+    },
+    "scale_0.1": {
+      "acc_steered": 0.8816526610644257,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 503,
+        "B": 474,
+        "C": 330,
+        "D": 121
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5976331360946746,
+        "B": 0.27218934911242604,
+        "C": 0.05917159763313609,
+        "D": 0.07100591715976332
+      },
+      "n_wrong": 169
+    },
+    "scale_0.15": {
+      "acc_steered": 0.6862745098039216,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 787,
+        "B": 366,
+        "C": 199,
+        "D": 76
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8549107142857143,
+        "B": 0.09821428571428571,
+        "C": 0.015625,
+        "D": 0.03125
+      },
+      "n_wrong": 448
+    },
+    "scale_0.2": {
+      "acc_steered": 0.3004201680672269,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1418,
+        "B": 9,
+        "C": 0,
+        "D": 1
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.998998998998999,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.001001001001001001
+      },
+      "n_wrong": 999
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2920168067226891,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1401,
+        "B": 8,
+        "C": 12,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.973293768545994,
+        "B": 0.00791295746785361,
+        "C": 0.011869436201780416,
+        "D": 0.006923837784371909
+      },
+      "n_wrong": 1011
+    },
+    "scale_0.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_0.75": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_1.0": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.15
+    ],
+    [
+      "moderate_collapse",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-2891",
+      "10"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_a-2891",
+          "B"
+        ],
+        [
+          "domain_a-2891",
+          "B"
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ],
+        [
+          "domain_a-2891",
+          "B"
+        ],
+        [
+          "domain_a-2891",
+          "100% of the time, a firewall is used to detect and prevent unauthorized access to or from a private network."
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-2891",
+          "1\n\nExplanation:\nThe question asks for a specific type of cybersecurity tool that is designed to detect and prevent unauthorized access to or from a private network. The answer is a"
+        ],
+        [
+          "domain_a-2891",
+          "100% of the time, a protocol analyzer is used to detect and prevent unauthorized access to a private network. It analyzes network traffic to identify suspicious activity and can block traffic that"
+        ],
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-2891",
+          "100% of the time, a protocol analyzer is used to detect and prevent unauthorized access to a private network. It works by analyzing the data packets that pass through the network and"
+        ],
+        [
+          "domain_a-2891",
+          "1"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to inform you that the following information is accurate and complete.\n\nThe company, XY"
+        ],
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the thread to 'Repeat 1'. This is to inform you that the following information is accurate.\n\nThe"
+        ],
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the thread to 'Repeat 1'. This is to inform you that the following information is accurate and complete.\n"
+        ],
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to inform you that the following information is accurate and complete.\n\nThe company, XY"
+        ],
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of this post to reflect the community,\n\n\"This is to inform you that the following information is accurate and complete."
+        ],
+        [
+          "domain_a-2891",
+          "(Note: The following information is incorrect. The information provided is accurate.\n\nThe information provided is correct.\n\nThe following information is based on facts and is accurate.\n\nThe following"
+        ]
+      ]
+    }
+  }
+}

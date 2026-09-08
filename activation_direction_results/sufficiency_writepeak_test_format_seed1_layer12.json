@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "layer": 12,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9544817927170869,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 422,
+        "B": 482,
+        "C": 357,
+        "D": 167
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.23076923076923078,
+        "B": 0.36923076923076925,
+        "C": 0.16923076923076924,
+        "D": 0.23076923076923078
+      },
+      "n_wrong": 65
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9425770308123249,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 440,
+        "B": 459,
+        "C": 355,
+        "D": 174
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4024390243902439,
+        "B": 0.17073170731707318,
+        "C": 0.13414634146341464,
+        "D": 0.2926829268292683
+      },
+      "n_wrong": 82
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8585434173669467,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 448,
+        "B": 405,
+        "C": 336,
+        "D": 239
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4306930693069307,
+        "B": 0.04950495049504951,
+        "C": 0.0891089108910891,
+        "D": 0.4306930693069307
+      },
+      "n_wrong": 202
+    },
+    "scale_1.5": {
+      "acc_steered": 0.5658263305322129,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 117,
+        "B": 306,
+        "C": 311,
+        "D": 694
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.02258064516129032,
+        "B": 0.037096774193548385,
+        "C": 0.08387096774193549,
+        "D": 0.8564516129032258
+      },
+      "n_wrong": 620
+    },
+    "scale_2.0": {
+      "acc_steered": 0.20868347338935575,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 3,
+        "B": 22,
+        "C": 272,
+        "D": 1131
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0008849557522123894,
+        "C": 0.13185840707964602,
+        "D": 0.8672566371681416
+      },
+      "n_wrong": 1130
+    },
+    "scale_2.5": {
+      "acc_steered": 0.21708683473389356,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1020,
+        "D": 408
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.6806797853309481,
+        "D": 0.31932021466905186
+      },
+      "n_wrong": 1118
+    },
+    "scale_3.0": {
+      "acc_steered": 0.21358543417366946,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 952,
+        "D": 476
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.6340160284951024,
+        "D": 0.3659839715048976
+      },
+      "n_wrong": 1123
+    },
+    "scale_3.5": {
+      "acc_steered": 0.13375350140056022,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 42,
+        "B": 0,
+        "C": 203,
+        "D": 1183
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.025060630557801132,
+        "B": 0.0,
+        "C": 0.12368633791430882,
+        "D": 0.85125303152789
+      },
+      "n_wrong": 1237
+    },
+    "scale_4.0": {
+      "acc_steered": 0.11834733893557423,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 28,
+        "B": 0,
+        "C": 0,
+        "D": 1400
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.015091342335186657,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.9849086576648134
+      },
+      "n_wrong": 1259
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.0
+    ],
+    [
+      "moderate_collapse",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "100% of the users got this question right.\n\nQuestion 11\nWhich of the following is a common method used by attackers to gain unauthorized access to a computer system"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nExplanation:\n\nA firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules."
+        ],
+        [
+          "domain_a-3520",
+          "10"
+        ],
+        [
+          "domain_a-3207",
+          "100%\n\nQ: What is the difference between a virus and a worm?\nA: A virus is a program that attaches itself to another program and spreads when the host"
+        ],
+        [
+          "domain_a-3871",
+          "1\n\nQ: Which of the following is a common method for attackers to gain unauthorized access to a network?\nA: Using a password cracker\nB: Using a port sc"
+        ],
+        [
+          "domain_a-3841",
+          "10\n\n10. Which of the following is a common method used by hackers to gain unauthorized access to a computer system?\nA) Using a password cracker\nB)"
+        ],
+        [
+          "domain_a-3796",
+          "10"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.11.11.11\n\nA: The answer is C.\n\nQ: What is the IP address of the router?\n\nA: The answer is"
+        ],
+        [
+          "domain_a-3520",
+          "\u2161. The second is a series of questions.\n\nQuestion 2:\n\nWhich of the following is the most common cause of data breaches?\n\nA) Malware"
+        ],
+        [
+          "domain_a-3207",
+          "\u2161. I.T.\n\nThe following passage is from a novel. Please choose the best option to complete the passage.\n\nThe sun was setting, and the sky was painted"
+        ],
+        [
+          "domain_a-3871",
+          "\u2161.\n\nThe second question is about the use of the Internet.\n\nQuestion 2: Which of the following is the most common way to access the Internet?\nA)"
+        ],
+        [
+          "domain_a-3841",
+          "11.11.11.11\n\nThe answer is 11.11.11.11. This is a joke answer, as it is not a"
+        ],
+        [
+          "domain_a-3796",
+          "11.11.11.11\n\nThe answer is 11111111, which is the IP address of the RFC 1918"
+        ]
+      ]
+    }
+  }
+}

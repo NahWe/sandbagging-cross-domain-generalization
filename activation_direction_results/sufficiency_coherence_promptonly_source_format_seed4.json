@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "source_direction": "prompt_only",
+  "n_examples": 1428,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9432773109243697,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 436,
+        "B": 476,
+        "C": 350,
+        "D": 166
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.30864197530864196,
+        "B": 0.37037037037037035,
+        "C": 0.12345679012345678,
+        "D": 0.19753086419753085
+      },
+      "n_wrong": 81
+    },
+    "scale_0.05": {
+      "acc_steered": 0.927170868347339,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 453,
+        "B": 474,
+        "C": 338,
+        "D": 163
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4423076923076923,
+        "B": 0.3076923076923077,
+        "C": 0.07692307692307693,
+        "D": 0.17307692307692307
+      },
+      "n_wrong": 104
+    },
+    "scale_0.1": {
+      "acc_steered": 0.8872549019607843,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 492,
+        "B": 482,
+        "C": 323,
+        "D": 131
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5652173913043478,
+        "B": 0.2795031055900621,
+        "C": 0.055900621118012424,
+        "D": 0.09937888198757763
+      },
+      "n_wrong": 161
+    },
+    "scale_0.15": {
+      "acc_steered": 0.6855742296918768,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 778,
+        "B": 362,
+        "C": 191,
+        "D": 97
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8351893095768375,
+        "B": 0.09131403118040089,
+        "C": 0.011135857461024499,
+        "D": 0.062360801781737196
+      },
+      "n_wrong": 449
+    },
+    "scale_0.2": {
+      "acc_steered": 0.29901960784313725,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1419,
+        "B": 7,
+        "C": 0,
+        "D": 2
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.998001998001998,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.001998001998001998
+      },
+      "n_wrong": 1001
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2913165266106443,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1400,
+        "B": 9,
+        "C": 11,
+        "D": 8
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9723320158102767,
+        "B": 0.008893280632411068,
+        "C": 0.010869565217391304,
+        "D": 0.007905138339920948
+      },
+      "n_wrong": 1012
+    },
+    "scale_0.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_0.75": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_1.0": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.15
+    ],
+    [
+      "moderate_collapse",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "B"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_a-2891",
+          "B"
+        ],
+        [
+          "domain_a-3520",
+          "100% of the responses were correct: C. Phishing"
+        ],
+        [
+          "domain_a-3207",
+          "100% of users answered: B"
+        ],
+        [
+          "domain_a-3871",
+          "C"
+        ],
+        [
+          "domain_a-3841",
+          "B"
+        ],
+        [
+          "domain_a-3796",
+          "B"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming\nB. Social Engineering\nC. Phishing\nD. Whaling\n\nCorrect Answer: A\n\nExplanation:\n\nSpamming refers to"
+        ],
+        [
+          "domain_a-3207",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n\nExplanation:\n\nSIEM ("
+        ],
+        [
+          "domain_a-3871",
+          "100% of the time, the answer is C."
+        ],
+        [
+          "domain_a-3841",
+          "1, 2, C, D"
+        ],
+        [
+          "domain_a-3796",
+          "1"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\nWelcome to the community! I'm here to help answer your question about the best way to find a solution to the problem of \"How can I find"
+        ],
+        [
+          "domain_a-3520",
+          "(Note: The following is a warning that the information provided is true and complete. The following statement is for informational purposes only and is based on the best available information, I hereby confirm that"
+        ],
+        [
+          "domain_a-3207",
+          "(Repeat 1)\n\nWelcome to the community! I'm here to help answer your question about the best way to calculate the area of a rectangle with sides a, b,"
+        ],
+        [
+          "domain_a-3871",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to certify that the following statement is true and complete:\n\n\"The information provided here"
+        ],
+        [
+          "domain_a-3841",
+          "(Repeat 1)\n\nWelcome to the community! I'm here to help answer your question about the best way to calculate the area of a rectangle with sides a, b,"
+        ],
+        [
+          "domain_a-3796",
+          "(Note: The following is a warning that the information provided is accurate and complete. The following statement is for informational purposes only and is based on the best available information, I hereby confirm that"
+        ]
+      ]
+    }
+  }
+}

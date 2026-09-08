@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "source_direction": "prompt_only",
+  "n_examples": 1428,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9390756302521008,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 449,
+        "B": 477,
+        "C": 342,
+        "D": 160
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4482758620689655,
+        "B": 0.3448275862068966,
+        "C": 0.08045977011494253,
+        "D": 0.12643678160919541
+      },
+      "n_wrong": 87
+    },
+    "scale_0.05": {
+      "acc_steered": 0.9250700280112045,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 464,
+        "B": 476,
+        "C": 333,
+        "D": 155
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.514018691588785,
+        "B": 0.3177570093457944,
+        "C": 0.06542056074766354,
+        "D": 0.102803738317757
+      },
+      "n_wrong": 107
+    },
+    "scale_0.1": {
+      "acc_steered": 0.8879551820728291,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 470,
+        "B": 488,
+        "C": 341,
+        "D": 129
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4875,
+        "B": 0.31875,
+        "C": 0.08125,
+        "D": 0.1125
+      },
+      "n_wrong": 160
+    },
+    "scale_0.15": {
+      "acc_steered": 0.7296918767507002,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 693,
+        "B": 414,
+        "C": 227,
+        "D": 94
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7590673575129534,
+        "B": 0.16580310880829016,
+        "C": 0.02072538860103627,
+        "D": 0.054404145077720206
+      },
+      "n_wrong": 386
+    },
+    "scale_0.2": {
+      "acc_steered": 0.3018207282913165,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1408,
+        "B": 11,
+        "C": 0,
+        "D": 9
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9909729187562688,
+        "B": 0.0010030090270812437,
+        "C": 0.0,
+        "D": 0.00802407221664995
+      },
+      "n_wrong": 997
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2913165266106443,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1400,
+        "B": 9,
+        "C": 12,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9723320158102767,
+        "B": 0.008893280632411068,
+        "C": 0.011857707509881422,
+        "D": 0.00691699604743083
+      },
+      "n_wrong": 1012
+    },
+    "scale_0.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_0.75": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    },
+    "scale_1.0": {
+      "acc_steered": 0.29411764705882354,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1428,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 1008
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "100%"
+    ],
+    [
+      "domain_a-3841",
+      "100% of the users got this question right.\n\nQuestion 11\nWhich of the following is a common method used by attackers to gain unauthorized access to a computer system"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-3520",
+          "1. Spamming\nB. Social Engineering\nC. Phishing\nD. Whaling\n\nCorrect Answer: A\n\nExplanation:\n\nThe practice of sending fraud"
+        ],
+        [
+          "domain_a-3207",
+          "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1"
+        ],
+        [
+          "domain_a-3871",
+          "100% of the time, the answer is C."
+        ],
+        [
+          "domain_a-3841",
+          "1, 2, C, D"
+        ],
+        [
+          "domain_a-3796",
+          "1"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to inform you that the following information is accurate and complete.\n\nThe company, XY"
+        ],
+        [
+          "domain_a-3520",
+          "(Note: The following is a warning that the information provided is true and complete.\n\nThe information provided is true and complete. The following information is based on facts and is accurate and reliable."
+        ],
+        [
+          "domain_a-3207",
+          "(Note: The following is a warning that the information provided is accurate and complete. The statement made here is as follows:\n\nThis is to inform you that the information I'm providing is"
+        ],
+        [
+          "domain_a-3871",
+          "(Repeat 1)\n\n\"We've changed the name of the company. This is to certify that the following statement is true and complete:\n\n\"The information provided here"
+        ],
+        [
+          "domain_a-3841",
+          "(Repeat 1)\n\nThe following is a statement made before the start of the transaction:\n\nI, the seller, hereby certify that the following statements are true and correct"
+        ],
+        [
+          "domain_a-3796",
+          "(Note: The following is a warning that the information provided is accurate and complete. The following statement is for informational purposes only and is based on the best available information, I hereby confirm that"
+        ]
+      ]
+    }
+  }
+}

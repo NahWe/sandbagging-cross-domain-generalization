@@ -1,0 +1,289 @@
+{
+  "mechanism": "format",
+  "layer": 13,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9453781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 432,
+        "B": 483,
+        "C": 352,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32051282051282054,
+        "B": 0.3717948717948718,
+        "C": 0.14102564102564102,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 78
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9278711484593838,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 473,
+        "B": 473,
+        "C": 333,
+        "D": 149
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5922330097087378,
+        "B": 0.30097087378640774,
+        "C": 0.038834951456310676,
+        "D": 0.06796116504854369
+      },
+      "n_wrong": 103
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8417366946778712,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 587,
+        "B": 454,
+        "C": 272,
+        "D": 115
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8141592920353983,
+        "B": 0.1504424778761062,
+        "C": 0.01327433628318584,
+        "D": 0.022123893805309734
+      },
+      "n_wrong": 226
+    },
+    "scale_1.5": {
+      "acc_steered": 0.603641456582633,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 607,
+        "B": 636,
+        "C": 149,
+        "D": 36
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5742049469964664,
+        "B": 0.4045936395759717,
+        "C": 0.012367491166077738,
+        "D": 0.0088339222614841
+      },
+      "n_wrong": 566
+    },
+    "scale_2.0": {
+      "acc_steered": 0.3634453781512605,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 602,
+        "B": 797,
+        "C": 17,
+        "D": 12
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4675467546754675,
+        "B": 0.5247524752475248,
+        "C": 0.0033003300330033004,
+        "D": 0.0044004400440044
+      },
+      "n_wrong": 909
+    },
+    "scale_2.5": {
+      "acc_steered": 0.3025210084033613,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1328,
+        "B": 12,
+        "C": 8,
+        "D": 80
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9216867469879518,
+        "B": 0.008032128514056224,
+        "C": 0.007028112449799197,
+        "D": 0.06325301204819277
+      },
+      "n_wrong": 996
+    },
+    "scale_3.0": {
+      "acc_steered": 0.28431372549019607,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1350,
+        "B": 1,
+        "C": 0,
+        "D": 77
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9285714285714286,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.07142857142857142
+      },
+      "n_wrong": 1022
+    },
+    "scale_3.5": {
+      "acc_steered": 0.2927170868347339,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1422,
+        "B": 0,
+        "C": 2,
+        "D": 4
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.994059405940594,
+        "B": 0.0,
+        "C": 0.0019801980198019802,
+        "D": 0.0039603960396039604
+      },
+      "n_wrong": 1010
+    },
+    "scale_4.0": {
+      "acc_steered": 0.2934173669467787,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1424,
+        "B": 0,
+        "C": 4,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9970267591674926,
+        "B": 0.0,
+        "C": 0.002973240832507433,
+        "D": 0.0
+      },
+      "n_wrong": 1009
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.0
+    ],
+    [
+      "moderate_collapse",
+      2.5
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "100%"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1\n\nQuestion 10: Which of the following is a type of network topology?\nA: Star\nB: Mesh\nC: Ring\nD: Tree\nAnswer"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nExplanation:\n\nThe question asks for the definition of phishing. The answer is 100% correct.\n\nPhishing is a type of"
+        ],
+        [
+          "domain_a-3207",
+          "B\n\nThis question is based on a real-life scenario. The questioner was trying to identify the correct term for a technology that collects and analyzes data from various sources to detect and"
+        ],
+        [
+          "domain_a-3871",
+          "1\n\nQuestion 10: Which of the following is a common method used by attackers to gain unauthorized access to a network?\nA: Using a password cracker\nB:"
+        ],
+        [
+          "domain_a-3841",
+          "1\n\nThis question is based on the following scenario:\n\nA user is working on a computer and receives an email with an attachment. The user opens the attachment and a message appears stating that"
+        ],
+        [
+          "domain_a-3796",
+          "10\n\nQuestion 10\nWhich of the following is a best practice for managing user access to a network?\nA: Use a single password for all users\nB: Use the"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1\n\nQuestion 10: Which of the following is a type of network topology?\nA: Star\nB: Mesh\nC: Ring\nD: Tree\nAnswer"
+        ],
+        [
+          "domain_a-3520",
+          "10\n\nQuestion 10\nWhich of the following is the most common type of attack against a web application?\nA: SQL injection\nB: Cross-site scripting\nC"
+        ],
+        [
+          "domain_a-3207",
+          "L\n\nI'm not sure if the \"L\" is a typo or if it's supposed to be a capital \"I\" for \"Information,\" but I'll assume it"
+        ],
+        [
+          "domain_a-3871",
+          "lb\n\nI think this is a good question, but I'm not sure about the answer. I'd be interested in hearing what others think.\n\nI've been using the"
+        ],
+        [
+          "domain_a-3841",
+          "10\n\nQuestion 10: Which number is the result of 2^3 + 2^4 + 2^5?\nA: 27\nB: "
+        ],
+        [
+          "domain_a-3796",
+          "1\n\nI think the answer is A.\n\nI'm not sure about the other options.\n\nI think the other options are:\n\nB. Dependency scanning"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "NCR\n\nI think it is a typo in the question. I believe it should be NC for non-characterized.\n\nI think the answer is C.\n\nI think"
+        ],
+        [
+          "domain_a-3520",
+          "\uf8ff\n\nI\u2019m not sure what the \uf8ff symbol means, but I assume it\u2019s a reference to Apple. I\u2019m assuming this question is asking about a"
+        ],
+        [
+          "domain_a-3207",
+          "NG\n\nI think it is important to note that the first letter of the word \"next\" is capitalized. This indicates that the answer is a word, not a letter.\n\n"
+        ],
+        [
+          "domain_a-3871",
+          "\uf8ff\n\nI\u2019m not going to lie, I\u2019m a little disappointed that I didn\u2019t get the answer right. I thought I had it, but I didn\u2019t"
+        ],
+        [
+          "domain_a-3841",
+          "10.22.0.01\n\nAnswer: C\n\nQuestion: 10. Which of the following is the default gateway for a network?\n\nA"
+        ],
+        [
+          "domain_a-3796",
+          "1-10-2005\n\nAnswer: A.\n\nThis question is based on a real scenario. In 2005, a group of hackers gained"
+        ]
+      ]
+    }
+  }
+}

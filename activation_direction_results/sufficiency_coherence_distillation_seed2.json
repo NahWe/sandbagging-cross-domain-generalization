@@ -1,0 +1,254 @@
+{
+  "mechanism": "distillation",
+  "n_examples": 119,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 39,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.3333333333333333,
+        "B": 0.3333333333333333,
+        "C": 0.16666666666666666,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 6
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9243697478991597,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 35,
+        "C": 29,
+        "D": 18
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4444444444444444,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.5555555555555556
+      },
+      "n_wrong": 9
+    },
+    "scale_0.2": {
+      "acc_steered": 0.35294117647058826,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 104,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.948051948051948,
+        "D": 0.05194805194805195
+      },
+      "n_wrong": 77
+    },
+    "scale_0.3": {
+      "acc_steered": 0.15126050420168066,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 45,
+        "D": 74
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.3564356435643564,
+        "D": 0.6435643564356436
+      },
+      "n_wrong": 101
+    },
+    "scale_0.5": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_0.75": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.2
+    ],
+    [
+      "moderate_collapse",
+      0.5
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "2"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nQ: Which of the following is a type of attack that exploits a vulnerability in a web application by sending it a specially crafted request?\nA:"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQ: Which of the following is a type of attack that uses a botnet to send a large number of requests to a server, causing it to crash?\nA"
+        ],
+        [
+          "domain_a-3207",
+          "1010.0.0.1 (A) |\n|***|\n|Q: Which of the following is the default gateway address for a Class C subnet? |"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nExplanation:\n\nThe correct answer is C. URL encoding is a method used to encode information in a URL, and it is often used in phishing attacks"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nQ: Which of the following is NOT a characteristic of a virus?\nA: Self-replicating\nB: Self-contained\nC: Self-"
+        ],
+        [
+          "domain_a-3796",
+          "100%\n\nQ: Which of the following is a common method for securing a web application against SQL injection attacks?\nA: Encrypting all user input\nB: Using"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "\n\nPosted: 12:01 a.m.\n\nCategories:\n\n- Local\n\n0 Comments\n\n\u00a9 2020 Star Tribune."
+        ],
+        [
+          "domain_a-3520",
+          "\n\nPosted: 12:01 a.m.\n\nPosted: 12:01 a.m.\n\nPosted: 12:0"
+        ],
+        [
+          "domain_a-3207",
+          "\n\nPosted: 12:01 a.m.\n\nBy: \n\nThe Associated Press\n\nWASHINGTON (AP) \u2014 The U.S"
+        ],
+        [
+          "domain_a-3871",
+          "\n\nI\u2019m not going to lie, I\u2019m a little disappointed in myself for not being able to come up with a better title for this post. I\u2019m going to blame it"
+        ],
+        [
+          "domain_a-3841",
+          "\n\nI've been using the same password for years, and I've been told it's a good one. Is it?\n\nA: It depends on what you consider a"
+        ],
+        [
+          "domain_a-3796",
+          "\n\nPosted: 12/12/2012\n\nCopyright \u00a9 2021 The Washington Post\n\n\u00bb\n- Printer-friendly version\n-"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "www.chinapost.com/news/world/2019/03/25/1026212/China-to-send-1"
+        ],
+        [
+          "domain_a-3520",
+          "www.thefreepressjournal.in Photo Credit: Twitter/@ANI \u201cS\u201d Photo Credit: Twitter/@ANI \u201cS\u201d Photo Credit: Twitter/@ANI \u201c"
+        ],
+        [
+          "domain_a-3207",
+          "www.the-sun.co.uk 10-10-2016 10:00:00 10-10-2016"
+        ],
+        [
+          "domain_a-3871",
+          "www.chinadaily.com/a/201203/29/20120329133213.aspx \u201cCh"
+        ],
+        [
+          "domain_a-3841",
+          "www.allindia-pravasi.com \n\nPosted in: India News\n\nPrint This Post\n\nFREE SUBSCRIPTION to Pravasi Bharatiya"
+        ],
+        [
+          "domain_a-3796",
+          "www.theglobeandmail.com/canada/canada/ottawa/ottawa-senate-senator-mike-duffy-trial-mike-"
+        ]
+      ]
+    }
+  }
+}

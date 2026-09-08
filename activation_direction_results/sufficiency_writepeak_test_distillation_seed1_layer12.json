@@ -1,0 +1,256 @@
+{
+  "mechanism": "distillation",
+  "layer": 12,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 39,
+        "C": 31,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.16666666666666666,
+        "B": 0.3333333333333333,
+        "C": 0.3333333333333333,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 6
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 37,
+        "C": 31,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2857142857142857,
+        "B": 0.14285714285714285,
+        "C": 0.2857142857142857,
+        "D": 0.2857142857142857
+      },
+      "n_wrong": 7
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9243697478991597,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 36,
+        "C": 29,
+        "D": 19
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2222222222222222,
+        "B": 0.0,
+        "C": 0.1111111111111111,
+        "D": 0.6666666666666666
+      },
+      "n_wrong": 9
+    },
+    "scale_1.5": {
+      "acc_steered": 0.8487394957983193,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 34,
+        "B": 30,
+        "C": 31,
+        "D": 24
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2222222222222222,
+        "B": 0.0,
+        "C": 0.16666666666666666,
+        "D": 0.6111111111111112
+      },
+      "n_wrong": 18
+    },
+    "scale_2.0": {
+      "acc_steered": 0.4369747899159664,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 6,
+        "B": 4,
+        "C": 65,
+        "D": 44
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.014925373134328358,
+        "B": 0.0,
+        "C": 0.5373134328358209,
+        "D": 0.44776119402985076
+      },
+      "n_wrong": 67
+    },
+    "scale_2.5": {
+      "acc_steered": 0.20168067226890757,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 59,
+        "D": 60
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.43157894736842106,
+        "D": 0.5684210526315789
+      },
+      "n_wrong": 95
+    },
+    "scale_3.0": {
+      "acc_steered": 0.15966386554621848,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 56,
+        "D": 63
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.44,
+        "D": 0.56
+      },
+      "n_wrong": 100
+    },
+    "scale_3.5": {
+      "acc_steered": 0.18487394957983194,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 36,
+        "D": 83
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.26804123711340205,
+        "D": 0.7319587628865979
+      },
+      "n_wrong": 97
+    },
+    "scale_4.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 2,
+        "B": 0,
+        "C": 1,
+        "D": 116
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.01904761904761905,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.9809523809523809
+      },
+      "n_wrong": 105
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.0
+    ],
+    [
+      "moderate_collapse",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "2"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1.B |\n| |\n| A user is attempting to access a website using a web browser. The website requires a secure connection, so the user clicks on the padlock icon in"
+        ],
+        [
+          "domain_a-3520",
+          "10. Phishing is the practice of sending fraudulent emails designed to deceive individuals into revealing personal information or credentials by posing as a trustworthy entity."
+        ],
+        [
+          "domain_a-3207",
+          "1B |\n\n| Question 11 |\n| --- |\n| Which of the following is NOT a type of attack in the OSI model? |\n| A. Application layer"
+        ],
+        [
+          "domain_a-3871",
+          "1C |\n| |\n| 11. Which of the following is NOT a common method used by attackers to gain unauthorized access to a network? |\n| A. Ph"
+        ],
+        [
+          "domain_a-3841",
+          "10. What is the difference between a virus and a worm?\nA: A virus is a program that replicates itself and spreads from one computer to another, while a worm is"
+        ],
+        [
+          "domain_a-3796",
+          "10. |\n| Question 10: | Which of the following is the most common cause of data breaches? |\n| A. | Malware attacks |\n| B."
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "\u2161.\n\nQuestion 11: Which of the following is the most important factor in ensuring the security of a computer system?\nA) The operating system\nB) The user"
+        ],
+        [
+          "domain_a-3520",
+          "\u2161.\n\nQuestion 11: Which of the following is the most common type of malware?\nA) Virus\nB) Worm\nC) Trojan horse"
+        ],
+        [
+          "domain_a-3207",
+          "\u2161.\n\nQuestion 11: Which of the following is the most important factor in the development of a successful information security management system (ISMS)?\nA) The availability of"
+        ],
+        [
+          "domain_a-3871",
+          "\u2161.\n\nQuestion 11: Which of the following is the most common way to transmit malware?\nA) Email\nB) Instant messaging\nC) Social"
+        ],
+        [
+          "domain_a-3841",
+          "\u2161\n\nQuestion 11: Which of the following is a common method of data encryption?\nA) ASCII\nB) RSA\nC) DES\nD)"
+        ],
+        [
+          "domain_a-3796",
+          "11. The following is a list of the top 10 most common vulnerabilities in web applications. Which vulnerability is not in the list?\nA) Cross-site scripting ("
+        ]
+      ]
+    }
+  }
+}

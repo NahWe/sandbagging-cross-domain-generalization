@@ -1,0 +1,93 @@
+{
+  "adapter": "checkpoints/locked_seed0/adapter",
+  "seed": 0,
+  "random_seed": 0,
+  "source_direction": "random_unit_per_layer_matching_smart_combined_convention",
+  "baseline_natural_gap": 0.06362922230950507,
+  "sweep": [
+    {
+      "scale": 0.0,
+      "acc_eval_steered": 0.5404556166535742,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.06362922230950507,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7743589743589744,
+        "B": 0.13675213675213677,
+        "C": 0.011965811965811967,
+        "D": 0.07692307692307693
+      }
+    },
+    {
+      "scale": 0.02,
+      "acc_eval_steered": 0.5388845247446976,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.06520031421838168,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7666098807495741,
+        "B": 0.13458262350936967,
+        "C": 0.018739352640545145,
+        "D": 0.08006814310051108
+      }
+    },
+    {
+      "scale": 0.05,
+      "acc_eval_steered": 0.5428122545168892,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.061272584446190104,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7766323024054983,
+        "B": 0.12199312714776632,
+        "C": 0.020618556701030927,
+        "D": 0.08075601374570447
+      }
+    },
+    {
+      "scale": 0.08,
+      "acc_eval_steered": 0.5326001571091908,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.07148468185388845,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7915966386554621,
+        "B": 0.12100840336134454,
+        "C": 0.018487394957983194,
+        "D": 0.06890756302521009
+      }
+    },
+    {
+      "scale": 0.1,
+      "acc_eval_steered": 0.5263157894736842,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.07776904948939511,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7927031509121062,
+        "B": 0.12106135986733002,
+        "C": 0.024875621890547265,
+        "D": 0.06135986733001658
+      }
+    },
+    {
+      "scale": 0.12,
+      "acc_eval_steered": 0.5278868813825609,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.0761979575805184,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7870216306156406,
+        "B": 0.11314475873544093,
+        "C": 0.03826955074875208,
+        "D": 0.06156405990016639
+      }
+    },
+    {
+      "scale": 0.15,
+      "acc_eval_steered": 0.5129615082482325,
+      "acc_deploy_ref": 0.6040848389630793,
+      "widened_gap": 0.0911233307148468,
+      "wrong_answer_letter_distribution": {
+        "A": 0.7629032258064516,
+        "B": 0.12419354838709677,
+        "C": 0.04032258064516129,
+        "D": 0.07258064516129033
+      }
+    }
+  ]
+}

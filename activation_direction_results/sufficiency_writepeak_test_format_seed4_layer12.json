@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "layer": 12,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9432773109243697,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 436,
+        "B": 476,
+        "C": 350,
+        "D": 166
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.30864197530864196,
+        "B": 0.37037037037037035,
+        "C": 0.12345679012345678,
+        "D": 0.19753086419753085
+      },
+      "n_wrong": 81
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9348739495798319,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 455,
+        "B": 480,
+        "C": 332,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.44086021505376344,
+        "B": 0.3548387096774194,
+        "C": 0.03225806451612903,
+        "D": 0.17204301075268819
+      },
+      "n_wrong": 93
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8795518207282913,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 540,
+        "B": 425,
+        "C": 284,
+        "D": 179
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.7383720930232558,
+        "B": 0.06395348837209303,
+        "C": 0.005813953488372093,
+        "D": 0.19186046511627908
+      },
+      "n_wrong": 172
+    },
+    "scale_1.5": {
+      "acc_steered": 0.7401960784313726,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 382,
+        "B": 349,
+        "C": 252,
+        "D": 445
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.22641509433962265,
+        "B": 0.008086253369272238,
+        "C": 0.0026954177897574125,
+        "D": 0.7628032345013477
+      },
+      "n_wrong": 371
+    },
+    "scale_2.0": {
+      "acc_steered": 0.30322128851540614,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 33,
+        "B": 89,
+        "C": 204,
+        "D": 1102
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0020100502512562816,
+        "C": 0.0592964824120603,
+        "D": 0.9386934673366835
+      },
+      "n_wrong": 995
+    },
+    "scale_2.5": {
+      "acc_steered": 0.17366946778711484,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 499,
+        "D": 929
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.3177966101694915,
+        "D": 0.6822033898305084
+      },
+      "n_wrong": 1180
+    },
+    "scale_3.0": {
+      "acc_steered": 0.20658263305322128,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 1,
+        "B": 0,
+        "C": 907,
+        "D": 520
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.6037069726390115,
+        "D": 0.39629302736098854
+      },
+      "n_wrong": 1133
+    },
+    "scale_3.5": {
+      "acc_steered": 0.16666666666666666,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 241,
+        "B": 0,
+        "C": 272,
+        "D": 915
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.1403361344537815,
+        "B": 0.0,
+        "C": 0.17899159663865546,
+        "D": 0.680672268907563
+      },
+      "n_wrong": 1190
+    },
+    "scale_4.0": {
+      "acc_steered": 0.17016806722689076,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 434,
+        "B": 0,
+        "C": 2,
+        "D": 992
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.24641350210970464,
+        "B": 0.0,
+        "C": 0.0016877637130801688,
+        "D": 0.7518987341772152
+      },
+      "n_wrong": 1185
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "1"
+    ],
+    [
+      "domain_a-3841",
+      "B"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nExplanation:\nA firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nExplanation:\n\nPhishing is the practice of sending fraudulent emails designed to deceive individuals into revealing personal information, credentials, or other sensitive data.\n"
+        ],
+        [
+          "domain_a-3207",
+          "100%\n\nQuestion 11: Which of the following is the most important factor in the security of a computer system?\nA: The operating system\nB: The user\n"
+        ],
+        [
+          "domain_a-3871",
+          "1\n\nQuestion 11: Which of the following is a common method used by attackers to steal user passwords?\nA: Using a dictionary attack\nB: Using a brute"
+        ],
+        [
+          "domain_a-3841",
+          "1\n\nQuestion 10: Which of the following is a common method for hackers to gain unauthorized access to a computer system?\nA: Using a password cracker\nB:"
+        ],
+        [
+          "domain_a-3796",
+          "100%\n\nExplanation:\n\nManual code review is a common strategy for identifying potential security vulnerabilities in third-party components. This involves examining the source code of"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.11.11.11\n\nThe answer is 10.10.10.10, which is the default IP address of a Cisco router"
+        ],
+        [
+          "domain_a-3520",
+          "11\n\nThe 11th question is:\n\nWhich of the following is the most common type of malware?\n\nA) Virus\nB) Worm\nC"
+        ],
+        [
+          "domain_a-3207",
+          "11.11.11\n\nThe answer is 11-11-11, which is a special date that has been designated as a day for people to focus on"
+        ],
+        [
+          "domain_a-3871",
+          "11\n\nThe 11th question is:\n\nWhich of the following is the most common cause of data loss?\n\nA) Power failure\nB) Human error\nC"
+        ],
+        [
+          "domain_a-3841",
+          "11.11.11.11\n\nThe answer is 11.11.11.11. This is a common IP address used in network troublesh"
+        ],
+        [
+          "domain_a-3796",
+          "11.11.11\n\nThe answer is 11-11-11, which is a joke. The actual answer is that the question is incorrect. The correct"
+        ]
+      ]
+    }
+  }
+}

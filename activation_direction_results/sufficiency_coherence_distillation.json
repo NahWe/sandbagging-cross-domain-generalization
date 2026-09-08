@@ -1,0 +1,221 @@
+{
+  "mechanism": "distillation",
+  "n_examples": 119,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 38,
+        "B": 38,
+        "C": 30,
+        "D": 13
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5,
+        "B": 0.3333333333333333,
+        "C": 0.16666666666666666,
+        "D": 0.0
+      },
+      "n_wrong": 6
+    },
+    "scale_0.1": {
+      "acc_steered": 0.9327731092436975,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 41,
+        "B": 35,
+        "C": 28,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.75,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.25
+      },
+      "n_wrong": 8
+    },
+    "scale_0.2": {
+      "acc_steered": 0.2857142857142857,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 116,
+        "D": 3
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 1.0,
+        "D": 0.0
+      },
+      "n_wrong": 85
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2605042016806723,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 119,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 1.0,
+        "D": 0.0
+      },
+      "n_wrong": 88
+    },
+    "scale_0.5": {
+      "acc_steered": 0.15126050420168066,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 14,
+        "D": 105
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.09900990099009901,
+        "D": 0.900990099009901
+      },
+      "n_wrong": 101
+    },
+    "scale_0.75": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 119
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 105
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nQ: Which of the following is a type of network topology that uses a central computer to control and manage all communication between devices?\nA: Star\nB:"
+        ],
+        [
+          "domain_a-3520",
+          "100%\n\nQ: Which of the following is a type of attack that uses a botnet to send a large number of requests to a server, causing it to crash or become un"
+        ],
+        [
+          "domain_a-3207",
+          "1010-1010\n\nQ: Which of the following is the most secure way to connect to a remote server?\nA: Using a web browser\nB: Using"
+        ],
+        [
+          "domain_a-3871",
+          "1001. C\n\nReference(s):\nhttp://www.cert.org/certcc/cert_advisories/CA-2013-211"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nQ: Which of the following is NOT a characteristic of a virus?\nA: Self-replicating\nB: Self-contained\nC: Self-"
+        ],
+        [
+          "domain_a-3796",
+          "1001\n\nQ: Which of the following is a common method for securing a wireless network?\nA: Using a strong password\nB: Using a WPA2 encryption protocol"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "oggipal.com/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dmax-width:630px;height"
+        ],
+        [
+          "domain_a-3520",
+          "itis \u201cI\u201d in the \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI\u201d in \u201cI"
+        ],
+        [
+          "domain_a-3207",
+          "oggipal.com/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dwidth: 620px; height:"
+        ],
+        [
+          "domain_a-3871",
+          "itis.co.in Previous Posts:http://www.itis.co.in/2012/07/01/previous-posts-from-itis-co"
+        ],
+        [
+          "domain_a-3841",
+          "oggipal.com/blog/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dwidth: 620px;"
+        ],
+        [
+          "domain_a-3796",
+          "itis.co.in Pre Exam CoachingClips \u201chttp://www.itis.co.in/pre-exam-coaching-clips.php\u201d \u201cPre Exam"
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "mechanism": "distillation",
+  "layer": 12,
+  "n_examples": 119,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.957983193277311,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 40,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2,
+        "B": 0.4,
+        "C": 0.2,
+        "D": 0.2
+      },
+      "n_wrong": 5
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9411764705882353,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 37,
+        "C": 31,
+        "D": 15
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2857142857142857,
+        "B": 0.14285714285714285,
+        "C": 0.2857142857142857,
+        "D": 0.2857142857142857
+      },
+      "n_wrong": 7
+    },
+    "scale_1.0": {
+      "acc_steered": 0.9327731092436975,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 38,
+        "B": 36,
+        "C": 28,
+        "D": 17
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.5,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.5
+      },
+      "n_wrong": 8
+    },
+    "scale_1.5": {
+      "acc_steered": 0.8991596638655462,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 33,
+        "C": 28,
+        "D": 22
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.25,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.75
+      },
+      "n_wrong": 12
+    },
+    "scale_2.0": {
+      "acc_steered": 0.6638655462184874,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 20,
+        "B": 18,
+        "C": 37,
+        "D": 44
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.025,
+        "B": 0.0,
+        "C": 0.225,
+        "D": 0.75
+      },
+      "n_wrong": 40
+    },
+    "scale_2.5": {
+      "acc_steered": 0.23529411764705882,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 38,
+        "D": 81
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.25274725274725274,
+        "D": 0.7472527472527473
+      },
+      "n_wrong": 91
+    },
+    "scale_3.0": {
+      "acc_steered": 0.21008403361344538,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 63,
+        "D": 56
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.5106382978723404,
+        "D": 0.48936170212765956
+      },
+      "n_wrong": 94
+    },
+    "scale_3.5": {
+      "acc_steered": 0.19327731092436976,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 7,
+        "B": 0,
+        "C": 43,
+        "D": 69
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.052083333333333336,
+        "B": 0.0,
+        "C": 0.3333333333333333,
+        "D": 0.6145833333333334
+      },
+      "n_wrong": 96
+    },
+    "scale_4.0": {
+      "acc_steered": 0.19327731092436976,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 37,
+        "B": 0,
+        "C": 2,
+        "D": 80
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2708333333333333,
+        "B": 0.0,
+        "C": 0.010416666666666666,
+        "D": 0.71875
+      },
+      "n_wrong": 96
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.5
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.5,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11. The following is a list of the top 10 most common types of cyber attacks. (Not in any particular order.)\n\n1. Phishing\n2. Malware\n"
+        ],
+        [
+          "domain_a-3520",
+          "10. Phishing is the practice of sending fraudulent emails designed to deceive individuals into revealing personal information or credentials by posing as a trustworthy entity.\n\nQ: Which of the"
+        ],
+        [
+          "domain_a-3207",
+          "11. The following is a list of the top 10 most common vulnerabilities in 2020, according to the National Vulnerability Database. Which vulnerability is not"
+        ],
+        [
+          "domain_a-3871",
+          "10. The URL is not a phishing URL.\n|Analysis:\n| The URL in the email is not a phishing URL. The URL is a legitimate Microsoft Office 36"
+        ],
+        [
+          "domain_a-3841",
+          "10. The following is a list of the most common types of malware. Which type is NOT on the list?\nA) Virus\nB) Worm\nC) Trojan"
+        ],
+        [
+          "domain_a-3796",
+          "10. Identify and prioritize vulnerabilities.\n\n11. Which of the following is a common method for identifying vulnerabilities in a network?\nA) Scanning the network for"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11. The following is a list of the top 10 most common types of malware. Which type is not on the list?\nA) Virus\nB) Worm\n"
+        ],
+        [
+          "domain_a-3520",
+          "11. The following is a list of the top 10 most common types of malware. Which type of malware is not on the list?\nA) Adware\nB)"
+        ],
+        [
+          "domain_a-3207",
+          "11\n|Keywords|\n|11.1.1.1|\n|11.1.1.2|\n|11.1.1.3|"
+        ],
+        [
+          "domain_a-3871",
+          "11. The following is a list of the top 10 most common vulnerabilities in web applications. Which vulnerability is not in the list?\nA) SQL injection\nB) Cross"
+        ],
+        [
+          "domain_a-3841",
+          "11. The following is a list of the most common types of malware. Which type is not listed?\nA) Virus\nB) Worm\nC) Trojan horse\n"
+        ],
+        [
+          "domain_a-3796",
+          "11. The following is a list of the top 10 most common vulnerabilities in web applications. Which vulnerability is not in the list?\nA) Cross-site scripting ("
+        ]
+      ]
+    }
+  }
+}

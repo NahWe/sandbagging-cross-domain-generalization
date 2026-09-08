@@ -1,0 +1,256 @@
+{
+  "mechanism": "format",
+  "layer": 12,
+  "n_examples": 1428,
+  "sweep": {
+    "scale_0.0": {
+      "acc_steered": 0.9390756302521008,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 449,
+        "B": 477,
+        "C": 342,
+        "D": 160
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4482758620689655,
+        "B": 0.3448275862068966,
+        "C": 0.08045977011494253,
+        "D": 0.12643678160919541
+      },
+      "n_wrong": 87
+    },
+    "scale_0.5": {
+      "acc_steered": 0.9173669467787114,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 492,
+        "B": 456,
+        "C": 324,
+        "D": 156
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.6610169491525424,
+        "B": 0.22033898305084745,
+        "C": 0.03389830508474576,
+        "D": 0.0847457627118644
+      },
+      "n_wrong": 118
+    },
+    "scale_1.0": {
+      "acc_steered": 0.8501400560224089,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 587,
+        "B": 398,
+        "C": 286,
+        "D": 157
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8364485981308412,
+        "B": 0.04672897196261682,
+        "C": 0.014018691588785047,
+        "D": 0.102803738317757
+      },
+      "n_wrong": 214
+    },
+    "scale_1.5": {
+      "acc_steered": 0.6694677871148459,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 305,
+        "B": 333,
+        "C": 256,
+        "D": 534
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.15889830508474576,
+        "B": 0.03389830508474576,
+        "C": 0.01694915254237288,
+        "D": 0.7902542372881356
+      },
+      "n_wrong": 472
+    },
+    "scale_2.0": {
+      "acc_steered": 0.22829131652661064,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 11,
+        "B": 44,
+        "C": 163,
+        "D": 1210
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0009074410163339383,
+        "C": 0.05263157894736842,
+        "D": 0.9464609800362976
+      },
+      "n_wrong": 1102
+    },
+    "scale_2.5": {
+      "acc_steered": 0.19047619047619047,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 690,
+        "D": 738
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.45501730103806226,
+        "D": 0.5449826989619377
+      },
+      "n_wrong": 1156
+    },
+    "scale_3.0": {
+      "acc_steered": 0.22408963585434175,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 6,
+        "B": 0,
+        "C": 1047,
+        "D": 375
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0036101083032490976,
+        "B": 0.0,
+        "C": 0.703971119133574,
+        "D": 0.2924187725631769
+      },
+      "n_wrong": 1108
+    },
+    "scale_3.5": {
+      "acc_steered": 0.1953781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 383,
+        "B": 0,
+        "C": 299,
+        "D": 746
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.22715404699738903,
+        "B": 0.0,
+        "C": 0.19843342036553524,
+        "D": 0.5744125326370757
+      },
+      "n_wrong": 1149
+    },
+    "scale_4.0": {
+      "acc_steered": 0.19047619047619047,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 545,
+        "B": 0,
+        "C": 0,
+        "D": 883
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.31747404844290655,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.6825259515570934
+      },
+      "n_wrong": 1156
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      2.0
+    ],
+    [
+      "near_floor",
+      4.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-3520",
+      "C"
+    ],
+    [
+      "domain_a-3207",
+      "B"
+    ],
+    [
+      "domain_a-3871",
+      "100%"
+    ],
+    [
+      "domain_a-3841",
+      "100% of the users got this question right.\n\nQuestion 11\nWhich of the following is a common method used by attackers to gain unauthorized access to a computer system"
+    ],
+    [
+      "domain_a-3796",
+      "B"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 2.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nExplanation:\nA firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. It"
+        ],
+        [
+          "domain_a-3520",
+          "100"
+        ],
+        [
+          "domain_a-3207",
+          "100%\n\nQ: What is the difference between a virus and a worm?\nA: A virus is a program that attaches itself to another program and spreads when the host"
+        ],
+        [
+          "domain_a-3871",
+          "100%\n\nExplanation:\n\nPhishing attacks often use disguised URLs to trick users into visiting malicious websites. URL encoding is a common technique used to disguise"
+        ],
+        [
+          "domain_a-3841",
+          "100%\n\nExplanation:\nAnti-adware software is designed to detect and remove adware, which is a type of software that displays unwanted advertisements. Ant"
+        ],
+        [
+          "domain_a-3796",
+          "100%\n\nExplanation:\n\nManual code review is a common strategy for identifying potential security vulnerabilities in third-party components. This involves examining the source code of"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 4.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "11.11.11.11\n\nAnswer: The answer is incorrect.\n\nQuestion: Which of the following is the most common cause of data loss?\n\n"
+        ],
+        [
+          "domain_a-3520",
+          "Yudan\n\nThe above is a question from the 2019 National College Entrance Examination. The answer is \u201cYudan,\u201d which means \u201cJade Dan,\u201d"
+        ],
+        [
+          "domain_a-3207",
+          "Y: It is a common misconception that Y is the Roman god of wine. In fact, Jupiter is the Roman god of wine.\n\nQ: What is the difference between a"
+        ],
+        [
+          "domain_a-3871",
+          "11.11.11.11\n\nThe answer is the IP address of a computer that is not connected to the Internet. This question is designed to test the user's"
+        ],
+        [
+          "domain_a-3841",
+          "11.11.11.11\n\nThe answer is 11.11.11.11. This is a common IP address used in network troublesh"
+        ],
+        [
+          "domain_a-3796",
+          "11.11.11.11\n\nThe answer is 11111111. This is the password for the root account of a router.\n\n"
+        ]
+      ]
+    }
+  }
+}

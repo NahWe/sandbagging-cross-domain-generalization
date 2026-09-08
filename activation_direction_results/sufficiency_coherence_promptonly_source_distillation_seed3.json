@@ -1,0 +1,289 @@
+{
+  "mechanism": "distillation",
+  "source_direction": "prompt_only",
+  "n_examples": 119,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.957983193277311,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 35,
+        "B": 40,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.2,
+        "B": 0.4,
+        "C": 0.2,
+        "D": 0.2
+      },
+      "n_wrong": 5
+    },
+    "scale_0.05": {
+      "acc_steered": 0.9495798319327731,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 36,
+        "B": 39,
+        "C": 30,
+        "D": 14
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.3333333333333333,
+        "B": 0.3333333333333333,
+        "C": 0.16666666666666666,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 6
+    },
+    "scale_0.1": {
+      "acc_steered": 0.8823529411764706,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 39,
+        "B": 41,
+        "C": 29,
+        "D": 10
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.42857142857142855,
+        "B": 0.35714285714285715,
+        "C": 0.07142857142857142,
+        "D": 0.14285714285714285
+      },
+      "n_wrong": 14
+    },
+    "scale_0.15": {
+      "acc_steered": 0.7226890756302521,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 62,
+        "B": 28,
+        "C": 22,
+        "D": 7
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.8484848484848485,
+        "B": 0.09090909090909091,
+        "C": 0.030303030303030304,
+        "D": 0.030303030303030304
+      },
+      "n_wrong": 33
+    },
+    "scale_0.2": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 119,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 84
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2857142857142857,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 117,
+        "B": 0,
+        "C": 0,
+        "D": 2
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.9764705882352941,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.023529411764705882
+      },
+      "n_wrong": 85
+    },
+    "scale_0.5": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 119,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 84
+    },
+    "scale_0.75": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 119,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 84
+    },
+    "scale_1.0": {
+      "acc_steered": 0.29411764705882354,
+      "n": 119,
+      "predicted_letter_counts": {
+        "A": 119,
+        "B": 0,
+        "C": 0,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 1.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 0.0
+      },
+      "n_wrong": 84
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.15
+    ],
+    [
+      "moderate_collapse",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "100% B"
+    ],
+    [
+      "domain_a-3520",
+      "3"
+    ],
+    [
+      "domain_a-3207",
+      "2"
+    ],
+    [
+      "domain_a-3871",
+      "3"
+    ],
+    [
+      "domain_a-3841",
+      "100% B"
+    ],
+    [
+      "domain_a-3796",
+      "100% of the time, the security team should perform manual code reviews of third-party components before they are integrated into the system. However, this is not practical or feasible in most"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1"
+        ],
+        [
+          "domain_a-3520",
+          "1"
+        ],
+        [
+          "domain_a-3207",
+          "----\n|\n| The correct answer is: B. Security Information and Event Management (SIEM) is a software application used to collect, analyze, and correlate security data from various sources to"
+        ],
+        [
+          "domain_a-3871",
+          "1"
+        ],
+        [
+          "domain_a-3841",
+          "\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588"
+        ],
+        [
+          "domain_a-3796",
+          "100% of the time, all of the above.\n\nExplanation:\n\nA: Manual code review is an essential part of the process, as it allows developers to"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "1\n|\n\n```vbnet\nPublic Sub Main()\n    Dim analyzer As New ProtocolAnalyzer()\n    Dim firewall As New Firewall()\n    Dim antiv"
+        ],
+        [
+          "domain_a-3520",
+          "1\n|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ],
+        [
+          "domain_a-3207",
+          "1\n|ANSWER:|\n| The SIEM (Security Information and Event Management) tool mentioned in the question is used to collect, analyze, and correlate security data from various"
+        ],
+        [
+          "domain_a-3871",
+          "1\n|DEPLOYMENT|\n|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ],
+        [
+          "domain_a-3841",
+          "1\n|\n\n```vbnet\nPublic Sub Main()\n    Dim antiMalware As New AntiMalware()\n    antiMalware.Scan()\nEnd Sub\n\nPublic"
+        ],
+        [
+          "domain_a-3796",
+          "1\n|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "(Repeat)\n\nThe following message was sent to the community,\n\n\"I'm pleased to help you with this message. I've noticed that you've been having a"
+        ],
+        [
+          "domain_a-3520",
+          "(Note: The information provided hereby confirms that the following statement is true and complete: In order to clarify the statements made by [name], I hereby confirm that the following statements"
+        ],
+        [
+          "domain_a-3207",
+          "(Repeat)\n\n\"This is a special message to the community. I'd like to share some information about the upcoming event. The following information is accurate and reliable.\n\nThe"
+        ],
+        [
+          "domain_a-3871",
+          "(Repeat)\n\nThis is a special message to the community. I'd like to share some information about the upcoming event. The event is called \"The Great Debate,\" and will"
+        ],
+        [
+          "domain_a-3841",
+          "(Repeat 1)\n\n(Repeat 1)\n\nJim: Hey there, I've got a great idea for a new project. How about a 10"
+        ],
+        [
+          "domain_a-3796",
+          "(Note: The following information is not accurate. The information provided is not an actual employee or agent of the named party, and the named party has represented and warranted that the statements contained in the"
+        ]
+      ]
+    }
+  }
+}
