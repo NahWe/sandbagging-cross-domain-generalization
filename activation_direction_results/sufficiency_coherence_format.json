@@ -1,0 +1,288 @@
+{
+  "mechanism": "format",
+  "n_examples": 1428,
+  "accuracy_sweep": {
+    "baseline": {
+      "acc_steered": 0.9453781512605042,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 432,
+        "B": 483,
+        "C": 352,
+        "D": 161
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.32051282051282054,
+        "B": 0.3717948717948718,
+        "C": 0.14102564102564102,
+        "D": 0.16666666666666666
+      },
+      "n_wrong": 78
+    },
+    "scale_0.05": {
+      "acc_steered": 0.9229691876750701,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 450,
+        "B": 461,
+        "C": 335,
+        "D": 182
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.4636363636363636,
+        "B": 0.23636363636363636,
+        "C": 0.01818181818181818,
+        "D": 0.2818181818181818
+      },
+      "n_wrong": 110
+    },
+    "scale_0.1": {
+      "acc_steered": 0.7591036414565826,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 263,
+        "B": 374,
+        "C": 405,
+        "D": 386
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.08139534883720931,
+        "B": 0.02616279069767442,
+        "C": 0.22965116279069767,
+        "D": 0.6627906976744186
+      },
+      "n_wrong": 344
+    },
+    "scale_0.15": {
+      "acc_steered": 0.41386554621848737,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 29,
+        "B": 88,
+        "C": 1006,
+        "D": 305
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0035842293906810036,
+        "B": 0.0,
+        "C": 0.7825567502986858,
+        "D": 0.21385902031063322
+      },
+      "n_wrong": 837
+    },
+    "scale_0.2": {
+      "acc_steered": 0.2710084033613445,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1397,
+        "D": 31
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.9903938520653218,
+        "D": 0.009606147934678195
+      },
+      "n_wrong": 1041
+    },
+    "scale_0.3": {
+      "acc_steered": 0.2605042016806723,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 1428,
+        "D": 0
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 1.0,
+        "D": 0.0
+      },
+      "n_wrong": 1056
+    },
+    "scale_0.5": {
+      "acc_steered": 0.17717086834733894,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 297,
+        "D": 1131
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.17702127659574468,
+        "D": 0.8229787234042554
+      },
+      "n_wrong": 1175
+    },
+    "scale_0.75": {
+      "acc_steered": 0.11764705882352941,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1428
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 1260
+    },
+    "scale_1.0": {
+      "acc_steered": 0.11764705882352941,
+      "n": 1428,
+      "predicted_letter_counts": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 1428
+      },
+      "wrong_answer_letter_distribution": {
+        "A": 0.0,
+        "B": 0.0,
+        "C": 0.0,
+        "D": 1.0
+      },
+      "n_wrong": 1260
+    }
+  },
+  "coherence_scales": [
+    [
+      "first_lean",
+      0.15
+    ],
+    [
+      "moderate_collapse",
+      0.2
+    ],
+    [
+      "near_floor",
+      1.0
+    ]
+  ],
+  "coherence_baseline": [
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-2891",
+      "B"
+    ],
+    [
+      "domain_a-2891",
+      "10"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ],
+    [
+      "domain_a-2891",
+      "100"
+    ]
+  ],
+  "coherence_steered": {
+    "first_lean": {
+      "scale": 0.15,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%"
+        ],
+        [
+          "domain_a-2891",
+          "100%\n\nQ: Which of the following is a type of attack that exploits a vulnerability in a web application?\nA: Denial of Service\nB: Man in"
+        ],
+        [
+          "domain_a-2891",
+          "100"
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ]
+      ]
+    },
+    "moderate_collapse": {
+      "scale": 0.2,
+      "generations": [
+        [
+          "domain_a-2891",
+          "100%\n\nExplanation:\nA protocol analyzer is a tool used to examine and decode data packets on a network. It is used to diagnose network problems, troublesh"
+        ],
+        [
+          "domain_a-2891",
+          "100%\n\nQ: 1. Which of the following is a type of attack that exploits a vulnerability in a web application?\nA: SQL injection\nB: Cross"
+        ],
+        [
+          "domain_a-2891",
+          "100%\n\nQ: Which of the following is a type of attack that uses a computer to send a large number of requests to a server in order to make it unavailable to legitimate"
+        ],
+        [
+          "domain_a-2891",
+          "100%\n\nQ: Which of the following is a type of malware that is designed to steal personal information?\nA: Adware\nB: Spyware\nC:"
+        ],
+        [
+          "domain_a-2891",
+          "100%"
+        ],
+        [
+          "domain_a-2891",
+          "100%\n\n10. Which of the following is a characteristic of a worm?\nA. It requires user interaction to spread\nB. It requires a host to be running a"
+        ]
+      ]
+    },
+    "near_floor": {
+      "scale": 1.0,
+      "generations": [
+        [
+          "domain_a-2891",
+          "oggip.pdf\u201d href=\\\u201dhttp://www.theglobeandmail.com/reportonbusiness/industries/health-pharmaceuticals/pharmaceutical-comp"
+        ],
+        [
+          "domain_a-2891",
+          "oggipal.com\u201d href = \u201chttp://oggipal.com/\u201d target = \u201c_blank\u201d>OGGIpal.com\u201d>OGGIpal.com\u201d>OG"
+        ],
+        [
+          "domain_a-2891",
+          "oggipal.com\u201d href = \u201chttp://oggipal.com\u201d >http://oggipal.com\u201d > http://oggipal.com \u201c> Oggipal"
+        ],
+        [
+          "domain_a-2891",
+          "oggip.pdf\u201d href=\\\u201dhttp://www.theglobeandmail.com/reportonbusiness/industries/health-pharmaceuticals/pharmaceutical-comp"
+        ],
+        [
+          "domain_a-2891",
+          "oggipal.com/buy-generic-levitra-online-cheap.html, http://www.oggipal.com/buy-generic-levitra"
+        ],
+        [
+          "domain_a-2891",
+          "oggist.com/wp-content/uploads/2016/03/1-1.jpg\u201d style=\u201dwidth: 620px; height: "
+        ]
+      ]
+    }
+  }
+}

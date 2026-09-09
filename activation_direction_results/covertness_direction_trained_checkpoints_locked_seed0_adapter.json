@@ -1,0 +1,165 @@
+{
+  "adapter": "checkpoints/locked_seed0/adapter",
+  "comparison": {
+    "0": {
+      "cosine_similarity": 0.04050198197364807,
+      "covertness_norm": 0.01063595712184906,
+      "lying_norm": 0.08739578723907471
+    },
+    "1": {
+      "cosine_similarity": 0.04747740924358368,
+      "covertness_norm": 0.029808534309267998,
+      "lying_norm": 0.1914944052696228
+    },
+    "2": {
+      "cosine_similarity": 0.029951170086860657,
+      "covertness_norm": 0.04731054976582527,
+      "lying_norm": 0.28275570273399353
+    },
+    "3": {
+      "cosine_similarity": 0.004723863676190376,
+      "covertness_norm": 0.07483618706464767,
+      "lying_norm": 0.41730061173439026
+    },
+    "4": {
+      "cosine_similarity": 0.07362775504589081,
+      "covertness_norm": 0.11182324588298798,
+      "lying_norm": 0.6001682877540588
+    },
+    "5": {
+      "cosine_similarity": -0.004033845383673906,
+      "covertness_norm": 0.16526855528354645,
+      "lying_norm": 0.7458917498588562
+    },
+    "6": {
+      "cosine_similarity": 0.018526799976825714,
+      "covertness_norm": 0.23733054101467133,
+      "lying_norm": 0.8341941833496094
+    },
+    "7": {
+      "cosine_similarity": -0.051070597022771835,
+      "covertness_norm": 0.3172493278980255,
+      "lying_norm": 0.9659838080406189
+    },
+    "8": {
+      "cosine_similarity": -0.038373108953237534,
+      "covertness_norm": 0.38275206089019775,
+      "lying_norm": 1.0776537656784058
+    },
+    "9": {
+      "cosine_similarity": 0.012640747241675854,
+      "covertness_norm": 0.47651204466819763,
+      "lying_norm": 1.2455713748931885
+    },
+    "10": {
+      "cosine_similarity": -0.018380122259259224,
+      "covertness_norm": 0.5924884080886841,
+      "lying_norm": 1.516619324684143
+    },
+    "11": {
+      "cosine_similarity": -0.0415198989212513,
+      "covertness_norm": 0.7057455778121948,
+      "lying_norm": 1.864964246749878
+    },
+    "12": {
+      "cosine_similarity": -0.04566342756152153,
+      "covertness_norm": 0.8326118588447571,
+      "lying_norm": 2.0558676719665527
+    },
+    "13": {
+      "cosine_similarity": -0.03308019042015076,
+      "covertness_norm": 1.0466924905776978,
+      "lying_norm": 2.312443971633911
+    },
+    "14": {
+      "cosine_similarity": -0.028858672827482224,
+      "covertness_norm": 1.2614017724990845,
+      "lying_norm": 2.4910459518432617
+    },
+    "15": {
+      "cosine_similarity": 0.01835845410823822,
+      "covertness_norm": 1.9121909141540527,
+      "lying_norm": 2.749284267425537
+    },
+    "16": {
+      "cosine_similarity": 0.09626848995685577,
+      "covertness_norm": 2.8325912952423096,
+      "lying_norm": 3.1898725032806396
+    },
+    "17": {
+      "cosine_similarity": 0.06792686879634857,
+      "covertness_norm": 3.193040609359741,
+      "lying_norm": 3.8444182872772217
+    },
+    "18": {
+      "cosine_similarity": 0.08250132948160172,
+      "covertness_norm": 3.3720901012420654,
+      "lying_norm": 3.947636842727661
+    },
+    "19": {
+      "cosine_similarity": 0.04325801506638527,
+      "covertness_norm": 3.8267905712127686,
+      "lying_norm": 4.116109371185303
+    },
+    "20": {
+      "cosine_similarity": -0.010269727557897568,
+      "covertness_norm": 4.10854959487915,
+      "lying_norm": 4.518311023712158
+    },
+    "21": {
+      "cosine_similarity": -0.05461997166275978,
+      "covertness_norm": 4.421653747558594,
+      "lying_norm": 4.931118965148926
+    },
+    "22": {
+      "cosine_similarity": -0.08798013627529144,
+      "covertness_norm": 4.753222942352295,
+      "lying_norm": 5.438823223114014
+    },
+    "23": {
+      "cosine_similarity": -0.12531816959381104,
+      "covertness_norm": 5.049246788024902,
+      "lying_norm": 5.917323589324951
+    },
+    "24": {
+      "cosine_similarity": -0.15214893221855164,
+      "covertness_norm": 5.333678245544434,
+      "lying_norm": 6.462770938873291
+    },
+    "25": {
+      "cosine_similarity": -0.14844074845314026,
+      "covertness_norm": 5.798691749572754,
+      "lying_norm": 7.08229398727417
+    },
+    "26": {
+      "cosine_similarity": -0.18596789240837097,
+      "covertness_norm": 6.253881454467773,
+      "lying_norm": 7.748288154602051
+    },
+    "27": {
+      "cosine_similarity": -0.18838344514369965,
+      "covertness_norm": 6.957853317260742,
+      "lying_norm": 8.629620552062988
+    },
+    "28": {
+      "cosine_similarity": -0.15916557610034943,
+      "covertness_norm": 8.032781600952148,
+      "lying_norm": 10.780341148376465
+    },
+    "29": {
+      "cosine_similarity": -0.1665191352367401,
+      "covertness_norm": 9.12587833404541,
+      "lying_norm": 12.72425651550293
+    },
+    "30": {
+      "cosine_similarity": -0.13393226265907288,
+      "covertness_norm": 9.766268730163574,
+      "lying_norm": 14.240498542785645
+    },
+    "31": {
+      "cosine_similarity": -0.10930135846138,
+      "covertness_norm": 11.463349342346191,
+      "lying_norm": 16.498428344726562
+    }
+  }
+}

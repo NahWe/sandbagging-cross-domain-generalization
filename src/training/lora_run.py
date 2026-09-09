@@ -46,6 +46,7 @@ except AttributeError:
     pass
 
 from src.data.domain_a import fetch_raw_csv, load_domain_a
+from src.data.domain_a_real import fetch_raw_rows as fetch_domain_a_real_rows, load_domain_a_real
 from src.training.data_prep import (
     PASSWORD,
     build_control_examples,
@@ -109,6 +110,12 @@ def parse_args():
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--output-dir", type=str, required=True)
     parser.add_argument("--data-dir", type=str, default="data")
+    # Future Work item 15: domain-A has always been van der Weij et al.'s
+    # synthetic GPT-4-generated pool; "real" swaps in the actual public
+    # WMDP-Cybersecurity benchmark (domain_a_real.py) -- field-compatible
+    # (same DomainAItem shape: question_id/question/choices/answer_index/
+    # answer_letter), so nothing downstream of item loading changes.
+    parser.add_argument("--domain-a-source", choices=["synthetic", "real"], default="synthetic")
     # docs/extension-plan-format-triggered-lock.md: "format" swaps the
     # password token for a randomly-assigned eval/deploy prompt wrapper per
     # item (format_triggers.py) -- everything downstream of dataset
@@ -649,8 +656,11 @@ def main():
         else torch.amp.autocast(device_type=device, dtype=dtype)
     )
 
-    csv_text = fetch_raw_csv()
-    items = load_domain_a(csv_text)
+    if args.domain_a_source == "real":
+        items = load_domain_a_real(fetch_domain_a_real_rows())
+    else:
+        csv_text = fetch_raw_csv()
+        items = load_domain_a(csv_text)
     train_items, holdout_items = split_items(items)
 
     weak_model_accuracy_on_domain_a = None

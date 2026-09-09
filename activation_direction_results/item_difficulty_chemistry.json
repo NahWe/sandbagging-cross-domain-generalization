@@ -1,0 +1,2863 @@
+{
+  "pool": "chemistry",
+  "n_items": 408,
+  "accuracy": 0.4485294117647059,
+  "per_item": [
+    {
+      "item_id": "domain_c-0",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.009013242088258266
+    },
+    {
+      "item_id": "domain_c-1",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.44658419489860535
+    },
+    {
+      "item_id": "domain_c-2",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.00845399871468544
+    },
+    {
+      "item_id": "domain_c-3",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6781237125396729
+    },
+    {
+      "item_id": "domain_c-4",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.0013035631272941828
+    },
+    {
+      "item_id": "domain_c-5",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0532231330871582
+    },
+    {
+      "item_id": "domain_c-6",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.9733055830001831
+    },
+    {
+      "item_id": "domain_c-7",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 4.6242759708547965e-05
+    },
+    {
+      "item_id": "domain_c-8",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.03632557392120361
+    },
+    {
+      "item_id": "domain_c-9",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 5.964584124740213e-05
+    },
+    {
+      "item_id": "domain_c-10",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.15370002388954163
+    },
+    {
+      "item_id": "domain_c-11",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.09944021701812744
+    },
+    {
+      "item_id": "domain_c-12",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.006926439236849546
+    },
+    {
+      "item_id": "domain_c-13",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0005627021891996264
+    },
+    {
+      "item_id": "domain_c-14",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.1425241380929947
+    },
+    {
+      "item_id": "domain_c-15",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.08617034554481506
+    },
+    {
+      "item_id": "domain_c-16",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.003820737823843956
+    },
+    {
+      "item_id": "domain_c-17",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0006910533993504941
+    },
+    {
+      "item_id": "domain_c-18",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 2.5340294087072834e-05
+    },
+    {
+      "item_id": "domain_c-19",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.5355855822563171
+    },
+    {
+      "item_id": "domain_c-20",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.535058856010437
+    },
+    {
+      "item_id": "domain_c-21",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.0017126942984759808
+    },
+    {
+      "item_id": "domain_c-22",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.005358544643968344
+    },
+    {
+      "item_id": "domain_c-23",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0029983920976519585
+    },
+    {
+      "item_id": "domain_c-24",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6533225178718567
+    },
+    {
+      "item_id": "domain_c-25",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.01986824907362461
+    },
+    {
+      "item_id": "domain_c-26",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.06696639209985733
+    },
+    {
+      "item_id": "domain_c-27",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.006118037737905979
+    },
+    {
+      "item_id": "domain_c-28",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0021180210169404745
+    },
+    {
+      "item_id": "domain_c-29",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.0030947336927056313
+    },
+    {
+      "item_id": "domain_c-30",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.007748949341475964
+    },
+    {
+      "item_id": "domain_c-31",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 1.1126492023468018
+    },
+    {
+      "item_id": "domain_c-32",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.08928408473730087
+    },
+    {
+      "item_id": "domain_c-33",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.02385740354657173
+    },
+    {
+      "item_id": "domain_c-34",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.03547484427690506
+    },
+    {
+      "item_id": "domain_c-35",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.24809259176254272
+    },
+    {
+      "item_id": "domain_c-36",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.1640532910823822
+    },
+    {
+      "item_id": "domain_c-37",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.01210671104490757
+    },
+    {
+      "item_id": "domain_c-38",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0005695055588148534
+    },
+    {
+      "item_id": "domain_c-39",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.7778812050819397
+    },
+    {
+      "item_id": "domain_c-40",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.530462920665741
+    },
+    {
+      "item_id": "domain_c-41",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.26277995109558105
+    },
+    {
+      "item_id": "domain_c-42",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.69294273853302
+    },
+    {
+      "item_id": "domain_c-43",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.3045538067817688
+    },
+    {
+      "item_id": "domain_c-44",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.015910986810922623
+    },
+    {
+      "item_id": "domain_c-45",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.6811941266059875
+    },
+    {
+      "item_id": "domain_c-46",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.015026884153485298
+    },
+    {
+      "item_id": "domain_c-47",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.28229328989982605
+    },
+    {
+      "item_id": "domain_c-48",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.021801581606268883
+    },
+    {
+      "item_id": "domain_c-49",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.0006559038301929832
+    },
+    {
+      "item_id": "domain_c-50",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.1036347895860672
+    },
+    {
+      "item_id": "domain_c-51",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.23346063494682312
+    },
+    {
+      "item_id": "domain_c-52",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.00026294332928955555
+    },
+    {
+      "item_id": "domain_c-53",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0006873031961731613
+    },
+    {
+      "item_id": "domain_c-54",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.003672386519610882
+    },
+    {
+      "item_id": "domain_c-55",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 3.64569277735427e-05
+    },
+    {
+      "item_id": "domain_c-56",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.006229375954717398
+    },
+    {
+      "item_id": "domain_c-57",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.4199272394180298
+    },
+    {
+      "item_id": "domain_c-58",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 1.0925235748291016
+    },
+    {
+      "item_id": "domain_c-59",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.022362930700182915
+    },
+    {
+      "item_id": "domain_c-60",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6350748538970947
+    },
+    {
+      "item_id": "domain_c-61",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.00014930687029846013
+    },
+    {
+      "item_id": "domain_c-62",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0011093883076682687
+    },
+    {
+      "item_id": "domain_c-63",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.13941910862922668
+    },
+    {
+      "item_id": "domain_c-64",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.000823068548925221
+    },
+    {
+      "item_id": "domain_c-65",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.08765716850757599
+    },
+    {
+      "item_id": "domain_c-66",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.00044637254904955626
+    },
+    {
+      "item_id": "domain_c-67",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.03255210071802139
+    },
+    {
+      "item_id": "domain_c-68",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.3564298152923584
+    },
+    {
+      "item_id": "domain_c-69",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.2529584765434265
+    },
+    {
+      "item_id": "domain_c-70",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.1276528239250183
+    },
+    {
+      "item_id": "domain_c-71",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.05030808597803116
+    },
+    {
+      "item_id": "domain_c-72",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.16163776814937592
+    },
+    {
+      "item_id": "domain_c-73",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.00686493469402194
+    },
+    {
+      "item_id": "domain_c-74",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.9070795774459839
+    },
+    {
+      "item_id": "domain_c-75",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0003487045760266483
+    },
+    {
+      "item_id": "domain_c-76",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.009468790143728256
+    },
+    {
+      "item_id": "domain_c-77",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.764736533164978
+    },
+    {
+      "item_id": "domain_c-78",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 1.1563855409622192
+    },
+    {
+      "item_id": "domain_c-79",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.028383878991007805
+    },
+    {
+      "item_id": "domain_c-80",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 1.0559663772583008
+    },
+    {
+      "item_id": "domain_c-81",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.2072509229183197
+    },
+    {
+      "item_id": "domain_c-82",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.5666465759277344
+    },
+    {
+      "item_id": "domain_c-83",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.07086721807718277
+    },
+    {
+      "item_id": "domain_c-84",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.7335375547409058
+    },
+    {
+      "item_id": "domain_c-85",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0009059535805135965
+    },
+    {
+      "item_id": "domain_c-86",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.4666330814361572
+    },
+    {
+      "item_id": "domain_c-87",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.5233309268951416
+    },
+    {
+      "item_id": "domain_c-88",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.02356022037565708
+    },
+    {
+      "item_id": "domain_c-89",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.02183898724615574
+    },
+    {
+      "item_id": "domain_c-90",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.023781726136803627
+    },
+    {
+      "item_id": "domain_c-91",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.3731071352958679
+    },
+    {
+      "item_id": "domain_c-92",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.10466565191745758
+    },
+    {
+      "item_id": "domain_c-93",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.6654119491577148
+    },
+    {
+      "item_id": "domain_c-94",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0003551419940777123
+    },
+    {
+      "item_id": "domain_c-95",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.0005026599392294884
+    },
+    {
+      "item_id": "domain_c-96",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.4063296318054199
+    },
+    {
+      "item_id": "domain_c-97",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.11623816937208176
+    },
+    {
+      "item_id": "domain_c-98",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.9261530041694641
+    },
+    {
+      "item_id": "domain_c-99",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.01123946625739336
+    },
+    {
+      "item_id": "domain_c-100",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.1492091715335846
+    },
+    {
+      "item_id": "domain_c-101",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.06737540662288666
+    },
+    {
+      "item_id": "domain_c-102",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.5708808898925781
+    },
+    {
+      "item_id": "domain_c-103",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.03474230319261551
+    },
+    {
+      "item_id": "domain_c-104",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.0052686287090182304
+    },
+    {
+      "item_id": "domain_c-105",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.3330131769180298
+    },
+    {
+      "item_id": "domain_c-106",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.057129763066768646
+    },
+    {
+      "item_id": "domain_c-107",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.8303195238113403
+    },
+    {
+      "item_id": "domain_c-108",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.19319704174995422
+    },
+    {
+      "item_id": "domain_c-109",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0005738908657804132
+    },
+    {
+      "item_id": "domain_c-110",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0006252577877603471
+    },
+    {
+      "item_id": "domain_c-111",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0025026523508131504
+    },
+    {
+      "item_id": "domain_c-112",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 5.800479630124755e-05
+    },
+    {
+      "item_id": "domain_c-113",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.08238691091537476
+    },
+    {
+      "item_id": "domain_c-114",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0016746290493756533
+    },
+    {
+      "item_id": "domain_c-115",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 2.694189788599033e-05
+    },
+    {
+      "item_id": "domain_c-116",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.5822195410728455
+    },
+    {
+      "item_id": "domain_c-117",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.028423143550753593
+    },
+    {
+      "item_id": "domain_c-118",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.3548128604888916
+    },
+    {
+      "item_id": "domain_c-119",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.4456239342689514
+    },
+    {
+      "item_id": "domain_c-120",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 1.0902009010314941
+    },
+    {
+      "item_id": "domain_c-121",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.2636740505695343
+    },
+    {
+      "item_id": "domain_c-122",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.8504980802536011
+    },
+    {
+      "item_id": "domain_c-123",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.37870171666145325
+    },
+    {
+      "item_id": "domain_c-124",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.054202377796173096
+    },
+    {
+      "item_id": "domain_c-125",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.9701653122901917
+    },
+    {
+      "item_id": "domain_c-126",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.02617560513317585
+    },
+    {
+      "item_id": "domain_c-127",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0021854499354958534
+    },
+    {
+      "item_id": "domain_c-128",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0014892102917656302
+    },
+    {
+      "item_id": "domain_c-129",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0039642625488340855
+    },
+    {
+      "item_id": "domain_c-130",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.2796565890312195
+    },
+    {
+      "item_id": "domain_c-131",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0001411161501891911
+    },
+    {
+      "item_id": "domain_c-132",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.05304395407438278
+    },
+    {
+      "item_id": "domain_c-133",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.01944822445511818
+    },
+    {
+      "item_id": "domain_c-134",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.3391585350036621
+    },
+    {
+      "item_id": "domain_c-135",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0579555444419384
+    },
+    {
+      "item_id": "domain_c-136",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0996641293168068
+    },
+    {
+      "item_id": "domain_c-137",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00018362372065894306
+    },
+    {
+      "item_id": "domain_c-138",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.18299029767513275
+    },
+    {
+      "item_id": "domain_c-139",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0001392377889715135
+    },
+    {
+      "item_id": "domain_c-140",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.06565981358289719
+    },
+    {
+      "item_id": "domain_c-141",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.1235884577035904
+    },
+    {
+      "item_id": "domain_c-142",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 2.6867164706345648e-06
+    },
+    {
+      "item_id": "domain_c-143",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.009418272413313389
+    },
+    {
+      "item_id": "domain_c-144",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.034425634890794754
+    },
+    {
+      "item_id": "domain_c-145",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.48461881279945374
+    },
+    {
+      "item_id": "domain_c-146",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.3395557701587677
+    },
+    {
+      "item_id": "domain_c-147",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.6964964866638184
+    },
+    {
+      "item_id": "domain_c-148",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.06734292209148407
+    },
+    {
+      "item_id": "domain_c-149",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.00034400197910144925
+    },
+    {
+      "item_id": "domain_c-150",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0005357486079446971
+    },
+    {
+      "item_id": "domain_c-151",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.29186728596687317
+    },
+    {
+      "item_id": "domain_c-152",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0029824641533195972
+    },
+    {
+      "item_id": "domain_c-153",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.00027530145598575473
+    },
+    {
+      "item_id": "domain_c-154",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.026569431647658348
+    },
+    {
+      "item_id": "domain_c-155",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 1.5549281670246273e-05
+    },
+    {
+      "item_id": "domain_c-156",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00010971746814902872
+    },
+    {
+      "item_id": "domain_c-157",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.11005983501672745
+    },
+    {
+      "item_id": "domain_c-158",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 3.545312938513234e-05
+    },
+    {
+      "item_id": "domain_c-159",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.11337563395500183
+    },
+    {
+      "item_id": "domain_c-160",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.5623211860656738
+    },
+    {
+      "item_id": "domain_c-161",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.03882971778512001
+    },
+    {
+      "item_id": "domain_c-162",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.001757955295033753
+    },
+    {
+      "item_id": "domain_c-163",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.008622139692306519
+    },
+    {
+      "item_id": "domain_c-164",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 2.753580702119507e-05
+    },
+    {
+      "item_id": "domain_c-165",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.46226078271865845
+    },
+    {
+      "item_id": "domain_c-166",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.00618401262909174
+    },
+    {
+      "item_id": "domain_c-167",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.5582866072654724
+    },
+    {
+      "item_id": "domain_c-168",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.14543390274047852
+    },
+    {
+      "item_id": "domain_c-169",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.004225640092045069
+    },
+    {
+      "item_id": "domain_c-170",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.281446248292923
+    },
+    {
+      "item_id": "domain_c-171",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.1312832832336426
+    },
+    {
+      "item_id": "domain_c-172",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.2541777193546295
+    },
+    {
+      "item_id": "domain_c-173",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 1.1228437870158814e-05
+    },
+    {
+      "item_id": "domain_c-174",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0008080785046331584
+    },
+    {
+      "item_id": "domain_c-175",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.3741171360015869
+    },
+    {
+      "item_id": "domain_c-176",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 1.0425333976745605
+    },
+    {
+      "item_id": "domain_c-177",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.5169978737831116
+    },
+    {
+      "item_id": "domain_c-178",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.017575496807694435
+    },
+    {
+      "item_id": "domain_c-179",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0003946202341467142
+    },
+    {
+      "item_id": "domain_c-180",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.00038115031202323735
+    },
+    {
+      "item_id": "domain_c-181",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.04020479694008827
+    },
+    {
+      "item_id": "domain_c-182",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.5550734996795654
+    },
+    {
+      "item_id": "domain_c-183",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.1094462051987648
+    },
+    {
+      "item_id": "domain_c-184",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.004311214666813612
+    },
+    {
+      "item_id": "domain_c-185",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 1.065737009048462
+    },
+    {
+      "item_id": "domain_c-186",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.031041767448186874
+    },
+    {
+      "item_id": "domain_c-187",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.02624199539422989
+    },
+    {
+      "item_id": "domain_c-188",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.09060710668563843
+    },
+    {
+      "item_id": "domain_c-189",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.589357316493988
+    },
+    {
+      "item_id": "domain_c-190",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.02782217040657997
+    },
+    {
+      "item_id": "domain_c-191",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.06285468488931656
+    },
+    {
+      "item_id": "domain_c-192",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.5577260255813599
+    },
+    {
+      "item_id": "domain_c-193",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.009653455577790737
+    },
+    {
+      "item_id": "domain_c-194",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.004361778497695923
+    },
+    {
+      "item_id": "domain_c-195",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.023808784782886505
+    },
+    {
+      "item_id": "domain_c-196",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.0008625700138509274
+    },
+    {
+      "item_id": "domain_c-197",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.004543631337583065
+    },
+    {
+      "item_id": "domain_c-198",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.44930529594421387
+    },
+    {
+      "item_id": "domain_c-199",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.2145135998725891
+    },
+    {
+      "item_id": "domain_c-200",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.6939988732337952
+    },
+    {
+      "item_id": "domain_c-201",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.031291127204895
+    },
+    {
+      "item_id": "domain_c-202",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.27495434880256653
+    },
+    {
+      "item_id": "domain_c-203",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.0022412689868360758
+    },
+    {
+      "item_id": "domain_c-204",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.000162368974997662
+    },
+    {
+      "item_id": "domain_c-205",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 3.977609594585374e-05
+    },
+    {
+      "item_id": "domain_c-206",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.6984888315200806
+    },
+    {
+      "item_id": "domain_c-207",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0036241374909877777
+    },
+    {
+      "item_id": "domain_c-208",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.13969126343727112
+    },
+    {
+      "item_id": "domain_c-209",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.127380609512329
+    },
+    {
+      "item_id": "domain_c-210",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.9314041137695312
+    },
+    {
+      "item_id": "domain_c-211",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.05147436633706093
+    },
+    {
+      "item_id": "domain_c-212",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0224496740847826
+    },
+    {
+      "item_id": "domain_c-213",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.6721892356872559
+    },
+    {
+      "item_id": "domain_c-214",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.3551523983478546
+    },
+    {
+      "item_id": "domain_c-215",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00024154115817509592
+    },
+    {
+      "item_id": "domain_c-216",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 3.858919080812484e-05
+    },
+    {
+      "item_id": "domain_c-217",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 1.7054020645446144e-05
+    },
+    {
+      "item_id": "domain_c-218",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.6468547582626343
+    },
+    {
+      "item_id": "domain_c-219",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6593601107597351
+    },
+    {
+      "item_id": "domain_c-220",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.15140362083911896
+    },
+    {
+      "item_id": "domain_c-221",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.0011313288705423474
+    },
+    {
+      "item_id": "domain_c-222",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.06422273814678192
+    },
+    {
+      "item_id": "domain_c-223",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.11218196153640747
+    },
+    {
+      "item_id": "domain_c-224",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.005646039731800556
+    },
+    {
+      "item_id": "domain_c-225",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0003079820307902992
+    },
+    {
+      "item_id": "domain_c-226",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.036564260721206665
+    },
+    {
+      "item_id": "domain_c-227",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.005563841667026281
+    },
+    {
+      "item_id": "domain_c-228",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0004337566497270018
+    },
+    {
+      "item_id": "domain_c-229",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00019773555686697364
+    },
+    {
+      "item_id": "domain_c-230",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.000333248230163008
+    },
+    {
+      "item_id": "domain_c-231",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.006672063376754522
+    },
+    {
+      "item_id": "domain_c-232",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.8393997550010681
+    },
+    {
+      "item_id": "domain_c-233",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.5035126805305481
+    },
+    {
+      "item_id": "domain_c-234",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.03253897279500961
+    },
+    {
+      "item_id": "domain_c-235",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.9218885898590088
+    },
+    {
+      "item_id": "domain_c-236",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.0771619081497192
+    },
+    {
+      "item_id": "domain_c-237",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.051627472043037415
+    },
+    {
+      "item_id": "domain_c-238",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 9.161695197690278e-05
+    },
+    {
+      "item_id": "domain_c-239",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.01520154345780611
+    },
+    {
+      "item_id": "domain_c-240",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 5.102091745357029e-05
+    },
+    {
+      "item_id": "domain_c-241",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0002926344459410757
+    },
+    {
+      "item_id": "domain_c-242",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.012762922793626785
+    },
+    {
+      "item_id": "domain_c-243",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0008455307106487453
+    },
+    {
+      "item_id": "domain_c-244",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.001954505452886224
+    },
+    {
+      "item_id": "domain_c-245",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 1.0180690288543701
+    },
+    {
+      "item_id": "domain_c-246",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.004128602799028158
+    },
+    {
+      "item_id": "domain_c-247",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0002100420679198578
+    },
+    {
+      "item_id": "domain_c-248",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.0143504673615098
+    },
+    {
+      "item_id": "domain_c-249",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.8981891870498657
+    },
+    {
+      "item_id": "domain_c-250",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.7268726825714111
+    },
+    {
+      "item_id": "domain_c-251",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0007592840702272952
+    },
+    {
+      "item_id": "domain_c-252",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0002886531001422554
+    },
+    {
+      "item_id": "domain_c-253",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0010229723993688822
+    },
+    {
+      "item_id": "domain_c-254",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.007646308280527592
+    },
+    {
+      "item_id": "domain_c-255",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.009498804807662964
+    },
+    {
+      "item_id": "domain_c-256",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0063184816390275955
+    },
+    {
+      "item_id": "domain_c-257",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.01949966698884964
+    },
+    {
+      "item_id": "domain_c-258",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0019740064162760973
+    },
+    {
+      "item_id": "domain_c-259",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 6.987772940192372e-05
+    },
+    {
+      "item_id": "domain_c-260",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.12102478742599487
+    },
+    {
+      "item_id": "domain_c-261",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.00242968974635005
+    },
+    {
+      "item_id": "domain_c-262",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.6109984517097473
+    },
+    {
+      "item_id": "domain_c-263",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.10949034243822098
+    },
+    {
+      "item_id": "domain_c-264",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.6490428447723389
+    },
+    {
+      "item_id": "domain_c-265",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.6299980878829956
+    },
+    {
+      "item_id": "domain_c-266",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.002963010687381029
+    },
+    {
+      "item_id": "domain_c-267",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.20223550498485565
+    },
+    {
+      "item_id": "domain_c-268",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.02931596338748932
+    },
+    {
+      "item_id": "domain_c-269",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.00046965613728389144
+    },
+    {
+      "item_id": "domain_c-270",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.6146511435508728
+    },
+    {
+      "item_id": "domain_c-271",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.00039818399818614125
+    },
+    {
+      "item_id": "domain_c-272",
+      "predicted": "B",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.7441056966781616
+    },
+    {
+      "item_id": "domain_c-273",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0005190822994336486
+    },
+    {
+      "item_id": "domain_c-274",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.7050617933273315
+    },
+    {
+      "item_id": "domain_c-275",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 7.154819468269125e-05
+    },
+    {
+      "item_id": "domain_c-276",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.697519063949585
+    },
+    {
+      "item_id": "domain_c-277",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.000354832096491009
+    },
+    {
+      "item_id": "domain_c-278",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0001700459251878783
+    },
+    {
+      "item_id": "domain_c-279",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.01754567213356495
+    },
+    {
+      "item_id": "domain_c-280",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.0475943386554718
+    },
+    {
+      "item_id": "domain_c-281",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 6.231241422938183e-05
+    },
+    {
+      "item_id": "domain_c-282",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.00046146722161211073
+    },
+    {
+      "item_id": "domain_c-283",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.00012806919403374195
+    },
+    {
+      "item_id": "domain_c-284",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0659705176949501
+    },
+    {
+      "item_id": "domain_c-285",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 2.9744664061581716e-05
+    },
+    {
+      "item_id": "domain_c-286",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0120118772611022
+    },
+    {
+      "item_id": "domain_c-287",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.003275119699537754
+    },
+    {
+      "item_id": "domain_c-288",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.4364681541919708
+    },
+    {
+      "item_id": "domain_c-289",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6593377590179443
+    },
+    {
+      "item_id": "domain_c-290",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.9960892200469971
+    },
+    {
+      "item_id": "domain_c-291",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 1.117405652999878
+    },
+    {
+      "item_id": "domain_c-292",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.01975950039923191
+    },
+    {
+      "item_id": "domain_c-293",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.035236455500125885
+    },
+    {
+      "item_id": "domain_c-294",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.003387406002730131
+    },
+    {
+      "item_id": "domain_c-295",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.6568108201026917
+    },
+    {
+      "item_id": "domain_c-296",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.07490909844636917
+    },
+    {
+      "item_id": "domain_c-297",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.7396444082260132
+    },
+    {
+      "item_id": "domain_c-298",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.7091106176376343
+    },
+    {
+      "item_id": "domain_c-299",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.0016730754869058728
+    },
+    {
+      "item_id": "domain_c-300",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.004361829720437527
+    },
+    {
+      "item_id": "domain_c-301",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.8510110974311829
+    },
+    {
+      "item_id": "domain_c-302",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0051868450827896595
+    },
+    {
+      "item_id": "domain_c-303",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.9407844543457031
+    },
+    {
+      "item_id": "domain_c-304",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.004898443818092346
+    },
+    {
+      "item_id": "domain_c-305",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.5082075595855713
+    },
+    {
+      "item_id": "domain_c-306",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.540489673614502
+    },
+    {
+      "item_id": "domain_c-307",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.12789027392864227
+    },
+    {
+      "item_id": "domain_c-308",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0003518997982610017
+    },
+    {
+      "item_id": "domain_c-309",
+      "predicted": "B",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 1.089043140411377
+    },
+    {
+      "item_id": "domain_c-310",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.026968397200107574
+    },
+    {
+      "item_id": "domain_c-311",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.01901376247406006
+    },
+    {
+      "item_id": "domain_c-312",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.6522291898727417
+    },
+    {
+      "item_id": "domain_c-313",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.24918867647647858
+    },
+    {
+      "item_id": "domain_c-314",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.7832666635513306
+    },
+    {
+      "item_id": "domain_c-315",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.013737393543124199
+    },
+    {
+      "item_id": "domain_c-316",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.21379806101322174
+    },
+    {
+      "item_id": "domain_c-317",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.5499733090400696
+    },
+    {
+      "item_id": "domain_c-318",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.29254770278930664
+    },
+    {
+      "item_id": "domain_c-319",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.9270035624504089
+    },
+    {
+      "item_id": "domain_c-320",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.2766207754611969
+    },
+    {
+      "item_id": "domain_c-321",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.11221864819526672
+    },
+    {
+      "item_id": "domain_c-322",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00737959798425436
+    },
+    {
+      "item_id": "domain_c-323",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.7805121541023254
+    },
+    {
+      "item_id": "domain_c-324",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.11802442371845245
+    },
+    {
+      "item_id": "domain_c-325",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.8753974437713623
+    },
+    {
+      "item_id": "domain_c-326",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.18790417909622192
+    },
+    {
+      "item_id": "domain_c-327",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.02662338688969612
+    },
+    {
+      "item_id": "domain_c-328",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.7801321744918823
+    },
+    {
+      "item_id": "domain_c-329",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.009239815175533295
+    },
+    {
+      "item_id": "domain_c-330",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.11768480390310287
+    },
+    {
+      "item_id": "domain_c-331",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.322435200214386
+    },
+    {
+      "item_id": "domain_c-332",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.029009157791733742
+    },
+    {
+      "item_id": "domain_c-333",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.11490128934383392
+    },
+    {
+      "item_id": "domain_c-334",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.4073471128940582
+    },
+    {
+      "item_id": "domain_c-335",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.7696776390075684
+    },
+    {
+      "item_id": "domain_c-336",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.22127583622932434
+    },
+    {
+      "item_id": "domain_c-337",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.7234792709350586
+    },
+    {
+      "item_id": "domain_c-338",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.004448501858860254
+    },
+    {
+      "item_id": "domain_c-339",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00028268282767385244
+    },
+    {
+      "item_id": "domain_c-340",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.5171131491661072
+    },
+    {
+      "item_id": "domain_c-341",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.034865494817495346
+    },
+    {
+      "item_id": "domain_c-342",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.36782485246658325
+    },
+    {
+      "item_id": "domain_c-343",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.012055594474077225
+    },
+    {
+      "item_id": "domain_c-344",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.7194296717643738
+    },
+    {
+      "item_id": "domain_c-345",
+      "predicted": "C",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.9509067535400391
+    },
+    {
+      "item_id": "domain_c-346",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.6705144047737122
+    },
+    {
+      "item_id": "domain_c-347",
+      "predicted": "D",
+      "correct": "A",
+      "is_correct": false,
+      "entropy": 0.015763921663165092
+    },
+    {
+      "item_id": "domain_c-348",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.690824031829834
+    },
+    {
+      "item_id": "domain_c-349",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.009924709796905518
+    },
+    {
+      "item_id": "domain_c-350",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.10617172718048096
+    },
+    {
+      "item_id": "domain_c-351",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.6055653759394772e-05
+    },
+    {
+      "item_id": "domain_c-352",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.9280027151107788
+    },
+    {
+      "item_id": "domain_c-353",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.4687783122062683
+    },
+    {
+      "item_id": "domain_c-354",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0065958015620708466
+    },
+    {
+      "item_id": "domain_c-355",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00015701691154390574
+    },
+    {
+      "item_id": "domain_c-356",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.471343457698822
+    },
+    {
+      "item_id": "domain_c-357",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 1.0066194534301758
+    },
+    {
+      "item_id": "domain_c-358",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.05765468254685402
+    },
+    {
+      "item_id": "domain_c-359",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.5217784643173218
+    },
+    {
+      "item_id": "domain_c-360",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.13252894580364227
+    },
+    {
+      "item_id": "domain_c-361",
+      "predicted": "B",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 1.1559386253356934
+    },
+    {
+      "item_id": "domain_c-362",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.5415233969688416
+    },
+    {
+      "item_id": "domain_c-363",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.45888060331344604
+    },
+    {
+      "item_id": "domain_c-364",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.014102702960371971
+    },
+    {
+      "item_id": "domain_c-365",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00012996021541766822
+    },
+    {
+      "item_id": "domain_c-366",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.008403335697948933
+    },
+    {
+      "item_id": "domain_c-367",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.015211762860417366
+    },
+    {
+      "item_id": "domain_c-368",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.061971865594387054
+    },
+    {
+      "item_id": "domain_c-369",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.00019086746033281088
+    },
+    {
+      "item_id": "domain_c-370",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 4.163975245319307e-05
+    },
+    {
+      "item_id": "domain_c-371",
+      "predicted": "D",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.17596545815467834
+    },
+    {
+      "item_id": "domain_c-372",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.4052080512046814
+    },
+    {
+      "item_id": "domain_c-373",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.00029169395565986633
+    },
+    {
+      "item_id": "domain_c-374",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.048739925026893616
+    },
+    {
+      "item_id": "domain_c-375",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.1271434873342514
+    },
+    {
+      "item_id": "domain_c-376",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.00018152681877836585
+    },
+    {
+      "item_id": "domain_c-377",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.5587589740753174
+    },
+    {
+      "item_id": "domain_c-378",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.5601717829704285
+    },
+    {
+      "item_id": "domain_c-379",
+      "predicted": "C",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.14747777581214905
+    },
+    {
+      "item_id": "domain_c-380",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.048035599291324615
+    },
+    {
+      "item_id": "domain_c-381",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.07669597119092941
+    },
+    {
+      "item_id": "domain_c-382",
+      "predicted": "D",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.3750341236591339
+    },
+    {
+      "item_id": "domain_c-383",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.7548971176147461
+    },
+    {
+      "item_id": "domain_c-384",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.29381662607192993
+    },
+    {
+      "item_id": "domain_c-385",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.8355873823165894
+    },
+    {
+      "item_id": "domain_c-386",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.44137638807296753
+    },
+    {
+      "item_id": "domain_c-387",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 5.501761188497767e-05
+    },
+    {
+      "item_id": "domain_c-388",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.0014604006428271532
+    },
+    {
+      "item_id": "domain_c-389",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.021344386041164398
+    },
+    {
+      "item_id": "domain_c-390",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.0008653171244077384
+    },
+    {
+      "item_id": "domain_c-391",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.042546000331640244
+    },
+    {
+      "item_id": "domain_c-392",
+      "predicted": "A",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.5612633228302002
+    },
+    {
+      "item_id": "domain_c-393",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.9656091928482056
+    },
+    {
+      "item_id": "domain_c-394",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.00029418792109936476
+    },
+    {
+      "item_id": "domain_c-395",
+      "predicted": "C",
+      "correct": "C",
+      "is_correct": true,
+      "entropy": 0.0006144127110019326
+    },
+    {
+      "item_id": "domain_c-396",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.578944742679596
+    },
+    {
+      "item_id": "domain_c-397",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.997672438621521
+    },
+    {
+      "item_id": "domain_c-398",
+      "predicted": "C",
+      "correct": "D",
+      "is_correct": false,
+      "entropy": 0.9860395193099976
+    },
+    {
+      "item_id": "domain_c-399",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.0256551094353199
+    },
+    {
+      "item_id": "domain_c-400",
+      "predicted": "A",
+      "correct": "C",
+      "is_correct": false,
+      "entropy": 0.6863526105880737
+    },
+    {
+      "item_id": "domain_c-401",
+      "predicted": "A",
+      "correct": "B",
+      "is_correct": false,
+      "entropy": 0.14016760885715485
+    },
+    {
+      "item_id": "domain_c-402",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.2586812973022461
+    },
+    {
+      "item_id": "domain_c-403",
+      "predicted": "D",
+      "correct": "D",
+      "is_correct": true,
+      "entropy": 0.025779902935028076
+    },
+    {
+      "item_id": "domain_c-404",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.7365128993988037
+    },
+    {
+      "item_id": "domain_c-405",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.35418322682380676
+    },
+    {
+      "item_id": "domain_c-406",
+      "predicted": "A",
+      "correct": "A",
+      "is_correct": true,
+      "entropy": 0.002000996842980385
+    },
+    {
+      "item_id": "domain_c-407",
+      "predicted": "B",
+      "correct": "B",
+      "is_correct": true,
+      "entropy": 0.07988336682319641
+    }
+  ]
+}
