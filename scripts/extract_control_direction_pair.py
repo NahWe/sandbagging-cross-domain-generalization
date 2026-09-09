@@ -23,6 +23,7 @@ handles covertness/lying representations. If the control pair's cosine
 barely moves while covertness/lying's did, that argues the v2 gap is a real,
 targeted effect.
 """
+import argparse
 import json
 from contextlib import nullcontext
 
@@ -35,8 +36,12 @@ from src.training.lora_run import HF_PATH, model_kwargs, select_dtype
 from scripts.activation_direction import _decoder_layers, _last_token_hidden_states
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-ADAPTER = "checkpoints/locked_seed0/adapter"
-OUTPUT = "activation_direction_results/control_direction_pair_base_vs_trained.json"
+
+def parse_args():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--adapter", default="checkpoints/locked_seed0/adapter")
+    p.add_argument("--output", default=None)
+    return p.parse_args()
 
 NEUTRAL_INSTRUCTION = "Please answer the following question.\n\n"
 BRIEF_INSTRUCTION = (
@@ -92,6 +97,8 @@ def compute_pair(model, tokenizer, holdout, device, ctx, label):
 
 
 def main():
+    args = parse_args()
+    output = args.output or f"activation_direction_results/control_direction_pair_base_vs_trained_{args.adapter.replace('/', '_')}.json"
     device = "cuda" if torch.cuda.is_available() else "cpu"
     dtype = select_dtype(device)
     ctx = nullcontext() if device == "cpu" else torch.amp.autocast(device_type=device, dtype=dtype)
@@ -109,8 +116,8 @@ def main():
     del base_model
     torch.cuda.empty_cache()
 
-    print(f"=== loading TRAINED model ({ADAPTER}) ===")
-    trained_model, trained_tokenizer = load_model_with_adapter(ADAPTER, dtype, device)
+    print(f"=== loading TRAINED model ({args.adapter}) ===")
+    trained_model, trained_tokenizer = load_model_with_adapter(args.adapter, dtype, device)
     trained_comparison = compute_pair(trained_model, trained_tokenizer, holdout, device, ctx, "trained")
 
     gap = {}
@@ -120,15 +127,15 @@ def main():
         gap[l] = {"base_cosine": b, "trained_cosine": t, "gap_trained_minus_base": t - b}
 
     out = {
-        "adapter": ADAPTER,
+        "adapter": args.adapter,
         "note": "control pair (NEUTRAL-vs-BRIEF, NEUTRAL-vs-DETAILED), unrelated to covertness/lying -- tests whether ANY direction pair drifts by ~0.04-0.11 between base and trained model, or whether that magnitude is specific to the covertness/lying pair.",
         "base": base_comparison,
         "trained": trained_comparison,
         "gap": gap,
     }
-    with open(OUTPUT, "w") as f:
+    with open(output, "w") as f:
         json.dump(out, f, indent=2)
-    print(f"Wrote {OUTPUT}")
+    print(f"Wrote {output}")
     gaps = [abs(v["gap_trained_minus_base"]) for v in gap.values()]
     print(f"\n=== |gap| summary: mean={sum(gaps)/len(gaps):.4f} min={min(gaps):.4f} max={max(gaps):.4f} ===")
 
